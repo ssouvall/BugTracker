@@ -32,9 +32,10 @@ namespace BugTracker.Models
         [DisplayName("File Extension")]
         public string FileContentType { get; set; }
 
-        public virtual ICollection<BTUser> Members { get; set; }
-        public virtual ICollection<Project> Projects { get; set; }
-        public virtual ICollection<Invite> Invites { get; set; }
+        //add new HashSet because if it returns null  you will get an object reference error, but new HashSet makes it so this doesn't break the code if the count is 0
+        public virtual ICollection<BTUser> Members { get; set; } = new HashSet<BTUser>();
+        public virtual ICollection<Project> Projects { get; set; } = new HashSet<Project>();
+        public virtual ICollection<Invite> Invites { get; set; } = new HashSet<Invite>();
 
     }
 }
