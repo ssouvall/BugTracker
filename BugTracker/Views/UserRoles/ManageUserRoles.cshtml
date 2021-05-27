@@ -1,22 +1,22 @@
 ﻿@model IEnumerable<BugTracker.Models.ViewModels.ManageUserRolesViewModel>
 
 <div class="row">
-    @foreach (var btuser in Model)
+    @foreach (var member in Model)
     {
         <div class="card col-6" style="margin:2px">
             <div class="card-body">
-                <h2 class="m-t-0 h3"><b>Assign Roles to @btuser.BTUser.FullName</b></h2>
+                <h2 class="m-t-0 h3"><b>Assign Roles to @member.BTUser.FullName</b></h2>
                 <p class="text-muted font-13 m-b-30">
-                    This form displays the current roles assigned to the user: @btuser.BTUser.FullName. Use the dropdown to select the roles that this user should be assigned. Once roles are selected, click "Assign Roles" to submit the form.
+                    This form displays the current roles assigned to the user: @member.BTUser.FullName. Use the dropdown to select the roles that this user should be assigned. Once roles are selected, click "Assign Roles" to submit the form.
                 </p>
                 <hr />
                 <form asp-controller="UserRoles" asp-action="ManageUserRoles" method="post">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                    <input type="hidden" asp-for="@btuser.BTUser.Id">
+                    <input type="hidden" asp-for="@member.BTUser.Id">
                     <div class="col-12">
                         <div class="form-group">
-                            <label asp-for="@btuser.Roles" class="control-label">Roles for @btuser.BTUser.FullName</label>
-                            <select asp-for="@btuser.SelectedRoles" class="form-control" asp-items="@btuser.Roles" multiple="multiple"></select>
+                            <label asp-for="@member.Roles" class="control-label">Roles for @member.BTUser.FullName</label>
+                            <select asp-for="@member.SelectedRoles" class="form-control" asp-items="@member.Roles" multiple="multiple"></select>
                         </div>
                     </div>
                     <hr />

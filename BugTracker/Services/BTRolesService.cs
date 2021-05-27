@@ -57,9 +57,9 @@ namespace BugTracker.Services
             return result;
         }
 
-        public async Task<bool> RemoveUsersFromRolesAsync(BTUser user, IEnumerable<string> roles)
+        public async Task<IdentityResult> RemoveUsersFromRolesAsync(BTUser user, IEnumerable<string> roles)
         {
-            bool result = (await _userManager.RemoveFromRolesAsync(user, roles)).Succeeded;
+            IdentityResult result = await _userManager.RemoveFromRolesAsync(user, roles);
             return result;
         }
 

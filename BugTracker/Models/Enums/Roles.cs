@@ -11,6 +11,7 @@ namespace BugTracker.Models.Enums
         ProjectManager,
         Developer,
         Submitter,
-        DemoUser
+        DemoUser,
+        NewUser
     }
 }

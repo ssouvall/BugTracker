@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace BugTracker.Controllers
 {
-    [Authorize(Roles="Admin")]
+    //[Authorize(Roles="Admin")]
     public class UserRolesController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -46,7 +46,7 @@ namespace BugTracker.Controllers
                 model.Add(vm);
             }
 
-            return View();
+            return View(model);
         }
 
         [HttpPost]
