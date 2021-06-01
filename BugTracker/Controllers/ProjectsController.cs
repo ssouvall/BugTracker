@@ -127,6 +127,24 @@ namespace BugTracker.Controllers
             return View(project);
         }
 
+
+        //[Authorize(Roles = "Admin,ProjectManager")]
+        [HttpGet]
+        public async Task<IActionResult> AssignUsers(int Id)
+        {
+            var model = new ProjectMembersViewModel();
+            var project = await _context.Projects
+                .Include(p => p.ProjectUsers)
+                .ThenInclude(p => p.User)
+                .FirstAsync(p => p.Id == id);
+
+            model.Project = project;
+            List<BTUser> users = await _context.Users.ToListAsync();
+            List<BTUser> members = (List<BTUser>)await _projectService.UsersOnProjectAsync(id);
+            model.Users = new MultiSelectList(users, "Id", "FullName", members);
+            return View(model);
+        }
+
         // GET: Projects/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
