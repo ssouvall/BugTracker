@@ -7,16 +7,21 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BugTracker.Data;
 using BugTracker.Models;
+using BugTracker.Models.ViewModels;
+using BugTracker.Services.Interfaces;
 
 namespace BugTracker.Controllers
 {
     public class ProjectsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IBTProjectService _projectService;
 
-        public ProjectsController(ApplicationDbContext context)
+        public ProjectsController(ApplicationDbContext context,
+                                    IBTProjectService projectService)
         {
             _context = context;
+            _projectService = projectService;
         }
 
         // GET: Projects
@@ -130,13 +135,12 @@ namespace BugTracker.Controllers
 
         //[Authorize(Roles = "Admin,ProjectManager")]
         [HttpGet]
-        public async Task<IActionResult> AssignUsers(int Id)
+        public async Task<IActionResult> AssignUsers(int id)
         {
-            var model = new ProjectMembersViewModel();
-            var project = await _context.Projects
-                .Include(p => p.ProjectUsers)
-                .ThenInclude(p => p.User)
-                .FirstAsync(p => p.Id == id);
+            ProjectMembersViewModel model = new ();
+
+            Project project = (await _projectService.GetAllProjectsByCompany(id))
+                                        .FirstOrDefaultAsync(p => p.Id == id);
 
             model.Project = project;
             List<BTUser> users = await _context.Users.ToListAsync();
