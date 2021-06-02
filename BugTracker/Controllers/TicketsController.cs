@@ -7,16 +7,29 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BugTracker.Data;
 using BugTracker.Models;
+using BugTracker.Services.Interfaces;
+using BugTracker.Models.ViewModels;
+using BugTracker.Extensions;
+using Microsoft.AspNetCore.Identity;
 
 namespace BugTracker.Controllers
 {
     public class TicketsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IBTTicketService _ticketService;
+        private readonly UserManager<BTUser> _userManager;
+        private readonly IBTCompanyInfoService _infoService;
 
-        public TicketsController(ApplicationDbContext context)
+        public TicketsController(ApplicationDbContext context,
+                                 IBTTicketService ticketService,
+                                 UserManager<BTUser> userManager,
+                                 IBTCompanyInfoService infoService)
         {
             _context = context;
+            _ticketService = ticketService;
+            _userManager = userManager;
+            _infoService = infoService;
         }
 
         // GET: Tickets
@@ -145,6 +158,34 @@ namespace BugTracker.Controllers
             ViewData["TicketStatusId"] = new SelectList(_context.Set<TicketStatus>(), "Id", "Id", ticket.TicketStatusId);
             ViewData["TicketTypeId"] = new SelectList(_context.Set<TicketType>(), "Id", "Id", ticket.TicketTypeId);
             return View(ticket);
+        }
+
+        
+        
+        [HttpGet]
+        public async Task<IActionResult> AllTickets()
+        {
+            
+            int companyId = User.Identity.GetCompanyId().Value;
+            
+            List<Ticket> tickets = await _ticketService.GetAllTicketsByCompanyAsync(companyId);
+
+            return View(tickets);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> MyTickets(string id)
+        {
+            var model = new CompanyTicketsViewModel();
+
+            int companyId = User.Identity.GetCompanyId().Value;
+            BTUser user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+
+            List<Ticket> myTickets = model.Tickets.Where(u => u.DeveloperUserId == user.Id || u.OwnerUserId == user.Id).ToList();
+
+            return View(myTickets);
+
+
         }
 
         // GET: Tickets/Delete/5

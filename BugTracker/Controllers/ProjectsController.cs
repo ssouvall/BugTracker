@@ -10,6 +10,7 @@ using BugTracker.Models;
 using BugTracker.Models.ViewModels;
 using BugTracker.Services.Interfaces;
 using BugTracker.Extensions;
+using BugTracker.Models.Enums;
 
 namespace BugTracker.Controllers
 {
@@ -17,12 +18,15 @@ namespace BugTracker.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly IBTProjectService _projectService;
+        private readonly IBTCompanyInfoService _bTCompanyInfoService;
 
         public ProjectsController(ApplicationDbContext context,
-                                    IBTProjectService projectService)
+                                    IBTProjectService projectService,
+                                    IBTCompanyInfoService bTCompanyInfoService)
         {
             _context = context;
             _projectService = projectService;
+            _bTCompanyInfoService = bTCompanyInfoService;
         }
 
         // GET: Projects
@@ -41,6 +45,7 @@ namespace BugTracker.Controllers
             }
 
             var project = await _context.Project
+                .Include(p => p.Members)
                 .Include(p => p.Company)
                 .Include(p => p.ProjectPriority)
                 .FirstOrDefaultAsync(m => m.Id == id);
@@ -147,8 +152,11 @@ namespace BugTracker.Controllers
                                         .FirstOrDefault(p => p.Id == id);
 
             model.Project = project;
-            List<BTUser> users = await _projectService.UsersNotOnProjectAsync(id, companyId);
-            List<BTUser> members = project.Members.ToList();
+            List<BTUser> developers = await _bTCompanyInfoService.GetMembersInRoleAsync(Roles.Developer.ToString(), companyId);
+            List<BTUser> submitters = await _bTCompanyInfoService.GetMembersInRoleAsync(Roles.Submitter.ToString(), companyId);
+
+            List<BTUser> users = developers.Concat(submitters).ToList();
+            List<string> members = project.Members.Select(m => m.Id).ToList();
             model.Users = new MultiSelectList(users, "Id", "FullName", members);
             return View(model);
         }
