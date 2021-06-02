@@ -15,15 +15,15 @@ namespace BugTracker.Services
     {
         private readonly ApplicationDbContext _context;
         private readonly IBTProjectService _projectService;
-        private readonly IBTCompanyInfoService _companyInfoService;
-        private readonly UserManager<BTUser> _userManager;
+        //private readonly IBTCompanyInfoService _companyInfoService;
+        //private readonly UserManager<BTUser> _userManager;
 
-        public BTTicketService(ApplicationDbContext context, IBTProjectService projectService, IBTCompanyInfoService companyInfoService,UserManager<BTUser> userManager)
+        public BTTicketService(ApplicationDbContext context, IBTProjectService projectService)
         {
             _context = context;
             _projectService = projectService;
-            _companyInfoService = companyInfoService;
-            _userManager = userManager;
+       //     _companyInfoService = companyInfoService;
+        //    _userManager = userManager;
         }
         public async Task AssignTicketAsync(int ticketId, string userId)
         {
