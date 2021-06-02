@@ -9,6 +9,7 @@ using BugTracker.Data;
 using BugTracker.Models;
 using BugTracker.Models.ViewModels;
 using BugTracker.Services.Interfaces;
+using BugTracker.Extensions;
 
 namespace BugTracker.Controllers
 {
@@ -137,15 +138,49 @@ namespace BugTracker.Controllers
         [HttpGet]
         public async Task<IActionResult> AssignUsers(int id)
         {
-            ProjectMembersViewModel model = new ();
+            ProjectMembersViewModel model = new();
 
-            Project project = (await _projectService.GetAllProjectsByCompany(id))
-                                        .FirstOrDefaultAsync(p => p.Id == id);
+            //get companyID
+            int companyId = User.Identity.GetCompanyId().Value;
+
+            Project project = (await _projectService.GetAllProjectsByCompany(companyId))
+                                        .FirstOrDefault(p => p.Id == id);
 
             model.Project = project;
-            List<BTUser> users = await _context.Users.ToListAsync();
-            List<BTUser> members = (List<BTUser>)await _projectService.UsersOnProjectAsync(id);
+            List<BTUser> users = await _projectService.UsersNotOnProjectAsync(id, companyId);
+            List<BTUser> members = project.Members.ToList();
             model.Users = new MultiSelectList(users, "Id", "FullName", members);
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AssignUsers(ProjectMembersViewModel model)
+        {
+            if(ModelState.IsValid)
+            {
+                if(model.SelectedUsers != null)
+                {
+
+                    List<string> memberIds = (await _projectService.GetMembersWithoutPMAsync(model.Project.Id))
+                                                                    .Select(m => m.Id).ToList();
+
+                    foreach(string id in memberIds)
+                    {
+                        await _projectService.RemoveUserFromProjectAsync(id, model.Project.Id);
+                    }
+
+                    foreach(string id in model.SelectedUsers)
+                    {
+                        await _projectService.AddUserToProjectAsync(id, model.Project.Id);
+                    }
+                    return RedirectToAction("Index", "Projects");
+                }
+                else
+                {
+                    //send error message
+                }
+            }
             return View(model);
         }
 
