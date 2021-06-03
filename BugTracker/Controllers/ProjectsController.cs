@@ -11,6 +11,7 @@ using BugTracker.Models.ViewModels;
 using BugTracker.Services.Interfaces;
 using BugTracker.Extensions;
 using BugTracker.Models.Enums;
+using Microsoft.AspNetCore.Identity;
 
 namespace BugTracker.Controllers
 {
@@ -19,14 +20,17 @@ namespace BugTracker.Controllers
         private readonly ApplicationDbContext _context;
         private readonly IBTProjectService _projectService;
         private readonly IBTCompanyInfoService _bTCompanyInfoService;
+        private readonly UserManager<BTUser> _userManager;
 
         public ProjectsController(ApplicationDbContext context,
                                     IBTProjectService projectService,
-                                    IBTCompanyInfoService bTCompanyInfoService)
+                                    IBTCompanyInfoService bTCompanyInfoService,
+                                    UserManager<BTUser> userManager)
         {
             _context = context;
             _projectService = projectService;
             _bTCompanyInfoService = bTCompanyInfoService;
+            _userManager = userManager;
         }
 
         // GET: Projects
@@ -165,20 +169,20 @@ namespace BugTracker.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AssignUsers(ProjectMembersViewModel model)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                if(model.SelectedUsers != null)
+                if (model.SelectedUsers != null)
                 {
 
                     List<string> memberIds = (await _projectService.GetMembersWithoutPMAsync(model.Project.Id))
                                                                     .Select(m => m.Id).ToList();
 
-                    foreach(string id in memberIds)
+                    foreach (string id in memberIds)
                     {
                         await _projectService.RemoveUserFromProjectAsync(id, model.Project.Id);
                     }
 
-                    foreach(string id in model.SelectedUsers)
+                    foreach (string id in model.SelectedUsers)
                     {
                         await _projectService.AddUserToProjectAsync(id, model.Project.Id);
                     }
@@ -192,7 +196,33 @@ namespace BugTracker.Controllers
             return View(model);
         }
 
-        // GET: Projects/Delete/5
+        [HttpGet]
+        public async Task<IActionResult> AllProjects()
+        {
+            int companyId = User.Identity.GetCompanyId().Value;
+            List<Project> projects = await _projectService.GetAllProjectsByCompany(companyId);
+            return View(projects);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> MyProjects()
+        {
+            BTUser user = await _userManager.GetUserAsync(User);
+
+            List<Project> myProjects = await _projectService.ListUserProjectsAsync(user.Id);
+
+            return View(myProjects);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ArchivedProjects()
+        {
+            int companyId = User.Identity.GetCompanyId().Value;
+            List<Project> projects = await _projectService.GetArchivedProjectsByCompany(companyId);
+            return View(projects);
+        }
+
+        //GET: Projects/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
