@@ -1,5 +1,7 @@
 ﻿@model IEnumerable<Ticket>
 
+
+<h1>My Development Tickets</h1>
 <table class="table">
     <thead class="thead-dark">
         <tr>
@@ -20,41 +22,108 @@
     <tbody>
         @foreach (Ticket ticket in Model)
         {
-            <tr>
-                <td>
-                    @ticket.Title
-                </td>
-                <td>
-                    @ticket.Description
-                </td>
-                <td>
-                    @ticket.Created
-                </td>
-                <td>
-                    @ticket.Updated
-                </td>
-                <td>
-                    @ticket.TicketPriority.Name
-                </td>
-                <td>
-                    @ticket.TicketStatus.Name
-                </td>
-                <td>
-                    @ticket.TicketType.Name
-                </td>
-                <td>
-                    @ticket.OwnerUser
-                </td>
-                <td>
-                    @ticket.DeveloperUser
-                </td>
-                <td>
-                    @ticket.Archived
-                </td>
-                <td>
-                    @ticket.ArchivedDate
-                </td>
-            </tr>
+            if (ticket.TicketStatus.Name == "Development")
+            {
+                <tr>
+                    <td>
+                        @ticket.Title
+                    </td>
+                    <td>
+                        @ticket.Description
+                    </td>
+                    <td>
+                        @ticket.Created
+                    </td>
+                    <td>
+                        @ticket.Updated
+                    </td>
+                    <td>
+                        @ticket.TicketPriority.Name
+                    </td>
+                    <td>
+                        @ticket.TicketStatus.Name
+                    </td>
+                    <td>
+                        @ticket.TicketType.Name
+                    </td>
+                    <td>
+                        @ticket.OwnerUser
+                    </td>
+                    <td>
+                        @ticket.DeveloperUser
+                    </td>
+                    <td>
+                        @ticket.Archived
+                    </td>
+                    <td>
+                        @ticket.ArchivedDate
+                    </td>
+                </tr>
+            }
+
+        }
+    </tbody>
+</table>
+
+<h1>My Submitted Tickets</h1>
+<table class="table">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col">Title</th>
+            <th scope="col">Description</th>
+            <th scope="col">Date Created</th>
+            <th scope="col">Date Updated</th>
+            <th scope="col">Priority</th>
+            <th scope="col">Status</th>
+            <th scope="col">Type</th>
+            <th scope="col">Owner</th>
+            <th scope="col">Developer</th>
+            <th scope="col">Archived?</th>
+            <th scope="col">Archived Date</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (Ticket ticket in Model)
+        {
+            if (ticket.TicketStatus.Name == "Submitted")
+            {
+                <tr>
+                    <td>
+                        @ticket.Title
+                    </td>
+                    <td>
+                        @ticket.Description
+                    </td>
+                    <td>
+                        @ticket.Created
+                    </td>
+                    <td>
+                        @ticket.Updated
+                    </td>
+                    <td>
+                        @ticket.TicketPriority.Name
+                    </td>
+                    <td>
+                        @ticket.TicketStatus.Name
+                    </td>
+                    <td>
+                        @ticket.TicketType.Name
+                    </td>
+                    <td>
+                        @ticket.OwnerUser
+                    </td>
+                    <td>
+                        @ticket.DeveloperUser
+                    </td>
+                    <td>
+                        @ticket.Archived
+                    </td>
+                    <td>
+                        @ticket.ArchivedDate
+                    </td>
+                </tr>
+            }
 
         }
     </tbody>

@@ -54,6 +54,8 @@ namespace BugTracker.Controllers
                 .Include(t => t.TicketPriority)
                 .Include(t => t.TicketStatus)
                 .Include(t => t.TicketType)
+                .Include(t => t.Comments)
+                    .ThenInclude(t => t.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (ticket == null)
             {
@@ -174,13 +176,12 @@ namespace BugTracker.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> MyTickets(string id)
+        public async Task<IActionResult> MyTickets()
         {
             var model = new CompanyTicketsViewModel();
-
+            BTUser user = await _userManager.GetUserAsync(User);
             int companyId = User.Identity.GetCompanyId().Value;
-            BTUser user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
-
+            
             List<Ticket> myTickets = model.Tickets.Where(u => u.DeveloperUserId == user.Id || u.OwnerUserId == user.Id).ToList();
 
             return View(myTickets);
