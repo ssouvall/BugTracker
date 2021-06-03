@@ -54,8 +54,12 @@ namespace BugTracker.Controllers
                 .Include(t => t.TicketPriority)
                 .Include(t => t.TicketStatus)
                 .Include(t => t.TicketType)
+                .Include(t => t.History)
+                    .ThenInclude(t => t.User)
                 .Include(t => t.Comments)
                     .ThenInclude(t => t.User)
+                .Include(t => t.Comments)
+                    .ThenInclude(t => t.Ticket)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (ticket == null)
             {
