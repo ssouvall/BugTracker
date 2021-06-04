@@ -1,4 +1,10 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Identity
+@using BugTracker.Services.Interfaces
+@inject SignInManager<BTUser> SignInManager
+@inject UserManager<BTUser> UserManager
+@inject IBTRolesService BTRolesService
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
@@ -10,11 +16,11 @@
             <div class="container-fluid">
                 <div class="d-flex">
                     <a class="header-brand" href="index.html">
-                        <ul class="ml-auto">
-                            <partial name="_LoginPartial" />
-                        </ul>
-                        <img src="../../assets/images/brand/logo.png" class="header-brand-img desktop-lgo" alt="Dayonelogo">
-                        <img src="../../assets/images/brand/logo-white.png" class="header-brand-img dark-logo" alt="Dayonelogo">
+                        @*<ul class="ml-auto">
+                                <partial name="_LoginPartial" />
+                            </ul>*@
+                        <img src="../../assets/images/brand/bugzapper-logo.png" class="header-brand-img desktop-lgo" alt="Dayonelogo">
+                        <img src="../../assets/images/brand/bugzapper-logo.pngbugzapper-logo.png" class="header-brand-img dark-logo" alt="Dayonelogo">
                         <img src="../../assets/images/brand/favicon.png" class="header-brand-img mobile-logo" alt="Dayonelogo">
                         <img src="../../assets/images/brand/favicon1.png" class="header-brand-img darkmobile-logo" alt="Dayonelogo">
                     </a>
@@ -173,37 +179,49 @@
                             </a>
                         </div>
                         <div class="dropdown profile-dropdown">
-                            <a href="#" class="nav-link pr-1 pl-0 leading-none" data-toggle="dropdown">
-                                <span>
-                                    <img src="../../assets/images/users/16.jpg" alt="img" class="avatar avatar-md bradius">
-                                </span>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow animated">
-                                <div class="p-3 text-center border-bottom">
-                                    <a href="#" class="text-center user pb-0 font-weight-bold">John Thomson</a>
-                                    <p class="text-center user-semi-title">App Developer</p>
+                            @if (SignInManager.IsSignedIn(User))
+                            {
+                                BTUser btUser = await UserManager.GetUserAsync(User);
+                                IEnumerable<string> roles = await BTRolesService.ListUserRolesAsync(btUser);
+
+                                <a href="#" class="nav-link pr-1 pl-0 leading-none" data-toggle="dropdown">
+                                    <span>
+                                        <img src="../../assets/images/users/16.jpg" alt="img" class="avatar avatar-md bradius">
+                                    </span>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow animated">
+                                    <div class="p-3 text-center border-bottom">
+                                        <a href="#" class="text-center user pb-0 font-weight-bold">@btUser.FullName</a>
+                                        @foreach (string role in roles)
+                                        {
+                                            <p class="text-center user-semi-title">@role</p>
+                                        }
+
+                                    </div>
+                                    <a class="dropdown-item d-flex" href="#">
+                                        <i class="feather feather-user mr-3 fs-16 my-auto"></i>
+                                        <div class="mt-1">Profile</div>
+                                    </a>
+                                    <a class="dropdown-item d-flex" href="#">
+                                        <i class="feather feather-settings mr-3 fs-16 my-auto"></i>
+                                        <div class="mt-1">Settings</div>
+                                    </a>
+                                    <a class="dropdown-item d-flex" href="#">
+                                        <i class="feather feather-mail mr-3 fs-16 my-auto"></i>
+                                        <div class="mt-1">Messages</div>
+                                    </a>
+                                    <a class="dropdown-item d-flex" href="#" data-toggle="modal" data-target="#changepasswordnmodal">
+                                        <i class="feather feather-edit-2 mr-3 fs-16 my-auto"></i>
+                                        <div class="mt-1">Change Password</div>
+                                    </a>
+                                    <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                                        <button type="submit" class="dropdown-item d-flex" href="#">
+                                            <i class="feather feather-power mr-3 fs-16 my-auto"></i>
+                                            <div class="mt-1">Sign Out</div>
+                                        </button>
+                                    </form>
                                 </div>
-                                <a class="dropdown-item d-flex" href="#">
-                                    <i class="feather feather-user mr-3 fs-16 my-auto"></i>
-                                    <div class="mt-1">Profile</div>
-                                </a>
-                                <a class="dropdown-item d-flex" href="#">
-                                    <i class="feather feather-settings mr-3 fs-16 my-auto"></i>
-                                    <div class="mt-1">Settings</div>
-                                </a>
-                                <a class="dropdown-item d-flex" href="#">
-                                    <i class="feather feather-mail mr-3 fs-16 my-auto"></i>
-                                    <div class="mt-1">Messages</div>
-                                </a>
-                                <a class="dropdown-item d-flex" href="#" data-toggle="modal" data-target="#changepasswordnmodal">
-                                    <i class="feather feather-edit-2 mr-3 fs-16 my-auto"></i>
-                                    <div class="mt-1">Change Password</div>
-                                </a>
-                                <a class="dropdown-item d-flex" href="#">
-                                    <i class="feather feather-power mr-3 fs-16 my-auto"></i>
-                                    <div class="mt-1">Sign Out</div>
-                                </a>
-                            </div>
+                            }
                         </div>
                     </div>
                 </div>

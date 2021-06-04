@@ -1,0 +1,77 @@
+/*---- IE11 Support ----*/
+*::-ms-backdrop, .img-height{
+	height:100%;
+}
+*::-ms-backdrop, .img-height1{
+	height:333px;
+}
+*::-ms-backdrop, .social-profile-buttons li{
+	float:none;
+	display:inline-block;
+}
+*::-ms-backdrop, .social-profile-buttons ul{
+	margin-bottom:0;
+}
+*::-ms-backdrop, .btn-icon.btn-svg .svg-icon{
+	height:16px;
+}
+*::-ms-backdrop, .price-svg .price-title{
+	top:0 !important;
+}
+*::-ms-backdrop, .price-svg svg{
+	height:65px !important;
+}
+*::-ms-backdrop, .item7-card-img {
+	height:100%;
+}
+*::-ms-backdrop, .main-content{
+	height:100%;
+}
+*::-ms-backdrop, .page-single, .page-single-content{
+	display:inline-block !important;
+}
+*::-ms-backdrop, .page, .page-content{
+	display:-ms-flexbox !important;
+}
+*::-ms-backdrop, .h-100vh .page{
+	height:100% !important;
+}
+*::-ms-backdrop, .page-style1{
+	background-position: center;
+    background-size: cover;
+    background-attachment: fixed;
+}
+*::-ms-backdrop, .app-sidebar-help{
+	display:none;
+}
+*::-ms-backdrop, html.fullscreen-content{
+	width:100%;
+}
+*::-ms-backdrop, html.fullscreen-content .main-content{
+	overflow:scroll;
+	overflow-x:hidden;
+	height:100vh;
+}
+*::-ms-backdrop, html.fullscreen-content .app-content{
+	overflow:scroll;
+	overflow-x:hidden;
+	height:100vh;
+}
+*::-ms-backdrop, .modal-footer.d-flex{
+	justify-content: inherit !important; 
+}
+*::-ms-backdrop, .modal-footer{
+	justify-content: inherit !important; 
+}
+*::-ms-backdrop, .header-datepicker .form-control.fc-datepicker,
+*::-ms-backdrop,  .header-datepicker .form-control{
+	padding-top: 0;
+	padding-bottom: 0;
+	height: 42px;
+}
+*::-ms-backdrop, .media-body{
+	display: inline-block !important;
+}
+*::-ms-backdrop, .sidebar-mini.sidenav-toggled.sidenav-toggled1 .app-sidebar .slide-menu{
+	position: relative;
+}

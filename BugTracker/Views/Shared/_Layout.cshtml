@@ -1,4 +1,10 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+@using BugTracker.Services.Interfaces 
+@inject SignInManager<BTUser> SignInManager
+@inject UserManager<BTUser> UserManager
+@inject IBTRolesService BTRolesService
+
+<!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
 
@@ -13,18 +19,19 @@
     <title>Dayone - Multipurpose Admin & Dashboard Template</title>
 
     <!--Favicon -->
-    <link rel="icon" href="../../assets/images/brand/favicon.ico" type="image/x-icon" />
+    <link rel="icon" href="../../assets/images/brand/favicon-32x32.png" type="image/x-icon" />
 
     <!-- Bootstrap css -->
-    @*<link href="../../assets/plugins/bootstrap/css/bootstrap.css" rel="stylesheet" />*@
-    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-    @*<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />*@
+    <link href="../../assets/plugins/bootstrap/css/bootstrap.css" rel="stylesheet" />
+
+    <!--Fontawesome-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <!-- Style css -->
     <link href="../../assets/css/style.css" rel="stylesheet" />
     <link href="../../assets/css/dark.css" rel="stylesheet" />
     <link href="../../assets/css/skin-modes.css" rel="stylesheet" />
-    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/assets/css/site.css" />
 
     <!-- Animate css -->
     <link href="../../assets/css/animated.css" rel="stylesheet" />
@@ -66,11 +73,17 @@
             <aside class="app-sidebar">
                 <div class="app-sidebar__logo">
                     <a class="header-brand" href="index.html">
-                        <img src="../../assets/images/brand/logo.png" class="header-brand-img desktop-lgo" alt="Dayonelogo">
-                        <img src="../../assets/images/brand/logo-white.png" class="header-brand-img dark-logo" alt="Dayonelogo">
-                        <img src="../../assets/images/brand/favicon.png" class="header-brand-img mobile-logo" alt="Dayonelogo">
-                        <img src="../../assets/images/brand/favicon1.png" class="header-brand-img darkmobile-logo" alt="Dayonelogo">
-                    </a>
+                        @if (!SignInManager.IsSignedIn(User))
+                        {
+                            <ul class="ml-auto">
+                                <partial name="_LoginPartial" />
+                            </ul>
+                        }
+                            <img src="../../assets/images/brand/bugzapper-logo.png" class="header-brand-img desktop-lgo h-auto w-75" alt="Dayonelogo">
+                            <img src="../../assets/images/brand/bugzapper-logo.png" class="header-brand-img dark-logo h-auto w-75" alt="Dayonelogo">
+                            <img src="../../assets/images/brand/logo-no-text.png" class="header-brand-img mobile-logo" alt="Dayonelogo">
+                            <img src="../../assets/images/brand/logo-no-text.png" class="header-brand-img darkmobile-logo" alt="Dayonelogo">
+                        </a>
                 </div>
                 <div class="app-sidebar3">
                     <div class="app-sidebar__user">
@@ -78,77 +91,35 @@
                             <div class="user-pic">
                                 <img src="../../assets/images/users/16.jpg" alt="user-img" class="avatar-xxl rounded-circle mb-1">
                             </div>
-                            <div class="user-info">
-                                <h5 class=" mb-2">Abigali kelly</h5>
-                                <span class="text-muted app-sidebar__user-name text-sm">App Developer</span>
-                            </div>
-                        </div>
+                            @if (SignInManager.IsSignedIn(User))
+                            {
+                                BTUser btUser = await UserManager.GetUserAsync(User);
+                                IEnumerable<string> roles = await BTRolesService.ListUserRolesAsync(btUser);
+
+                                <div>
+                                    <div class="user-info">
+                                        <h5 class=" mb-2">@btUser.FullName</h5>
+                                        @foreach (string role in roles)
+                                        {
+                                            <span class="text-muted app-sidebar__user-name text-sm">@role</span>
+                                        }
+
+                                    </div>
+                                </div>
+                            }
                     </div>
+                </div>
                     <ul class="side-menu">
-                        <li class="side-item side-item-category mt-4">Dashboards</li>
                         <li class="slide">
                             <a class="side-menu__item" data-toggle="slide" href="#">
                                 <i class="feather feather-home sidemenu_icon"></i>
-                                <span class="side-menu__label">HR Dashboard</span><i class="angle fa fa-angle-right"></i>
+                                <span class="side-menu__label">Dashboard</span>
                             </a>
-                            <ul class="slide-menu">
-                                <li><a href="index.html" class="slide-item">Dashboard</a></li>
-                                <li><a href="hr-department.html" class="slide-item">Department</a></li>
-                                <li class="sub-slide">
-                                    <a class="sub-side-menu__item" data-toggle="sub-slide" href="#"><span class="sub-side-menu__label">Employees</span><i class="sub-angle fa fa-angle-right"></i></a>
-                                    <ul class="sub-slide-menu">
-                                        <li><a class="sub-slide-item" href="hr-emplist.html">Employees List</a></li>
-                                        <li><a class="sub-slide-item" href="hr-empview.html">View Employee</a></li>
-                                        <li><a class="sub-slide-item" href="hr-addemployee.html">Add Employee</a></li>
-                                    </ul>
-                                </li>
-                                <li class="sub-slide">
-                                    <a class="sub-side-menu__item" data-toggle="sub-slide" href="#"><span class="sub-side-menu__label">Attendance</span><i class="sub-angle fa fa-angle-right"></i></a>
-                                    <ul class="sub-slide-menu">
-                                        <li><a class="sub-slide-item" href="hr-attlist.html">Attendance List</a></li>
-                                        <li><a class="sub-slide-item" href="hr-attuser.html">Attendance By User</a></li>
-                                        <li><a class="sub-slide-item" href="hr-attview.html">Attendance View</a></li>
-                                        <li><a class="sub-slide-item" href="hr-overviewcldr.html">Overview Calender</a></li>
-                                        <li><a class="sub-slide-item" href="hr-attmark.html">Attendance Mark </a></li>
-                                        <li><a class="sub-slide-item" href="hr-leaves.html">Leave Settings</a></li>
-                                        <li><a class="sub-slide-item" href="hr-leavesapplication.html">Leave Applications</a></li>
-                                        <li><a class="sub-slide-item" href="hr-recentleaves.html">Recent Leaves </a></li>
-                                    </ul>
-                                </li>
-                                <li><a href="hr-award.html" class="slide-item">Awards</a></li>
-                                <li><a href="hr-holiday.html" class="slide-item">Holidays</a></li>
-                                <li><a href="hr-notice.html" class="slide-item">Notice Board</a></li>
-                                <li><a href="hr-expenses.html" class="slide-item">Expenses</a></li>
-                                <li class="sub-slide">
-                                    <a class="sub-side-menu__item" data-toggle="sub-slide" href="#"><span class="sub-side-menu__label">Payroll</span><i class="sub-angle fa fa-angle-right"></i></a>
-                                    <ul class="sub-slide-menu">
-                                        <li><a class="sub-slide-item" href="hr-empsalary.html">Employee Salary</a></li>
-                                        <li><a class="sub-slide-item" href="hr-addpayroll.html">Add Payroll</a></li>
-                                        <li><a class="sub-slide-item" href="hr-editpayroll.html">Edit Payroll</a></li>
-                                    </ul>
-                                </li>
-                                <li><a href="hr-events.html" class="slide-item">Events</a></li>
-                                <li><a href="hr-settings.html" class="slide-item">Settings</a></li>
-                            </ul>
                         </li>
                         <li class="slide">
                             <a class="side-menu__item" data-toggle="slide" href="#">
-                                <i class="feather  feather-users sidemenu_icon"></i>
-                                <span class="side-menu__label">Employee Dashboard</span><i class="angle fa fa-angle-right"></i>
-                            </a>
-                            <ul class="slide-menu">
-                                <li><a href="index2.html" class="slide-item">Dashboard</a></li>
-                                <li><a href="employee-attendance.html" class="slide-item">Attendance</a></li>
-                                <li><a href="employee-leaves.html" class="slide-item">Apply Leaves </a></li>
-                                <li><a href="employee-myleaves.html" class="slide-item">My Leaves </a></li>
-                                <li><a href="employee-payslips.html" class="slide-item">Payslips </a></li>
-                                <li><a href="employee-expenses.html" class="slide-item">Expenses</a></li>
-                            </ul>
-                        </li>
-                        <li class="slide">
-                            <a class="side-menu__item" data-toggle="slide" href="#">
-                                <i class="feather feather-clipboard sidemenu_icon"></i>
-                                <span class="side-menu__label">Task Dashboard</span><i class="angle fa fa-angle-right"></i>
+                                <i class="far fa-envelope"></i>
+                                <span class="side-menu__label">Notification Inbox</span><i class="angle fa fa-angle-right"></i>
                             </a>
                             <ul class="slide-menu">
                                 <li><a href="index3.html" class="slide-item">Dashboard</a></li>
@@ -710,13 +681,13 @@
                 </div>
             </aside>
             <!--aside closed-->
-            <div class="container">
+            <div class="container-fluid">
                 <main role="main" class="pb-3">
                     @RenderBody()
                 </main>
             </div>
 
-           
+
         </div>
 
         <!--Footer-->
@@ -1014,7 +985,7 @@
 
     <!-- Jquery js-->
     <script src="../../assets/plugins/jquery/jquery.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    @*<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>*@
 
     <!--Moment js-->
     <script src="../../assets/plugins/moment/moment.js"></script>
@@ -1022,8 +993,6 @@
     <!-- Bootstrap4 js-->
     <script src="../../assets/plugins/bootstrap/popper.min.js"></script>
     <script src="../../assets/plugins/bootstrap/js/bootstrap.min.js"></script>
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 
     <!--Othercharts js-->
     <script src="../../assets/plugins/othercharts/jquery.sparkline.min.js"></script>
@@ -1066,7 +1035,7 @@
 
     <!-- Custom js-->
     <script src="../../assets/js/custom.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/assets/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 
 </body>

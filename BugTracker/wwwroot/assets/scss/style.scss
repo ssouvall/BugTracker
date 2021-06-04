@@ -1,0 +1,212 @@
+/*------------------------------------------------------------------
+[Master Stylesheet]
+
+Project        :   Dayone - Multipurpose Admin & Dashboard Template
+Version        :   V.1
+Create Date    :   23/04/2021
+Copyright      :   Spruko Technologies Private Limited 
+Author         :   SprukoSoft
+Author URL     :   https://themeforest.net/user/sprukosoft
+Support	       :   support@spruko.com
+License        :   Licensed under ThemeForest License
+
+-------------------------------------------------------------------*/
+
+/*
+1.  Accordions
+2.  Alerts
+3.  Badges
+4.  Bootstrap-Styles
+5.  Breadcrumbs
+6.  Buttons
+7.  Card
+8.  Carousel
+9.  Dropdown
+10. Input-Group
+11. Jumbotron
+12. Labels
+13. List
+14. Media
+15. Modal
+16. Navigation
+17. Pagination
+18. Panel
+19. Progress
+20. Tables
+21. Tags
+22. Thumbnail
+23. Tolltip&popover
+24. Typography
+25. Chat
+26. Chat2
+27. Contact
+28. Date-Picker
+29. Loader
+30. Popup-chat
+31. Profile
+32. RangeSlider
+33. Rating
+34. Select-Group
+35. Selectize
+36. Tabs
+37. Vectormap
+38. Avatars
+39. Custom-Control
+40. Custom-styles
+41. Custom
+42. Feather-icons
+43. Highlight
+44. Icon-list
+45. Ie
+46. Pricing
+47. SupportDashboard
+48. Footer
+49. Grid
+50. Header
+51. Horizontal-menu
+52. Calendar
+53. Charts
+54. Email
+55. Form-Elements
+56. Form-wizard
+57. Gallery
+58. Time-line
+59. Alignments
+60. Backgrounds
+61. Borders
+62. Height
+63. Margin
+64. Padding
+65. Typography
+66. Width
+*/
+
+/* ###### Fonts ####### */
+@import "custom/fonts/fonts";
+
+
+/* ###### bootstrap ####### */
+@import "variables";
+@import "bootstrap/accordion";
+@import "bootstrap/alerts";
+@import "bootstrap/badges";
+@import "bootstrap/bootstrap-styles";
+@import "bootstrap/breadcrumb";
+@import "bootstrap/buttons";
+@import "bootstrap/cards";
+@import "bootstrap/carousel";
+@import "bootstrap/dropdown";
+@import "bootstrap/input-group";
+@import "bootstrap/jumbotron";
+@import "bootstrap/labels";
+@import "bootstrap/list";
+@import "bootstrap/media";
+@import "bootstrap/modal";
+@import "bootstrap/navigation";
+@import "bootstrap/pagination";
+@import "bootstrap/panel";
+@import "bootstrap/progress";
+@import "bootstrap/tables";
+@import "bootstrap/tags";
+@import "bootstrap/thumbnail";
+@import "bootstrap/tooltip&popover";
+@import "bootstrap/typhography";
+
+
+/* ###### components ####### */
+@import "components/chat";
+@import "components/chat2";
+@import "components/contact";
+@import "components/date-picker";
+@import "components/loader";
+@import "components/popup-chat";
+@import "components/profile";
+@import "components/rangeslider";
+@import "components/rating";
+@import "components/select-group";
+@import "components/selectize";
+@import "components/tabs";
+@import "components/vectormap";
+
+
+/* ###### custom ####### */
+@import "custom/avatars";
+@import "custom/custom-control";
+@import "custom/custom-styles";
+@import "custom/custom";
+@import "custom/feather-icons";
+@import "custom/highlight";
+@import "custom/icon-list";
+@import "custom/ie";
+@import "custom/pricing";
+@import "custom/supportdashboard";
+
+
+/* ###### layouts ####### */
+@import "layouts/footer";
+@import "layouts/grid";
+@import "layouts/header";
+@import "layouts/horizontal-menu";
+
+
+/* ###### library ####### */
+@import "library/calendar";
+@import "library/charts";
+@import "library/email";
+@import "library/form-elements";
+@import "library/form-wizard";
+@import "library/gallery";
+@import "library/timeline";
+
+
+/* ###### utlities ####### */
+@import "utlities/alignments";
+@import "utlities/backgrounds";
+@import "utlities/borders";
+@import "utlities/height";
+@import "utlities/margin";
+@import "utlities/padding";
+@import "utlities/typography";
+@import "utlities/width";
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
