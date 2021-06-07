@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Ticket>
+﻿@model BugTracker.Models.ViewModels.MyTicketsViewModel
 
 
 <h1>My Development Tickets</h1>
@@ -20,7 +20,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (Ticket ticket in Model)
+        @foreach (Ticket ticket in Model.DevTickets)
         {
             if (ticket.TicketStatus.Name == "Development")
             {
@@ -80,11 +80,12 @@
             <th scope="col">Developer</th>
             <th scope="col">Archived?</th>
             <th scope="col">Archived Date</th>
+            <th></th>
 
         </tr>
     </thead>
     <tbody>
-        @foreach (Ticket ticket in Model)
+        @foreach (Ticket ticket in Model.SubmittedTickets)
         {
             if (ticket.TicketStatus.Name == "Submitted")
             {
@@ -121,6 +122,11 @@
                     </td>
                     <td>
                         @ticket.ArchivedDate
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@ticket.Id">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@ticket.Id">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@ticket.Id">Delete</a>
                     </td>
                 </tr>
             }

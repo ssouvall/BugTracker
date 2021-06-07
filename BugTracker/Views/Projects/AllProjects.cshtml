@@ -1,49 +1,57 @@
-﻿@model IEnumerable<Project>
+﻿@model BugTracker.Models.ViewModels.DashboardViewModel
 
-<div class="row m-5">
-    <div class="col-md-12 col-lg-12">
-        <div class="card">
-            <div class="card-header border-bottom-0">
-                <h3 class="card-title">Hoverable Rows Table</h3>
-            </div>
-            <div class="card-body p-0">
-                <div class="table-responsive">
-                    <table id="details-datatable" class="table table-hover card-table table-vcenter text-nowrap mb-0">
-                        <thead>
-                            <tr>
-                                <th scope="col">Name</th>
-                                <th scope="col">Description</th>
-                                <th scope="col">Start Date</th>
-                                <th scope="col">End Date</th>
-                                <th scope="col">Priority</th>
-                                <th scope="col">Archived</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (Project project in Model)
-                            {
+    <div class="row mt-5">
+        <div class="col-xl-12 col-md-12 col-lg-12">
+            <div class="card">
+                <div class="card-header border-bottom-0">
+                    <h3 class="card-title">Project List</h3>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table id="details-datatable" class="table table-hover card-table table-vcenter text-nowrap mb-0">
+                            <thead>
                                 <tr>
-                                    <th scope="row">
-                                        @project.Name
-                                    </th>
-                                    <td>
-                                        @project.StartDate.ToString("MMM dd, yyyy")
-                                    </td>
-                                    <td>
-                                        @project.EndDate.ToString("MMM dd, yyyy");
-                                    </td>
-                                    <td>
-                                        @project.ProjectPriorityId;
-                                    </td>
-                                    <td>
-                                        @project.Archived
-                                    </td>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Start Date</th>
+                                    <th scope="col">End Date</th>
+                                    <th scope="col">Team</th>
+                                    <th scope="col">Ticket Count</th>
+                                    <th scope="col">Details</th>
                                 </tr>
-                            }
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                @foreach (Project project in Model.Projects)
+                                {
+                                    <tr>
+                                        <th scope="row">
+                                            @project.Name
+                                        </th>
+                                        <td>
+                                            @project.StartDate.ToString("MMM dd, yyyy")
+                                        </td>
+                                        <td>
+                                            @project.EndDate.ToString("MMM dd, yyyy")
+                                        </td>
+                                        <td>
+                                            <div class="avatar-list avatar-list-stacked">
+                                                <img class="avatar avatar-md brround" src="../../assets/images/users/16.jpg" alt="img">
+                                                <img class="avatar avatar-md brround" src="../../assets/images/users/16.jpg" alt="img">
+                                                <img class="avatar avatar-md brround" src="../../assets/images/users/16.jpg" alt="img">
+                                                <img class="avatar avatar-md brround" src="../../assets/images/users/16.jpg" alt="img">
+                                            </div>
+                                        </td>
+                                        <td>
+                                            @project.Tickets.Count
+                                        </td>
+                                        <td>
+                                            <a asp-controller="Projects" asp-action="Details" asp-route-id="@project.Id"><i class="far fa-eye"></i></a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>

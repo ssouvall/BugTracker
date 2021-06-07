@@ -198,14 +198,15 @@ namespace BugTracker.Controllers
         [HttpGet]
         public async Task<IActionResult> MyTickets()
         {
-            var model = new CompanyTicketsViewModel();
-            BTUser user = await _userManager.GetUserAsync(User);
-            int companyId = User.Identity.GetCompanyId().Value;
-            
-            List<Ticket> myTickets = model.Tickets.Where(u => u.DeveloperUserId == user.Id || u.OwnerUserId == user.Id).ToList();
-
-            return View(myTickets);
-
+            string userId = _userManager.GetUserId(User);
+            var devTickets = await _ticketService.GetAllTicketsByRoleAsync("Developer", userId);
+            var subTickets = await _ticketService.GetAllTicketsByRoleAsync("Submitter", userId);
+            var model = new MyTicketsViewModel()
+            {
+                DevTickets = devTickets,
+                SubmittedTickets = subTickets
+            };
+            return View(model);
 
         }
 

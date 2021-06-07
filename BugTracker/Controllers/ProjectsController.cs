@@ -20,16 +20,19 @@ namespace BugTracker.Controllers
         private readonly ApplicationDbContext _context;
         private readonly IBTProjectService _projectService;
         private readonly IBTCompanyInfoService _bTCompanyInfoService;
+        private readonly IBTTicketService _ticketService;
         private readonly UserManager<BTUser> _userManager;
 
         public ProjectsController(ApplicationDbContext context,
                                     IBTProjectService projectService,
                                     IBTCompanyInfoService bTCompanyInfoService,
+                                    IBTTicketService ticketService,
                                     UserManager<BTUser> userManager)
         {
             _context = context;
             _projectService = projectService;
             _bTCompanyInfoService = bTCompanyInfoService;
+            _ticketService = ticketService;
             _userManager = userManager;
         }
 
@@ -203,8 +206,17 @@ namespace BugTracker.Controllers
         public async Task<IActionResult> AllProjects()
         {
             int companyId = User.Identity.GetCompanyId().Value;
-            List<Project> projects = await _projectService.GetAllProjectsByCompany(companyId);
-            return View(projects);
+            var members = await _bTCompanyInfoService.GetAllMembersAsync(companyId);
+            var projects = await _projectService.GetAllProjectsByCompany(companyId);
+            var tickets = await _ticketService.GetAllTicketsByCompanyAsync(companyId);
+            var model = new DashboardViewModel()
+
+            {
+                Tickets = tickets,
+                Projects = projects,
+                Users = members,
+            };
+            return View(model);
         }
 
         [HttpGet]
