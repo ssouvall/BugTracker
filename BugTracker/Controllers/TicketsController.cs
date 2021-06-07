@@ -19,16 +19,19 @@ namespace BugTracker.Controllers
         private readonly ApplicationDbContext _context;
         private readonly IBTTicketService _ticketService;
         private readonly UserManager<BTUser> _userManager;
+        private readonly IBTProjectService _projectService;
         private readonly IBTCompanyInfoService _infoService;
 
         public TicketsController(ApplicationDbContext context,
                                  IBTTicketService ticketService,
                                  UserManager<BTUser> userManager,
+                                 IBTProjectService projectService,
                                  IBTCompanyInfoService infoService)
         {
             _context = context;
             _ticketService = ticketService;
             _userManager = userManager;
+            _projectService = projectService;
             _infoService = infoService;
         }
 
@@ -70,14 +73,26 @@ namespace BugTracker.Controllers
         }
 
         // GET: Tickets/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ViewData["DeveloperUserId"] = new SelectList(_context.Users, "Id", "Id");
-            ViewData["OwnerUserId"] = new SelectList(_context.Users, "Id", "Id");
-            ViewData["ProjectId"] = new SelectList(_context.Project, "Id", "Name");
-            ViewData["TicketPriorityId"] = new SelectList(_context.Set<TicketPriority>(), "Id", "Id");
-            ViewData["TicketStatusId"] = new SelectList(_context.Set<TicketStatus>(), "Id", "Id");
-            ViewData["TicketTypeId"] = new SelectList(_context.Set<TicketType>(), "Id", "Id");
+            //get current user
+            BTUser btUser = await _userManager.GetUserAsync(User);
+            //get current user's company
+            int companyId = User.Identity.GetCompanyId().Value;
+
+            if (User.IsInRole("Admin"))
+            {
+                ViewData["ProjectId"] = new SelectList(await _projectService.GetAllProjectsByCompany(companyId), "Id", "Name");
+            }
+            else
+            {
+                ViewData["ProjectId"] = new SelectList(await _projectService.ListUserProjectsAsync(btUser.Id), "Id", "Name");
+            }
+            
+
+
+            ViewData["TicketPriorityId"] = new SelectList(_context.Set<TicketPriority>(), "Id", "Name");
+            ViewData["TicketTypeId"] = new SelectList(_context.Set<TicketType>(), "Id", "Name");
             return View();
         }
 
@@ -86,21 +101,22 @@ namespace BugTracker.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Description,Created,Updated,Archived,ArchivedDate,ProjectId,TicketPriorityId,TicketTypeId,TicketStatusId,OwnerUserId,DeveloperUserId")] Ticket ticket)
+        public async Task<IActionResult> Create([Bind("Id,Title,Description,ProjectId,TicketPriorityId,TicketTypeId")] Ticket ticket)
         {
             if (ModelState.IsValid)
             {
+                ticket.Created = DateTimeOffset.Now;
+                string userId = _userManager.GetUserId(User);
+                ticket.OwnerUserId = userId;
+
+                ticket.TicketStatusId = (await _ticketService.LookupTicketStatusIdAsync("New")).Value;
+
                 _context.Add(ticket);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Details", "Projects", new { id = ticket.ProjectId });
             }
-            ViewData["DeveloperUserId"] = new SelectList(_context.Users, "Id", "Id", ticket.DeveloperUserId);
-            ViewData["OwnerUserId"] = new SelectList(_context.Users, "Id", "Id", ticket.OwnerUserId);
-            ViewData["ProjectId"] = new SelectList(_context.Project, "Id", "Name", ticket.ProjectId);
-            ViewData["TicketPriorityId"] = new SelectList(_context.Set<TicketPriority>(), "Id", "Id", ticket.TicketPriorityId);
-            ViewData["TicketStatusId"] = new SelectList(_context.Set<TicketStatus>(), "Id", "Id", ticket.TicketStatusId);
-            ViewData["TicketTypeId"] = new SelectList(_context.Set<TicketType>(), "Id", "Id", ticket.TicketTypeId);
-            return View(ticket);
+
+            return View("Create");
         }
 
         // GET: Tickets/Edit/5

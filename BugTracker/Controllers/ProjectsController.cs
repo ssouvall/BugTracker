@@ -62,10 +62,11 @@ namespace BugTracker.Controllers
         }
 
         // GET: Projects/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ViewData["CompanyId"] = new SelectList(_context.Company, "Id", "Name");
-            ViewData["ProjectPriorityId"] = new SelectList(_context.Set<ProjectPriority>(), "Id", "Id");
+            
+            //ViewData["CompanyId"] = new SelectList(_context.Company, "Id", "Name");
+            ViewData["ProjectPriorityId"] = new SelectList(_context.Set<ProjectPriority>(), "Id", "Name");
             return View();
         }
 
@@ -74,10 +75,12 @@ namespace BugTracker.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,CompanyId,Name,Description,StartDate,EndDate,ProjectPriorityId,FileName,FileData,FileContentType,Archived")] Project project)
+        public async Task<IActionResult> Create([Bind("Id,Name,Description,StartDate,EndDate,ProjectPriorityId,FileName,FileData,FileContentType")] Project project)
         {
+            
             if (ModelState.IsValid)
             {
+                project.CompanyId = User.Identity.GetCompanyId().Value;
                 _context.Add(project);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));

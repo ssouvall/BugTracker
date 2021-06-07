@@ -66,19 +66,14 @@
         <img src="../../assets/images/svgs/loader.svg" alt="loader">
     </div>
 
-    <div class="page">
-        <div class="page-main">
+    @*<div class="page">
+        <div class="page-main">*@
 
             <!--aside open-->
             <aside class="app-sidebar">
                 <div class="app-sidebar__logo">
                     <a class="header-brand" href="index.html">
-                        @if (!SignInManager.IsSignedIn(User))
-                        {
-                            <ul class="ml-auto">
-                                <partial name="_LoginPartial" />
-                            </ul>
-                        }
+                        
                         <img src="../../assets/images/brand/bugzapper-logo.png" class="header-brand-img desktop-lgo h-auto w-75" alt="Dayonelogo">
                         <img src="../../assets/images/brand/bugzapper-logo.png" class="header-brand-img dark-logo h-auto w-75" alt="Dayonelogo">
                         <img src="../../assets/images/brand/logo-no-text.png" class="header-brand-img mobile-logo" alt="Dayonelogo">
@@ -91,6 +86,7 @@
                             <div class="user-pic">
                                 <img src="../../assets/images/users/16.jpg" alt="user-img" class="avatar-xxl rounded-circle mb-1">
                             </div>
+
                             @if (SignInManager.IsSignedIn(User))
                             {
                                 BTUser btUser = await UserManager.GetUserAsync(User);
@@ -130,8 +126,8 @@
                             <ul class="slide-menu">
                                 <li><a asp-controller="Projects" asp-action="AllProjects" class="slide-item">All Projects</a></li>
                                 <li><a asp-controller="Projects" asp-action="MyProjects" class="slide-item">My Projects</a></li>
-                                <li><a href="project-view.html" class="slide-item">Add Project</a></li>
-                                <li><a href="project-overclndr.html" class="slide-item">Manage Projects</a></li>
+                                <li><a asp-controller="Projects" asp-action="Create" class="slide-item">Add Project</a></li>
+                                <li><a asp-controller="Projects" asp-action="Index" class="slide-item">Manage Projects</a></li>
                                 <li><a asp-controller="Projects" asp-action="ArchivedProjects" class="slide-item">Project Archive</a></li>
                             </ul>
                         </li>
@@ -141,11 +137,11 @@
                                 <span class="side-menu__label">Tickets</span><i class="angle fa fa-angle-right"></i>
                             </a>
                             <ul class="slide-menu">
-                                <li><a href="index5.html" class="slide-item">All Tickets</a></li>
-                                <li><a href="client-list.html" class="slide-item">My Tickets</a></li>
-                                <li><a href="client-view.html" class="slide-item">Add Tickets</a></li>
-                                <li><a href="client-new.html" class="slide-item">Manage Tickets</a></li>
-                                <li><a href="client-profile.html" class="slide-item">Ticket Archive</a></li>
+                                <li><a asp-controller="Tickets" asp-action="AllTickets" class="slide-item">All Tickets</a></li>
+                                <li><a asp-controller="Tickets" asp-action="MyTickets" class="slide-item">My Tickets</a></li>
+                                <li><a asp-controller="Tickets" asp-action="Create" class="slide-item">Add Tickets</a></li>
+                                <li><a asp-controller="Tickets" asp-action="Index" class="slide-item">Manage Tickets</a></li>
+                                <li><a asp-controller="Tickets" asp-action="ArchivedTickets" class="slide-item">Ticket Archive</a></li>
                             </ul>
                         </li>
                         <li class="slide">
@@ -160,7 +156,9 @@
                                 <span class="side-menu__label">Admin</span>
                             </a>
                         </li>
+
                     </ul>
+                    
                 </div>
             </aside>
             <!--aside closed-->
@@ -335,6 +333,12 @@
                                         </a>
                                     </div>
                                     <div class="dropdown profile-dropdown">
+                                        @if (!SignInManager.IsSignedIn(User))
+                                        {
+                                            <ul class="ml-auto">
+                                                <partial name="_LoginPartial" />
+                                            </ul>
+                                        }
                                         @if (SignInManager.IsSignedIn(User))
                                         {
                                             BTUser btUser = await UserManager.GetUserAsync(User);
