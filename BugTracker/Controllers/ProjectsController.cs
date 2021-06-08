@@ -55,6 +55,7 @@ namespace BugTracker.Controllers
                 .Include(p => p.Members)
                 .Include(p => p.Company)
                 .Include(p => p.ProjectPriority)
+                .Include(p => p.Tickets)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (project == null)
             {

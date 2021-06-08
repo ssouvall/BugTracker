@@ -60,6 +60,7 @@
 </head>
 
 <body class="app sidebar-mini">
+    <partial name="_LogoutPartial" />
 
     <!---Global-loader-->
     <div id="global-loader">
@@ -254,12 +255,10 @@
                                                     <i class="feather feather-edit-2 mr-3 fs-16 my-auto"></i>
                                                     <div class="mt-1">Change Password</div>
                                                 </a>
-                                                <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-                                                    <button type="submit" class="dropdown-item d-flex" href="#">
-                                                        <i class="feather feather-power mr-3 fs-16 my-auto"></i>
-                                                        <div class="mt-1">Sign Out</div>
-                                                    </button>
-                                                </form>
+                                                <a class="dropdown-item d-flex" href="javascript:document.getElementById('logoutform').submit();">
+                                                    <i class="feather feather-power mr-3 fs-16 my-auto"></i>
+                                                    <div class="mt-1">Sign Out</div>
+                                                </a>
                                             </div>
                                         }
                                     </div>

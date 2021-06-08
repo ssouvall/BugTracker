@@ -9,14 +9,10 @@
     ViewData["Title"] = "Home Page";
 }
 
-        @if (User.Identity.IsAuthenticated)
-        {
-
-
         <!--Page header-->
         <div class="page-header d-xl-flex d-block">
             <div class="page-leftheader">
-                <h4 class="page-title">Dashboard</h4>
+                <h4 class="page-title">Welcome @Model.User.FirstName!</h4>
             </div>
             <div class="page-rightheader ml-md-auto">
                 <div class="d-flex align-items-end flex-wrap my-auto right-content breadcrumb-right">
@@ -131,6 +127,7 @@
                                                 <p class="tx-16 font-weight-semibold text-muted mb-2">Resolved: @completed.Count</p>
                                                 <p class="tx-16 font-weight-semibold text-muted mb-2">Archived: @archived.Count</p>
                                             </div>
+                                            
                                         </div>
                                         <div class="col-3">
                                             <div class="task-img bg-light my-auto float-right">
@@ -161,7 +158,6 @@
                                                     <p class="tx-16 font-weight-semibold text-muted mb-2">high priority: @highPriority.Count</p>
                                                     <p class="tx-16 font-weight-semibold text-muted mb-2">urgent: @urgentPriority.Count</p>
                                                 </div>
-                                                
                                             </div>
                                         </div>
                                         <div class="col-3">
@@ -202,9 +198,36 @@
                                         <div class="col-9">
                                             <div class="mt-0 text-left">
                                                 <h4 class="mb-0 mt-1 mb-2 font-weight-semibold">Project Members by Role</h4>
-                                                @foreach(Project project in Model.Projects)
+                                                @foreach (Project project in Model.Projects)
                                                 {
-                                                        <p>@project.Members.Count</p>
+                                                    <p>Project Name: @project.Name</p>
+                                                    <p>Total members: @project.Members.Count</p>
+
+                                                    List<BTUser> pms = new();
+                                                    List<BTUser> devs = new();
+                                                    List<BTUser> subs = new();
+                                                    List<BTUser> allMembers = new();
+
+                                                    @foreach (BTUser member in project.Members)
+                                                    {
+                                                        if (Model.ProjectManagers.Contains(member))
+                                                        {
+                                                            pms.Add(member);
+                                                        }
+                                                        else if(Model.Developers.Contains(member))
+                                                        {
+                                                            devs.Add(member);
+                                                        }
+                                                        else if(Model.Submitters.Contains(member))
+                                                        {
+                                                            subs.Add(member);
+                                                        }
+
+                                                    }
+
+                                                    <p>Total PMs: @pms.Count</p>
+                                                    <p>Total Developers: @devs.Count</p>
+                                                    <p>Total Submitters: @subs.Count</p>
                                                 }
                                             </div>
                                         </div>
@@ -324,4 +347,3 @@
     </div>
     </div>
     <!-- End Row -->
-                            }

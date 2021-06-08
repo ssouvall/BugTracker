@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Identity;
 using BugTracker.Services.Interfaces;
 using BugTracker.Data;
 using BugTracker.Extensions;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BugTracker.Controllers
 {
@@ -21,35 +22,47 @@ namespace BugTracker.Controllers
         private readonly IBTTicketService _ticketService;
         private readonly IBTProjectService _projectService;
         private readonly IBTCompanyInfoService _companyInfoService;
+        private readonly IBTRolesService _rolesService;
 
         public HomeController(ILogger<HomeController> logger,
                               UserManager<BTUser> userManager,
                               IBTTicketService ticketService,
                               IBTProjectService projectService,
-                              IBTCompanyInfoService companyInfoService)
+                              IBTCompanyInfoService companyInfoService,
+                              IBTRolesService rolesService)
         {
             _logger = logger;
             _userManager = userManager;
             _ticketService = ticketService;
             _projectService = projectService;
             _companyInfoService = companyInfoService;
+            _rolesService = rolesService;
         }
 
+        [Authorize]
         public async Task<IActionResult> Index()
         {
             //string userId = _userManager.GetUserId(User);
             if (User.Identity.IsAuthenticated)
             {
+                BTUser user = await _userManager.GetUserAsync(User);
                 int companyId = User.Identity.GetCompanyId().Value;
                 var members = await _companyInfoService.GetAllMembersAsync(companyId);
                 var tickets = await _ticketService.GetAllTicketsByCompanyAsync(companyId);
                 var projects = await _projectService.GetAllProjectsByCompany(companyId);
+                var developers = await _companyInfoService.GetMembersInRoleAsync("Developer", companyId);
+                var submitters = await _companyInfoService.GetMembersInRoleAsync("Submitter", companyId);
+                var projectManagers = await _companyInfoService.GetMembersInRoleAsync("ProjectManager", companyId);
+
                 var model = new DashboardViewModel()
-                
                 {
                     Tickets = tickets,
                     Projects = projects,
                     Users = members,
+                    Developers = developers,
+                    Submitters = submitters,
+                    ProjectManagers = projectManagers,
+                    User = user
                 };
                 return View(model);
             }
@@ -58,6 +71,28 @@ namespace BugTracker.Controllers
                 return View();
             }
             
+        }
+
+        public IActionResult Landing()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> PieChartMethod()
+        {
+            int companyId = User.Identity.GetCompanyId().Value;
+            List<Project> projects = await _projectService.GetAllProjectsByCompany(companyId);
+
+            List<object> chartData = new();
+            chartData.Add(new object[] { "ProjectName", "TicketCount" });
+
+            foreach (Project project in projects)
+            {
+                chartData.Add(new object[] { project.Name, project.Tickets.Count() });
+            }
+
+            return Json(chartData);
         }
 
         public IActionResult Privacy()
