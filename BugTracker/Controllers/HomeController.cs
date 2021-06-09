@@ -82,6 +82,7 @@ namespace BugTracker.Controllers
         public async Task<JsonResult> PieChartMethod()
         {
             int companyId = User.Identity.GetCompanyId().Value;
+
             List<Project> projects = await _projectService.GetAllProjectsByCompany(companyId);
 
             List<object> chartData = new();

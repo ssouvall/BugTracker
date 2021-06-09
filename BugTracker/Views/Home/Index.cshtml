@@ -66,7 +66,7 @@
                         <div class="row">
                             <div class="col-7">
                                 <div class="mt-0 text-left">
-                                    <span class="fs-16 font-weight-semibold">Unassigned Tickets</span>
+                                    <span class="fs-16 font-weight-semibold">Resolved Tickets</span>
                                     @{
                                         List<Ticket> newTickets = Model.Tickets.Where(t => t.TicketStatusId == 6).ToList();
                                         List<Ticket> unassigned = Model.Tickets.Where(t => t.TicketStatusId == 5).ToList();
@@ -75,7 +75,7 @@
                                         List<Ticket> completed = Model.Tickets.Where(t => t.TicketStatusId == 2).ToList();
                                         List<Ticket> archived = Model.Tickets.Where(t => t.TicketStatusId == 1).ToList();
                                     }
-                                    <h3 class="mb-0 mt-1 text-success fs-25">@unassigned.Count</h3>
+                                <h3 class="mb-0 mt-1 text-success fs-25">@completed.Count</h3>
                                 </div>
                             </div>
                             <div class="col-5">
@@ -91,8 +91,8 @@
                         <div class="row">
                             <div class="col-7">
                                 <div class="mt-0 text-left">
-                                    <span class="fs-16 font-weight-semibold">Resolved Tickets</span>
-                                    <h3 class="mb-0 mt-1 text-secondary fs-25">@completed.Count</h3>
+                                    <span class="fs-16 font-weight-semibold">Unassigned Tickets</span>
+                                    <h3 class="mb-0 mt-1 text-secondary fs-25">@unassigned.Count</h3>
                                 </div>
                             </div>
                             <div class="col-5">
@@ -117,7 +117,7 @@
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-9">
-                                            <div class="mt-0 text-left">
+                                            <div class="mt-0 text-left chart1">
                                                 <a href="project-view.html" class="mb-0 mt-1 mb-2 font-weight-semibold h4">Tickets By Status</a>
                                                 <small>(THIS WILL BE A PIE GRAPH)</small>
                                                 <p class="tx-16 font-weight-semibold text-muted mb-2">New: @newTickets.Count</p>
@@ -346,4 +346,7 @@
         </div>
     </div>
     </div>
+
+    @*---------Google Charts Scripts----------*@
+    @*<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery.*@
     <!-- End Row -->

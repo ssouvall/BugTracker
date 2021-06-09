@@ -160,7 +160,7 @@
                                     @foreach(Ticket ticket in Model.Tickets)
                                     {
                                         <tr>
-                                            <td>@ticket.Title</td>
+                                            <td><a href="#" class="d-flex sidebarmodal-collapase">@ticket.Title</a></td>
                                             @if(ticket.OwnerUser is not null)
                                             {
                                                 <td>@ticket.OwnerUser.FullName</td>

@@ -155,8 +155,21 @@ namespace BugTracker.Controllers
 
             if (ModelState.IsValid)
             {
+
+                int companyId = User.Identity.GetCompanyId().Value;
+                BTUser currentUser = await _userManager.GetUserAsync(User);
+                BTUser projectManager = await _projectService.GetProjectManagerAsync(ticket.ProjectId);
+
+                Ticket oldTicket = await _context.Ticket
+                                            .Include(t => t.TicketPriority)
+                                            .Include(t => t.TicketStatus)
+                                            .Include(t => t.TicketType)
+                                            .Include(t => t.DeveloperUser)
+                                            .AsNoTracking().FirstOrDefaultAsync(t => t.Id == ticket.Id);
+
                 try
                 {
+                    ticket.Updated = DateTimeOffset.Now;
                     _context.Update(ticket);
                     await _context.SaveChangesAsync();
                 }

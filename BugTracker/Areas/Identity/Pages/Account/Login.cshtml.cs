@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Configuration;
 
 namespace BugTracker.Areas.Identity.Pages.Account
 {
@@ -19,14 +20,17 @@ namespace BugTracker.Areas.Identity.Pages.Account
     public class LoginModel : PageModel
     {
         private readonly UserManager<BTUser> _userManager;
+        private readonly IConfiguration _configuration;
         private readonly SignInManager<BTUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
 
         public LoginModel(SignInManager<BTUser> signInManager, 
             ILogger<LoginModel> logger,
-            UserManager<BTUser> userManager)
+            UserManager<BTUser> userManager,
+            IConfiguration configuration)
         {
             _userManager = userManager;
+            _configuration = configuration;
             _signInManager = signInManager;
             _logger = logger;
         }
@@ -76,6 +80,25 @@ namespace BugTracker.Areas.Identity.Pages.Account
         {
             returnUrl ??= Url.Content("~/Home/Index");
 
+            if(!string.IsNullOrWhiteSpace(demoEmail))
+            {
+                var email = _configuration[demoEmail];
+                var password = _configuration["DemoUserPassword"];
+
+                var result = await _signInManager.PasswordSignInAsync(email, password, false, lockoutOnFailure: false);
+                if (result.Succeeded)
+                {
+                    _logger.LogInformation("User logged in.");
+                    return LocalRedirect(returnUrl);
+                    //Ucomment for redirect to dashboard
+                    //return RedirectToAction("Index", "Home");
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    return Page();
+                }
+            }
             
         
             if (ModelState.IsValid)
