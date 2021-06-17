@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using BugTracker.Extensions;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
@@ -36,8 +37,11 @@ namespace BugTracker.Models
             }
         }
 
+        [Display(Name = "Select Image")]
         [NotMapped]
         [DataType(DataType.Upload)]
+        [MaxFileSize(2 * 1024 * 1024)]
+        [AllowedExtensions(new string[] { ".jpg", ".png", ".doc", ".docx", ".xls", ".xlsx", ".pdf" })]
         public IFormFile AvatarFormFile { get; set; }
         public string AvatarFileName { get; set; }
         public byte[] AvatarFileData { get; set; }

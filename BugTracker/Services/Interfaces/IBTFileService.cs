@@ -8,17 +8,17 @@ namespace BugTracker.Services.Interfaces
 {
     public interface IBTFileService
     {
-        Task<byte[]> EncodeFileAsync(IFormFile file);
-        Task<byte[]> EncodeFileAsync(string fileName);
-        string DecodeFile(byte[] data, string type);
+        public Task<byte[]> ConvertFileToByteArrayAsync(IFormFile file);
 
-        bool ValidateFileType(IFormFile file);
-        bool ValidateFileType(IFormFile file, List<string> fileTypes);
 
-        bool ValidateFileSize(IFormFile file);
-        bool ValidateFileSize(IFormFile file, int maxSize);
+        public string ConvertByteArrayToFile(byte[] fileData, string extension);
 
-        string ContentType(IFormFile file);
-        int Size(IFormFile file);
+
+        public string GetFileIcon(string file);
+
+
+        public string FormatFileSize(long bytes);
+
     }
+
 }

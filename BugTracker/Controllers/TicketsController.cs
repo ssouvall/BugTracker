@@ -11,6 +11,7 @@ using BugTracker.Services.Interfaces;
 using BugTracker.Models.ViewModels;
 using BugTracker.Extensions;
 using Microsoft.AspNetCore.Identity;
+using System.IO;
 
 namespace BugTracker.Controllers
 {
@@ -63,6 +64,7 @@ namespace BugTracker.Controllers
                 .Include(t => t.TicketPriority)
                 .Include(t => t.TicketStatus)
                 .Include(t => t.TicketType)
+                .Include(t => t.Attachments)
                 .Include(t => t.History)
                     .ThenInclude(t => t.User)
                 .Include(t => t.Comments)
@@ -343,7 +345,18 @@ namespace BugTracker.Controllers
 
             return RedirectToAction("Details", "Tickets", new { id = model.ticket.Id });
         }
-        
+
+        public IActionResult ShowFile(int id)
+        {
+            TicketAttachment ticketAttachment = _context.TicketAttachment.Find(id);
+            string fileName = ticketAttachment.FileName;
+            byte[] fileData = ticketAttachment.FileData;
+            string ext = Path.GetExtension(fileName).Replace(".", "");
+
+            Response.Headers.Add("Content-Disposition", $"inline; filename={fileName}");
+            return File(fileData, $"application/{ext}");
+        }
+
         [HttpGet]
         public async Task<IActionResult> AllTickets()
         {

@@ -71,14 +71,72 @@
         <div class="card rounded shadow m-3 p-3">
             <div class="card-body">
                 <h5>Ticket Attachments</h5>
-                <form enctype="multipart/form-data">
-                    <div class="form-group">
-                        <div class="custom-file">
-                            <input type="file" name="file" class="form-control-file custom-file-input" multiple onchange="processSelectedFiles(this)" />
-                            <label class="control-label custom-file-label text-left text-muted" id="file-label">Choose a File</label>
+                <div class="row clearfix">
+                    @foreach (TicketAttachment item in Model.Attachments)
+                    {
+                        <div class="col-sm-2">
+                            <div class="card">
+                                <div class="file">
+                                    <a asp-action="ShowFile" asp-controller="Tickets" asp-route-id="@item.Id">
+                                        <div class="hover">
+                                            <a asp-action="Delete" asp-controller="TicketAttachments" asp-route-id="@item.Id" type="button" data-toggle="modal" data-target="#deleteAttachmentModal" class="btn-sm btn-icon btn-danger">
+                                                <i class="fa fa-xs fa-trash"></i>
+                                            </a>
+                                        </div>
+                                        <div class="icon">
+                                            <img src="@_fileService.GetFileIcon(item.FileName)" style="height:60px;width:60px" />
+                                        </div>
+                                        <div class="file-name">
+                                            <p class="m-b-5 text-muted">@System.IO.Path.GetFileNameWithoutExtension(item.FileName)</p>
+                                            <small>Size: @_fileService.FormatFileSize(item.FileData.Length) <span class="date text-muted">@item.Created.ToString("MMM dd, yyyy")</span></small>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </form>
+                        <div class="modal fade" id="deleteAttachmentModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="deleteModalLabel">Confirm Delete</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p>Are you sure you want to delete this attachment?</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <form asp-controller="TicketAttachments" asp-action="Delete" asp-route-id="@item.Id">
+                                            <input type="hidden" asp-for="@item.Id" />
+                                            <button type="button" class="btn btn-outline-dark" data-dismiss="modal">Close</button>
+                                            <input type="submit" value="Delete" class="btn btn-danger">
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                }
+                </div>
+                <div>
+                    <form asp-action="Create" asp-controller="TicketAttachments" enctype="multipart/form-data" method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <input type="hidden" asp-for="@Model.Id" name="TicketId">
+
+
+                        <div class="media-body ml-3">
+                            <label class="form-label d-block mb-2">Add Attachment</label>
+                            <label>
+                                Description
+                                <input asp-for="@Model.Attachments.FirstOrDefault().Description" type="text" class="form-control" />
+                            </label><br />
+                            <label class="btn btn-outline-primary btn-sm">
+                                <input asp-for="@Model.Attachments.FirstOrDefault().FormFile" type="file" />
+                            </label>
+                            <button type="submit" class="btn btn-outline-secondary btn-sm md-btn-flat">Submit</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
@@ -104,12 +162,12 @@
                     {
                         <div class="row">
                             <div class="media border mr-3 ml-3 p-3 w-100">
-                                <img src="@_fileService.DecodeFile(comment.User.AvatarFileData, comment.User.AvatarContentType)" alt="@comment.User.FullName" class="mr-3 mt-3 rounded-circle" style="width:60px;">
+                                @*<img src="@_fileService.DecodeFile(comment.User.AvatarFileData, comment.User.AvatarContentType)" alt="@comment.User.FullName" class="mr-3 mt-3 rounded-circle" style="width:60px;">*@
                                 <div class="media-body">
-                                    
-                                        <h5>@comment.User.FullName <small><i>Posted on @comment.Created.ToString("MMM dd, yyyy")</i></small></h5>
-                                        <p>@comment.Comment</p>
-                                
+
+                                    <h5>@comment.User.FullName <small><i>Posted on @comment.Created.ToString("MMM dd, yyyy")</i></small></h5>
+                                    <p>@comment.Comment</p>
+
                                 </div>
                             </div>
                         </div>
@@ -125,21 +183,22 @@
                 <div class="row d-flex mt-70 mb-70">
                     <div class="row">
                         <div class="col-md-10">
-                            <ul class="timeline">
+                            <ul class="timeline pr-5">
                                 @foreach (TicketHistory history in Model.History)
                                 {
-                                    <li>
-                                        <p>@history.Description</p>
-                                        <small>By @history.User.FullName on @history.Created.ToString("MMM dd, yyyy")</small>
+                                    <li class="pr-5">
+                                        <p class="pl-5">@history.Description</p>
+                                        <small class="pl-5">By @history.User.FullName on @history.Created.ToString("MMM dd, yyyy")</small>
                                     </li>
                                 }
                             </ul>
                         </div>
                     </div>
                 </div>
-              </div>
+            </div>
         </div>
-</div>
+
+        
 
 
 <div>
