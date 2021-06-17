@@ -23096,7 +23096,7 @@ hr.divider:after {
 }
 
 .login-bg, .message-bg {
-    background: url(../images/photos/login1.jpg);
+    background: url(//i.ibb.co/6Db9h32/landing-Bg.jpg);
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
@@ -40000,3 +40000,21 @@ color: #333;
 .progress-bar {
     background-color: #0275d8;
 }
+
+#landingCard {
+    height: 500px;
+    width: auto;
+}
+
+    #landingCard h1 {
+        color: black;
+        font-size: 3rem;
+        font-weight: bolder;
+    }
+
+    .landingSub {
+        line-height: 2rem;
+        margin-top: 2rem;
+        padding: 2rem;
+    }
+
