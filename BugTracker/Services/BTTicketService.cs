@@ -191,7 +191,7 @@ namespace BugTracker.Services
 
         public async Task<List<Ticket>> GetAllTicketsByTypeAsync(int companyId, string typeName)
         {
-            int typeId = (await LookupTicketPriorityIdAsync(typeName)).Value;
+            int typeId = (await LookupTicketTypeIdAsync(typeName)).Value;
             List<Ticket> tickets = new();
 
             try
@@ -338,6 +338,12 @@ namespace BugTracker.Services
                 throw;
             }
            
+        }
+
+        public async Task<List<TicketStatus>> GetTicketStatusListAsync()
+        {
+            List<TicketStatus> ticketStatusNames = await _context.TicketStatus.ToListAsync();
+            return ticketStatusNames;
         }
     }
 }

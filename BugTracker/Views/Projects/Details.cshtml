@@ -84,7 +84,7 @@
             <div class="card-header  border-0">
                 <div class="card-title">Assigned Team</div>
                 <div class="ml-auto">
-                    <a href="#" class="btn btn-success btn-sm" data-toggle="modal" data-target="#addteammodal">Add</a>
+                    <a asp-action="AssignUsers" asp-controller="Projects" asp-route-id="@Model.Id" class="btn btn-success btn-sm">Add</a>
                 </div>
             </div>
             <div class="card-body p-1 pt-2">
@@ -187,10 +187,7 @@
     </div>
 </div>
 <!-- End Row-->
-					</div><!-- end app-content-->
-				</div>
-
-			</div>
+					
 
 <!--Footer-->
 <footer class="footer">

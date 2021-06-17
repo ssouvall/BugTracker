@@ -10,18 +10,18 @@ using System.Threading.Tasks;
 
 namespace BugTracker.Services
 {
-    public class BTHistoryService : IBTHistoryService
+    public class BTNotificationsService : IBTHistoryService
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<BTUser> _userManager;
 
-        public BTHistoryService(ApplicationDbContext context,
+        public BTNotificationsService(ApplicationDbContext context,
                                 UserManager<BTUser> userManager)
         {
             _context = context;
             _userManager = userManager;
         }
-        public async Task AddHistoryAsync(Ticket oldTicket, Ticket newTicket, string userId)
+        public async Task AddHistory(Ticket oldTicket, Ticket newTicket, string userId)
         {
             if(oldTicket is null && newTicket is not null)
             {

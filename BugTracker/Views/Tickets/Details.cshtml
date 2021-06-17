@@ -17,25 +17,25 @@
             <div class="card-body">
                 <h5 class="card-title">@Model.Description</h5>
                 <p class="card-text">Ticket Status: @Model.TicketStatus.Name</p>
-                @if (Model.TicketStatus.Id == 6 || Model.TicketStatus.Id == 5)
+                @if (Model.TicketStatus.Name == "Unassigned" || Model.TicketStatus.Name == "New")
                 {
                     <div class="progress">
                         <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                 }
-                else if (Model.TicketStatus.Id == 4)
+                else if (Model.TicketStatus.Name == "Development")
                 {
                     <div class="progress">
                         <div class="progress-bar" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                 }
-                else if (Model.TicketStatus.Id == 3)
+                else if (Model.TicketStatus.Name == "Testing")
                 {
                     <div class="progress">
                         <div class="progress-bar" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                 }
-                else if (Model.TicketStatus.Id == 2)
+                else if (Model.TicketStatus.Name == "Resolved")
                 {
                     <div class="progress">
                         <div class="progress-bar" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
@@ -45,11 +45,17 @@
                 @if (Model.DeveloperUser != null)
                 {
                     <p class="card-text mt-3">Assigned Developer: @Model.DeveloperUser.FullName</p>
+
+                    <a asp-action="AssignTicket" asp-controller="Tickets" asp-route-ticketId="@Model.Id" class="btn btn-success">Change Developer</a>
                 }
                 else
                 {
                     <p class="card-text mt-3">Assigned Developer: Unassigned</p>
+
+                    <a asp-action="AssignTicket" asp-controller="Tickets" asp-route-ticketId="@Model.Id" class="btn btn-success">Assign Developer</a>
                 }
+
+
 
             </div>
         </div>
@@ -85,7 +91,7 @@
                     <input type="hidden" name="TicketId" value="@Model.Id" />
                     @*----------*@
                     <h5 class="text-center">ADD A COMMENT</h5>
-                    <textarea class="form-control mb-3" name="Comment" rows="5"></textarea>
+                    <textarea class="form-control mb-3" rows="5" id="summernote" name="editordata"></textarea>
                     <button type="submit" class="btn btn-primary btn-block btn-sm">Submit!</button>
                 </form>
                 <div class="col-12 mx-auto">

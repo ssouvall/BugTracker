@@ -36,6 +36,7 @@ namespace BugTracker.Services.Interfaces
 
         public Task<List<BTUser>> UsersNotOnProjectAsync(int projectId, int companyId);
         public Task<int> LookupProjectPriorityId(string priorityName);
+        public Task<List<BTUser>> DevelopersOnProjectAsync(int projectId);
 
 
     }

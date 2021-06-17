@@ -94,11 +94,9 @@ namespace BugTracker.Services
 
         public async Task<List<Project>> GetAllProjectsByCompany(int companyId)
         {
-            List<Project> projects = await _context.Project.Where(p => p.CompanyId == companyId).ToListAsync();
-            foreach(Project project in projects)
-            {
-                await _context.Project.Include(p => p.Members).ToListAsync();
-            }
+            List<Project> projects = await _context.Project
+                                            .Include(p => p.Tickets)
+                                            .Include(p => p.Members ).Where(p => p.CompanyId == companyId).ToListAsync();
             return projects;
         }
 
@@ -128,6 +126,12 @@ namespace BugTracker.Services
 
             List<BTUser> teamMembers = developers.Concat(submitters).Concat(admins).ToList();
             return teamMembers;
+        }
+
+        public async Task<List<BTUser>> DevelopersOnProjectAsync(int projectId)
+        {
+            List<BTUser> developers = await GetProjectMembersByRoleAsync(projectId, "Developer");
+            return developers;
         }
 
         public async Task<BTUser> GetProjectManagerAsync(int projectId)

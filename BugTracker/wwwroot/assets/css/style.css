@@ -39992,3 +39992,11 @@ color: #333;
 .dbcard {
     height: 300px;
 }
+
+.card-line {
+    height: 350px;
+}
+
+.progress-bar {
+    background-color: #0275d8;
+}

@@ -9,291 +9,187 @@
     ViewData["Title"] = "Home Page";
 }
 
-        <!--Page header-->
-        <div class="page-header d-xl-flex d-block">
-            <div class="page-leftheader">
-                <h4 class="page-title">Welcome @Model.User.FirstName!</h4>
-            </div>
-            <div class="page-rightheader ml-md-auto">
-                <div class="d-flex align-items-end flex-wrap my-auto right-content breadcrumb-right">
-                    <div class="btn-list">
-                        <a asp-controller="Projects" asp-action="Create" class="btn btn-primary "><i class="feather feather-plus fs-15 my-auto mr-2"></i>Create New Project</a>
-                        <a asp-controller="Tickets" asp-action="Create" class="btn btn-success "><i class="feather feather-plus fs-15 my-auto mr-2"></i>Create New Ticket</a>
-                    </div>
-                </div>
+<!--Page header-->
+<div class="page-header d-xl-flex d-block">
+    <div class="page-leftheader">
+        <h4 class="page-title">Welcome @Model.User.FirstName!</h4>
+    </div>
+    <div class="page-rightheader ml-md-auto">
+        <div class="d-flex align-items-end flex-wrap my-auto right-content breadcrumb-right">
+            <div class="btn-list">
+                <a asp-controller="Projects" asp-action="Create" class="btn btn-primary "><i class="feather feather-plus fs-15 my-auto mr-2"></i>Create New Project</a>
+                <a asp-controller="Tickets" asp-action="Create" class="btn btn-success "><i class="feather feather-plus fs-15 my-auto mr-2"></i>Create New Ticket</a>
             </div>
         </div>
-        <!--End Page header-->
-        <!-- Row -->
-        <div class="row">
-            <div class="col-xl-3 col-lg-6 col-md-12">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-7">
-                                <div class="mt-0 text-left">
-                                    <span class="fs-16 font-weight-semibold">Active Projects</span>
-                                    <h3 class="mb-0 mt-1 text-primary fs-25">@Model.Projects.Count</h3>
-                                </div>
-                            </div>
-                            <div class="col-5">
-                                <div class="icon1 bg-primary-transparent my-auto  float-right"> <i class="feather feather-briefcase"></i> </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xl-3 col-lg-6 col-md-12">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-7">
-                                <div class="mt-0 text-left">
-                                    <span class="fs-16 font-weight-semibold">Total Tickets</span>
-                                    <h3 class="mb-0 mt-1 text-danger fs-25">@Model.Tickets.Count</h3>
-                                </div>
-                            </div>
-                            <div class="col-5">
-                                <div class="icon1 bg-danger-transparent my-auto  float-right"> <i class="feather feather-briefcase"></i> </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xl-3 col-lg-6 col-md-12">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-7">
-                                <div class="mt-0 text-left">
-                                    <span class="fs-16 font-weight-semibold">Resolved Tickets</span>
-                                    @{
-                                        List<Ticket> newTickets = Model.Tickets.Where(t => t.TicketStatusId == 6).ToList();
-                                        List<Ticket> unassigned = Model.Tickets.Where(t => t.TicketStatusId == 5).ToList();
-                                        List<Ticket> development = Model.Tickets.Where(t => t.TicketStatusId == 4).ToList();
-                                        List<Ticket> testing = Model.Tickets.Where(t => t.TicketStatusId == 3).ToList();
-                                        List<Ticket> completed = Model.Tickets.Where(t => t.TicketStatusId == 2).ToList();
-                                        List<Ticket> archived = Model.Tickets.Where(t => t.TicketStatusId == 1).ToList();
-                                    }
-                                <h3 class="mb-0 mt-1 text-success fs-25">@completed.Count</h3>
-                                </div>
-                            </div>
-                            <div class="col-5">
-                                <div class="icon1 bg-success-transparent my-auto  float-right"> <i class="feather feather-check"></i> </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xl-3 col-lg-6 col-md-12">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-7">
-                                <div class="mt-0 text-left">
-                                    <span class="fs-16 font-weight-semibold">Unassigned Tickets</span>
-                                    <h3 class="mb-0 mt-1 text-secondary fs-25">@unassigned.Count</h3>
-                                </div>
-                            </div>
-                            <div class="col-5">
-                                <div class="icon1 bg-secondary-transparent my-auto  float-right"> <i class="feather feather-info"></i> </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- End Row -->
-        <!-- Row -->
-        <div class="row">
-            <div class="col-md-12">
-                <div class="">
-                    <div class="card-header pt-0 pl-0 ml-0 mb-4 mt-4 border-bottom-0 responsive-header">
-                        
-                    </div>
-                    <div class="row">
-                        <div class="col-xl-3 col-lg-12 col-md-12">
-                            <div class="card dbcard">
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col-9">
-                                            <div class="mt-0 text-left chart1">
-                                                <a href="project-view.html" class="mb-0 mt-1 mb-2 font-weight-semibold h4">Tickets By Status</a>
-                                                <small>(THIS WILL BE A PIE GRAPH)</small>
-                                                <p class="tx-16 font-weight-semibold text-muted mb-2">New: @newTickets.Count</p>
-                                                <p class="tx-16 font-weight-semibold text-muted mb-2">Unassigned: @unassigned.Count</p>
-                                                <p class="tx-16 font-weight-semibold text-muted mb-2">Development: @development.Count</p>
-                                                <p class="tx-16 font-weight-semibold text-muted mb-2">Testing: @testing.Count</p>
-                                                <p class="tx-16 font-weight-semibold text-muted mb-2">Resolved: @completed.Count</p>
-                                                <p class="tx-16 font-weight-semibold text-muted mb-2">Archived: @archived.Count</p>
-                                            </div>
-                                            
-                                        </div>
-                                        <div class="col-3">
-                                            <div class="task-img bg-light my-auto float-right">
-                                                <img src="../../assets/images/png/task1.png" alt="img" class="">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        @{ 
-                            List<Ticket> lowPriority = Model.Tickets.Where(p => p.TicketPriorityId == 4).ToList();
-                            List<Ticket> mediumPriority = Model.Tickets.Where(p => p.TicketPriorityId == 3).ToList();
-                            List<Ticket> highPriority = Model.Tickets.Where(p => p.TicketPriorityId == 2).ToList();
-                            List<Ticket> urgentPriority = Model.Tickets.Where(p => p.TicketPriorityId == 1).ToList();
-                        }
-                        <div class="col-xl-3 col-lg-12 col-md-12">
-                            <div class="card dbcard">
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col-9">
-                                            <div class="mt-0 text-left">
-                                                <div class="mt-0 text-left">
-                                                    <a href="project-view.html" class="mb-0 mt-1 mb-2 font-weight-semibold h4">Tickets By Priority</a>
-                                                    <small>(THIS WILL BE A PIE GRAPH)</small>
-                                                    <p class="tx-16 font-weight-semibold text-muted mb-2">low priority: @lowPriority.Count</p>
-                                                    <p class="tx-16 font-weight-semibold text-muted mb-2">medium priority: @mediumPriority.Count</p>
-                                                    <p class="tx-16 font-weight-semibold text-muted mb-2">high priority: @highPriority.Count</p>
-                                                    <p class="tx-16 font-weight-semibold text-muted mb-2">urgent: @urgentPriority.Count</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-3">
-                                            <div class="task-img bg-light my-auto float-right">
-                                                <img src="../../assets/images/png/task2.png" alt="img" class="">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xl-3 col-lg-12 col-md-12">
-                            <div class="card dbcard">
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col-9">
-                                            <div class="mt-0 text-left">
-                                                <a href="project-view.html" class="mb-0 mt-1 mb-2 font-weight-semibold h4">Company Data</a>
-                                                <p>Members: @Model.Users.Count</p>
-                                                <p>Projects: @Model.Projects.Count</p>
-                                                <p>Tickets: @Model.Tickets.Count</p>
-                                                <p>Notifications: ()</p>
-                                            </div>
-                                        </div>
-                                        <div class="col-3">
-                                            <div class="task-img bg-light my-auto float-right">
-                                                <img src="../../assets/images/png/task3.png" alt="img" class="">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xl-3 col-lg-12 col-md-12">
-                            <div class="card dbcard">
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col-9">
-                                            <div class="mt-0 text-left">
-                                                <h4 class="mb-0 mt-1 mb-2 font-weight-semibold">Project Members by Role</h4>
-                                                @foreach (Project project in Model.Projects)
-                                                {
-                                                    <p>Project Name: @project.Name</p>
-                                                    <p>Total members: @project.Members.Count</p>
+    </div>
+</div>
+<!--End Page header-->
+<!-- Row -->
 
-                                                    List<BTUser> pms = new();
-                                                    List<BTUser> devs = new();
-                                                    List<BTUser> subs = new();
-                                                    List<BTUser> allMembers = new();
-
-                                                    @foreach (BTUser member in project.Members)
-                                                    {
-                                                        if (Model.ProjectManagers.Contains(member))
-                                                        {
-                                                            pms.Add(member);
-                                                        }
-                                                        else if(Model.Developers.Contains(member))
-                                                        {
-                                                            devs.Add(member);
-                                                        }
-                                                        else if(Model.Submitters.Contains(member))
-                                                        {
-                                                            subs.Add(member);
-                                                        }
-
-                                                    }
-
-                                                    <p>Total PMs: @pms.Count</p>
-                                                    <p>Total Developers: @devs.Count</p>
-                                                    <p>Total Submitters: @subs.Count</p>
-                                                }
-                                            </div>
-                                        </div>
-                                        <div class="col-3">
-                                            <div class="task-img bg-light my-auto float-right">
-                                                <img src="../../assets/images/png/task4.png" alt="img" class="">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- End Row -->
-        <!--Row-->
 <div class="row">
-    <div class="col-xl-4 col-md-12 col-lg-12">
+    <div class="col-xl-3 col-lg-6 col-md-12">
         <div class="card">
-            <div class="card-header border-bottom-0">
-                <h3 class="card-title">Members</h3>
-            </div>
-            <div class="card-body p-0">
-                <div class="table-responsive">
-                    <table id="details-datatable" class="table table-hover card-table table-vcenter text-nowrap mb-0">
-                        <thead>
-                            <tr>
-                                <th scope="col">Avatar</th>
-                                <th scope="col">Name</th>
-                                <th scope="col">Projects</th>
-                                <th scope="col">Role</th>=
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (BTUser user in Model.Users.Cast<BTUser>().Take(5))
-                            {
-                                <tr>
-                                    <th scope="row">
-                                        <img src="../../assets/images/users/16.jpg" alt="user-img" class="avatar-xxl w-25 h-auto rounded-circle mb-1">
-                                    </th>
-                                    <td>
-                                        @user.FullName
-                                    </td>
-                                    <td>
-                                        @user.Projects.Count
-                                    </td>
-                                    <td>
-                                        (User roles?)
-                                    </td>
-                                </tr>
-                            }
-                            <tr>
-                                <td>
-                                    Plus @(Model.Users.Count - 5) more...
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-7">
+                        <div class="mt-0 text-left">
+                            <span class="fs-16 font-weight-semibold">Active Projects</span>
+                            <h3 class="mb-0 mt-1 text-primary fs-25">@Model.Projects.Count</h3>
+                        </div>
+                    </div>
+                    <div class="col-5">
+                        <div class="icon1 bg-primary-transparent my-auto  float-right"> <i class="feather feather-briefcase"></i> </div>
+                    </div>
                 </div>
             </div>
         </div>
-        </div>
-    <div class="col-xl-8 col-md-12 col-lg-12">
+    </div>
+    <div class="col-xl-3 col-lg-6 col-md-12">
         <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-7">
+                        <div class="mt-0 text-left">
+                            <span class="fs-16 font-weight-semibold">Total Tickets</span>
+                            <h3 class="mb-0 mt-1 text-danger fs-25">@Model.Tickets.Count</h3>
+                        </div>
+                    </div>
+                    <div class="col-5">
+                        <div class="icon1 bg-danger-transparent my-auto  float-right"> <i class="feather feather-briefcase"></i> </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-lg-6 col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-7">
+                        <div class="mt-0 text-left">
+                            <span class="fs-16 font-weight-semibold">Resolved Tickets</span>
+                            @{
+                                List<Ticket> newTickets = Model.Tickets.Where(t => t.TicketStatusId == 6).ToList();
+                                List<Ticket> unassigned = Model.Tickets.Where(t => t.TicketStatusId == 5).ToList();
+                                List<Ticket> development = Model.Tickets.Where(t => t.TicketStatusId == 4).ToList();
+                                List<Ticket> testing = Model.Tickets.Where(t => t.TicketStatusId == 3).ToList();
+                                List<Ticket> completed = Model.Tickets.Where(t => t.TicketStatusId == 2).ToList();
+                                List<Ticket> archived = Model.Tickets.Where(t => t.TicketStatusId == 1).ToList();
+                            }
+                            <h3 class="mb-0 mt-1 text-success fs-25">@completed.Count</h3>
+                        </div>
+                    </div>
+                    <div class="col-5">
+                        <div class="icon1 bg-success-transparent my-auto  float-right"> <i class="feather feather-check"></i> </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-lg-6 col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-7">
+                        <div class="mt-0 text-left">
+                            <span class="fs-16 font-weight-semibold">Unassigned Tickets</span>
+                            <h3 class="mb-0 mt-1 text-secondary fs-25">@unassigned.Count</h3>
+                        </div>
+                    </div>
+                    <div class="col-5">
+                        <div class="icon1 bg-secondary-transparent my-auto  float-right"> <i class="feather feather-info"></i> </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Row -->
+<!-- Row -->
+<div class="row clearfix">
+    <div class="col-lg-3 col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h4>Company Ticket Distribution</h4>
+                <div id="chart1">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h4>Tickets By Status</h4>
+                <div id="chart3D">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h4>Tickets By Type</h4>
+                <div id="donut">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h4>Tickets By Priority</h4>
+                <div id="donut2">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Row -->
+<!-- Row -->
+<div class="row">
+    <div class="col-lg-3 col-md-6">
+        <div class="card card-line">
+            <div class="card-body p-5">
+                <div class="mt-0 text-left">
+                    <div class="text-center mb-5">
+                        <h4>Company Data</h4>
+                        <h6>@Model.Company.Name</h6>
+                    </div>
+                    <div class="row mt-5 mb-5 p-2">
+                        <div class="col-6">
+                            <i class="fas fa-lg fa-user-friends mr-3"></i><strong class="text-blue">Members</strong>
+                        </div>
+                        <div class="col-6 text-right">
+                            <p class="badge badge-pill badge-primary"><strong >@Model.Users.Count</strong></p>
+                        </div>
+                    </div>
+                    <div class="row mt-5 mb-5 p-2">
+                        <div class="col-6">
+                            <i class="fas fa-lg fa-project-diagram mr-3"></i><strong class="text-blue">Projects</strong>
+                        </div>
+                        <div class="col-6 text-right">
+                            <p class="badge badge-pill badge-success"><strong>@Model.Projects.Count</strong></p>
+                        </div>
+                    </div>
+                    <div class="row mt-5 mb-5  p-2">
+                        <div class="col-6">
+                            <i class="fas fa-lg fa-ticket-alt mr-3"></i><strong class="text-blue">Tickets</strong>
+                        </div>
+                        <div class="col-6 text-right">
+                            <p class="badge badge-pill badge-danger"><strong>@Model.Tickets.Count</strong></p>
+                        </div>
+                    </div>
+                        
+                </div>  
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-9 col-md-12 col-sm-12">
+        <div class="card card-line">
             <div class="card-header border-bottom-0">
                 <h3 class="card-title">Project List</h3>
             </div>
@@ -310,43 +206,174 @@
                                 <th scope="col">Details</th>
                             </tr>
                         </thead>
-                            <tbody>
-                                @foreach (Project project in Model.Projects)
-                                {
-                                    <tr>
-                                        <th scope="row">
-                                            @project.Name
-                                        </th>
-                                        <td>
-                                            @project.StartDate.ToString("MMM dd, yyyy")
-                                        </td>
-                                        <td>
-                                            @project.EndDate.ToString("MMM dd, yyyy")
-                                        </td>
-                                        <td>
-                                            <div class="avatar-list avatar-list-stacked">
-                                                <img class="avatar avatar-md brround" src="../../assets/images/users/16.jpg" alt="img">
-                                                <img class="avatar avatar-md brround" src="../../assets/images/users/16.jpg" alt="img">
-                                                <img class="avatar avatar-md brround" src="../../assets/images/users/16.jpg" alt="img">
-                                                <img class="avatar avatar-md brround" src="../../assets/images/users/16.jpg" alt="img">
-                                            </div>
-                                        </td>
-                                        <td>
-                                            @project.Tickets.Count
-                                        </td>
-                                        <td>
-                                            <a asp-controller="Projects" asp-action="Details" asp-route-id="@project.Id"><i class="far fa-eye"></i></a>
-                                        </td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-                    </div>
+                        <tbody>
+                            @foreach (Project project in Model.Projects.Cast<Project>().Take(3))
+                            {
+                                <tr>
+                                    <th scope="row">
+                                        @project.Name
+                                    </th>
+                                    <td>
+                                        @project.StartDate.ToString("MMM dd, yyyy")
+                                    </td>
+                                    <td>
+                                        @project.EndDate.ToString("MMM dd, yyyy")
+                                    </td>
+                                    <td>
+                                        <div class="avatar-list avatar-list-stacked">
+                                            <img class="avatar avatar-md brround" src="../../assets/images/users/16.jpg" alt="img">
+                                            <img class="avatar avatar-md brround" src="../../assets/images/users/16.jpg" alt="img">
+                                            <img class="avatar avatar-md brround" src="../../assets/images/users/16.jpg" alt="img">
+                                            <img class="avatar avatar-md brround" src="../../assets/images/users/16.jpg" alt="img">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        @project.Tickets.Count
+                                    </td>
+                                    <td>
+                                        <a asp-controller="Projects" asp-action="Details" asp-route-id="@project.Id"><i class="far fa-eye"></i></a>
+                                    </td>
+                                </tr>
+                            }
+                            <tr class="mt-5 p-5">
+                                <td>
+                                    <a asp-action="AllProjects" asp-controller="Projects">See all...</a> 
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
+            </div>
         </div>
     </div>
-    </div>
+</div>
+<!-- End Row -->
 
-    @*---------Google Charts Scripts----------*@
-    @*<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery.*@
-    <!-- End Row -->
+@section scripts{
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+        google.load("visualization", "1", { packages: ["corechart"] });
+        google.setOnLoadCallback(drawChart);
+        function drawChart() {
+            $.ajax({
+                type: "POST",
+                url: "/Home/PieChartMethod",
+                data: '{}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    var data = google.visualization.arrayToDataTable(result);
+
+                    //Pie
+                    var options = {
+                        //title: 'Company Ticket Distribution',
+                        is3D: true
+                    };
+                    var chart = new google.visualization.PieChart($("#chart1")[0]);
+                    chart.draw(data, options);
+                },
+                failure: function (result) {
+                    alert(result.d);
+                },
+                error: function (result) {
+                    alert(result.d);
+                }
+            });
+        }
+    </script>
+    <script type="text/javascript">
+        google.load("visualization", "1", { packages: ["corechart"] });
+        google.setOnLoadCallback(drawChart);
+        function drawChart() {
+            $.ajax({
+                type: "POST",
+                url: "/Home/TicketStatusChartMethod",
+                data: '{}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    var data = google.visualization.arrayToDataTable(result);
+
+                    //3D Pie
+                    var options = {
+                        //title: 'Tickets By Status',
+                        is3D: true
+                    };
+                    var chart = new google.visualization.PieChart($("#chart3D")[0]);
+                    chart.draw(data, options);
+                },
+                failure: function (rresult) {
+                    alert(result.d);
+                },
+                error: function (result) {
+                    alert(result.d);
+                }
+            });
+        }
+    </script>
+    <script type="text/javascript">
+        google.load("visualization", "1", { packages: ["corechart"] });
+        google.setOnLoadCallback(drawChart);
+        function drawChart() {
+            $.ajax({
+                type: "POST",
+                url: "/Home/TicketTypeChartMethod",
+                data: '{}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    var data = google.visualization.arrayToDataTable(result);
+
+                    //Donut
+                    var options = {
+                        //title: 'Tickets By Type',
+                        //pieHole: 0.5,
+                        is3D: true
+                    };
+                    var chart = new google.visualization.PieChart($("#donut")[0]);
+                    chart.draw(data, options);
+                },
+                failure: function (rresult) {
+                    alert(result.d);
+                },
+                error: function (result) {
+                    alert(result.d);
+                }
+            });
+        }
+    </script>
+    <script type="text/javascript">
+        google.load("visualization", "1", { packages: ["corechart"] });
+        google.setOnLoadCallback(drawChart);
+        function drawChart() {
+            $.ajax({
+                type: "POST",
+                url: "/Home/TicketPriorityChartMethod",
+                data: '{}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    var data = google.visualization.arrayToDataTable(result);
+
+                    //Donut
+                    var options = {
+                        //title: 'Tickets By Priority',
+                        //pieHole: 0.5,
+                        is3D: true
+
+                    };
+                    var chart = new google.visualization.PieChart($("#donut2")[0]);
+                    chart.draw(data, options);
+                },
+                failure: function (rresult) {
+                    alert(result.d);
+                },
+                error: function (result) {
+                    alert(result.d);
+                }
+            });
+        }
+    </script>
+}
+
+<!-- End Row -->
