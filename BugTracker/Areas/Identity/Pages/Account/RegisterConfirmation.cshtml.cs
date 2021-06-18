@@ -42,8 +42,8 @@ namespace BugTracker.Areas.Identity.Pages.Account
             }
 
             Email = email;
-            // Once you add a real email sender, you should remove this code that lets you confirm the account
-            DisplayConfirmAccountLink = true;
+            // Now that we have an email service setting this variable to false allows us to use it 
+            DisplayConfirmAccountLink = false;
             if (DisplayConfirmAccountLink)
             {
                 var userId = await _userManager.GetUserIdAsync(user);
@@ -60,3 +60,4 @@ namespace BugTracker.Areas.Identity.Pages.Account
         }
     }
 }
+

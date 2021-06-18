@@ -4,4 +4,14 @@
     ViewData["Title"] = "Confirm email";
 }
 
-<h1>@ViewData["Title"]</h1>
+<div class="card">
+    <div class="header">
+        <p class="lead">@ViewData["Title"]</p>
+    </div>
+    <div class="body">
+        <p>@Model.StatusMessage</p>
+
+        <a class="btn btn-primary btn-lg btn-block" asp-area="Identity" asp-page="/Account/Login"><i class="fa fa-sign-in"></i><span> SIGN IN</span></a>
+
+    </div>
+</div>

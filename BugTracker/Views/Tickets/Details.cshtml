@@ -116,7 +116,7 @@
                                 </div>
                             </div>
                         </div>
-                }
+                    }
                 </div>
                 <div>
                     <form asp-action="Create" asp-controller="TicketAttachments" enctype="multipart/form-data" method="post">
@@ -182,11 +182,11 @@
                 <h5>Ticket History</h5>
                 <div class="row d-flex mt-70 mb-70">
                     <div class="row">
-                        <div class="col-md-10">
+                        <div class="col-12">
                             <ul class="timeline pr-5">
                                 @foreach (TicketHistory history in Model.History)
                                 {
-                                    <li class="pr-5">
+                                    <li>
                                         <p class="pl-5">@history.Description</p>
                                         <small class="pl-5">By @history.User.FullName on @history.Created.ToString("MMM dd, yyyy")</small>
                                     </li>
@@ -199,8 +199,6 @@
         </div>
     </div>
 </div>
-
-        
 
 
 <div>

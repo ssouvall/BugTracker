@@ -9,6 +9,7 @@
     ViewData["Title"] = "Home Page";
 }
 
+
 <!--Page header-->
 <div class="page-header d-xl-flex d-block">
     <div class="page-leftheader">
@@ -164,7 +165,7 @@
                             <i class="fas fa-lg fa-user-friends mr-3"></i><strong class="text-blue">Members</strong>
                         </div>
                         <div class="col-6 text-right">
-                            <p class="badge badge-pill badge-primary"><strong >@Model.Users.Count</strong></p>
+                            <p class="badge badge-pill badge-primary"><strong>@Model.Users.Count</strong></p>
                         </div>
                     </div>
                     <div class="row mt-5 mb-5 p-2">
@@ -183,8 +184,8 @@
                             <p class="badge badge-pill badge-danger"><strong>@Model.Tickets.Count</strong></p>
                         </div>
                     </div>
-                        
-                </div>  
+
+                </div>
             </div>
         </div>
     </div>
@@ -237,7 +238,7 @@
                             }
                             <tr class="mt-5 p-5">
                                 <td>
-                                    <a asp-action="AllProjects" asp-controller="Projects">See all...</a> 
+                                    <a asp-action="AllProjects" asp-controller="Projects">See all...</a>
                                 </td>
                             </tr>
                         </tbody>
@@ -250,6 +251,7 @@
 <!-- End Row -->
 
 @section scripts{
+    
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>
     <script type="text/javascript">
         google.load("visualization", "1", { packages: ["corechart"] });

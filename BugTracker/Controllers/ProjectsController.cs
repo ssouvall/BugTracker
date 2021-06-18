@@ -66,7 +66,7 @@ namespace BugTracker.Controllers
         }
 
         // GET: Projects/Create
-        public async Task<IActionResult> Create()
+        public IActionResult Create()
         {
             
             //ViewData["CompanyId"] = new SelectList(_context.Company, "Id", "Name");
@@ -167,9 +167,17 @@ namespace BugTracker.Controllers
             List<BTUser> submitters = await _bTCompanyInfoService.GetMembersInRoleAsync(Roles.Submitter.ToString(), companyId);
 
             List<BTUser> users = developers.Concat(submitters).ToList();
+            if(project.Members is not null) 
+            { 
             List<string> members = project.Members.Select(m => m.Id).ToList();
             model.Users = new MultiSelectList(users, "Id", "FullName", members);
             return View(model);
+            }
+            else
+            {
+                return View(model);
+            }
+            
         }
 
         [HttpPost]

@@ -65,6 +65,7 @@ namespace BugTracker.Controllers
                 .Include(t => t.TicketStatus)
                 .Include(t => t.TicketType)
                 .Include(t => t.Attachments)
+                .Include(t => t.Notifications)
                 .Include(t => t.History)
                     .ThenInclude(t => t.User)
                 .Include(t => t.Comments)
@@ -153,7 +154,7 @@ namespace BugTracker.Controllers
                 if (projectManager != null)
                 {
                    await _notificationsService.SaveNotificationAsync(notification);
-
+                    await _notificationsService.EmailNotificationAsync(notification, "New Ticket Added");
                 }
                 else
                 {

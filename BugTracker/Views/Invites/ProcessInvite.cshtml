@@ -1,0 +1,38 @@
+﻿@model BugTracker.Models.Invite
+
+@{ Layout = "_LoginLayout";
+                ViewData["Title"] = "Register"; }
+
+<div id="wrapper">
+    <div class="vertical-align-wrap">
+        <div class="vertical-align-middle auth-main">
+            <div class="auth-box">
+                <div class="top">
+                </div>
+                <div class="card">
+                    <div class="header">
+                        <h3>
+                            <span class="clearfix title">
+                                <span class="number">Welcome</span><br />
+                                <span>@Model.InviteeFirstName @Model.InviteeLastName!</span> <br>
+                            </span>
+                        </h3>
+                        <h5><span>@Model.Company.Name Company</span></h5>
+                    </div>
+
+                    <div class="body">
+                        <p>
+                            @Model.Invitor.FullName has invited you to collaborate on the @Model.Project.Name project.
+                            <br /><br /> Click the "JOIN" button below to register with the company and begin entering tickets.
+                        </p>
+                        <a class="btn btn-primary btn-lg btn-block" asp-area="Identity" asp-page="/Account/RegisterByInvite" asp-route-id="@Model.Id"><i class="fa fa-sign-in"></i> <span>JOIN</span></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

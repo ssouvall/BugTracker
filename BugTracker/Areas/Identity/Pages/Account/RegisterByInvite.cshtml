@@ -1,0 +1,62 @@
+﻿@page
+@model RegisterByInviteModel
+@{ Layout = "_LoginLayout";
+                ViewData["Title"] = "RegisterByInviteModel"; }
+
+<div id="wrapper">
+    <div class="vertical-align-wrap">
+        <div class="vertical-align-middle auth-main">
+            <div class="auth-box">
+                <div class="top">
+                </div>
+                <div class="card">
+                    <div class="header">
+                        <p class="lead">Create an account</p>
+                    </div>
+                    <div class="body">
+                        <form class="form-auth-small" method="post">
+                            <input hidden asp-for="Input.CompanyId" />
+                            <input hidden asp-for="Input.ProjectId" />
+                            <div class="form-group">
+                                <label asp-for="Input.Email" class="control-label">Email</label>
+                                <input type="email" class="form-control" asp-for="Input.Email" placeholder="Your email">
+                                <span asp-validation-for="Input.Email" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Input.FirstName" class="control-label"></label>
+                                <input asp-for="Input.FirstName" class="form-control" placeholder="First Name" />
+                                <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Input.LastName" class="control-label"></label>
+                                <input asp-for="Input.LastName" class="form-control" placeholder="Last Name" />
+                                <span asp-validation-for="Input.LastName" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Input.Company" class="control-label"></label>
+                                <input asp-for="Input.Company" class="form-control" disabled />
+                            </div>
+                            <hr />
+                            <div class="form-group">
+                                <label asp-for="Input.Password" class="control-label"></label>
+                                <input asp-for="Input.Password" class="form-control" type="password" placeholder="Password" />
+                                <span asp-validation-for="Input.Password" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Input.ConfirmPassword" class="control-label"></label>
+                                <input asp-for="Input.ConfirmPassword" class="form-control" type="password" placeholder="Confirm Password" />
+                                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-lg btn-block">REGISTER</button>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
