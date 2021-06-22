@@ -12,9 +12,11 @@ using BugTracker.Services.Interfaces;
 using BugTracker.Extensions;
 using BugTracker.Models.Enums;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BugTracker.Controllers
 {
+    [Authorize]
     public class ProjectsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -34,13 +36,6 @@ namespace BugTracker.Controllers
             _bTCompanyInfoService = bTCompanyInfoService;
             _ticketService = ticketService;
             _userManager = userManager;
-        }
-
-        // GET: Projects
-        public async Task<IActionResult> Index()
-        {
-            var applicationDbContext = _context.Project.Include(p => p.Company).Include(p => p.ProjectPriority);
-            return View(await applicationDbContext.ToListAsync());
         }
 
         // GET: Projects/Details/5
@@ -91,6 +86,7 @@ namespace BugTracker.Controllers
             
         }
 
+        [Authorize(Roles= "Admin,ProjectManager")]
         // GET: Projects/Create
         public IActionResult Create()
         {
@@ -103,6 +99,7 @@ namespace BugTracker.Controllers
         // POST: Projects/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Admin,ProjectManager")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,Description,StartDate,EndDate,ProjectPriorityId,FileName,FileData,FileContentType")] Project project)
@@ -120,6 +117,7 @@ namespace BugTracker.Controllers
             return View(project);
         }
 
+        [Authorize(Roles = "Admin,ProjectManager")]
         // GET: Projects/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -141,6 +139,7 @@ namespace BugTracker.Controllers
         // POST: Projects/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Admin,ProjectManager")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,CompanyId,Name,Description,StartDate,EndDate,ProjectPriorityId,FileName,FileData,FileContentType,Archived")] Project project)
@@ -177,6 +176,7 @@ namespace BugTracker.Controllers
 
 
         //[Authorize(Roles = "Admin,ProjectManager")]
+        [Authorize(Roles = "Admin,ProjectManager")]
         [HttpGet]
         public async Task<IActionResult> AssignUsers(int id)
         {
@@ -205,7 +205,7 @@ namespace BugTracker.Controllers
             }
             
         }
-
+        [Authorize(Roles = "Admin,ProjectManager")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AssignUsers(ProjectMembersViewModel model)
@@ -236,7 +236,7 @@ namespace BugTracker.Controllers
             }
             return View(model);
         }
-
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<IActionResult> AssignProjectManager(int id)
         {
@@ -262,7 +262,7 @@ namespace BugTracker.Controllers
             }
 
         }
-
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AssignProjectManager(int id, BTUser projectManager)
@@ -279,6 +279,7 @@ namespace BugTracker.Controllers
 
         }
 
+        [Authorize(Roles = "Admin,ProjectManager")]
         [HttpGet]
         public async Task<IActionResult> AllProjects()
         {
@@ -305,7 +306,7 @@ namespace BugTracker.Controllers
 
             return View(myProjects);
         }
-
+        [Authorize(Roles = "Admin,ProjectManager")]
         [HttpGet]
         public async Task<IActionResult> ArchivedProjects()
         {
@@ -315,6 +316,7 @@ namespace BugTracker.Controllers
         }
 
         //GET: Projects/Delete/5
+        [Authorize(Roles = "Admin,ProjectManager")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -333,7 +335,7 @@ namespace BugTracker.Controllers
 
             return View(project);
         }
-
+        [Authorize(Roles = "Admin,ProjectManager")]
         // POST: Projects/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]

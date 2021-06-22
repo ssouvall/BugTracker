@@ -18,8 +18,12 @@
     <div class="page-rightheader ml-md-auto">
         <div class="d-flex align-items-end flex-wrap my-auto right-content breadcrumb-right">
             <div class="btn-list">
-                <a asp-controller="Projects" asp-action="Create" class="btn btn-primary "><i class="feather feather-plus fs-15 my-auto mr-2"></i>Create New Project</a>
+                @if (User.IsInRole("Admin") || User.IsInRole("ProjectManager"))
+                {
+                    <a asp-controller="Projects" asp-action="Create" class="btn btn-primary "><i class="feather feather-plus fs-15 my-auto mr-2"></i>Create New Project</a>
+                }
                 <a asp-controller="Tickets" asp-action="Create" class="btn btn-success "><i class="feather feather-plus fs-15 my-auto mr-2"></i>Create New Ticket</a>
+
             </div>
         </div>
     </div>

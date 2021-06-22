@@ -75,8 +75,6 @@
         <img src="../../assets/images/svgs/loader.svg" alt="loader">
     </div>
 
-    @*<div class="page">
-        <div class="page-main">*@
 
     <!--aside open-->
     <aside class="app-sidebar" style="background:#191d43;">
@@ -129,6 +127,13 @@
                             <span class="side-menu__label">Invite New Member</span>
                         </a>
                     </li>
+                    <li class="slide">
+                        <a class="side-menu__item" asp-action="ManageUserRoles" asp-controller="UserRoles">
+                            <i class="fas fa-users sidemenu_icon"></i>
+                            <span class="side-menu__label">Manage User Roles</span>
+                        </a>
+                    </li>
+
                 }
                 <li class="slide">
                     <a class="side-menu__item" data-toggle="slide" href="#">
@@ -136,10 +141,15 @@
                         <span class="side-menu__label">Projects</span><i class="angle fa fa-angle-right"></i>
                     </a>
                     <ul class="slide-menu">
+                        @if(User.IsInRole("Admin") || User.IsInRole("ProjectManager"))
+                        {
                         <li><a asp-controller="Projects" asp-action="AllProjects" class="slide-item">All Projects</a></li>
-                        <li><a asp-controller="Projects" asp-action="MyProjects" class="slide-item">My Projects</a></li>
                         <li><a asp-controller="Projects" asp-action="Create" class="slide-item">Add Project</a></li>
                         <li><a asp-controller="Projects" asp-action="ArchivedProjects" class="slide-item">Project Archive</a></li>
+                        }
+
+                        <li><a asp-controller="Projects" asp-action="MyProjects" class="slide-item">My Projects</a></li>
+
                     </ul>
                 </li>
                 <li class="slide">
@@ -154,6 +164,7 @@
                         <li><a asp-controller="Tickets" asp-action="ArchivedTickets" class="slide-item">Ticket Archive</a></li>
                     </ul>
                 </li>
+
 
             </ul>
 

@@ -1,9 +1,8 @@
 ﻿@model IEnumerable<BugTracker.Models.ViewModels.ManageUserRolesViewModel>
 
-<div class="row">
     @foreach (var member in Model)
     {
-        <div class="card col-6" style="margin:2px">
+        <div class="card col-lg-6 mx-auto m-5" style="margin:2px">
             <div class="card-body">
                 <h2 class="m-t-0 h3"><b>Assign Roles to @member.BTUser.FullName</b></h2>
                 <p class="text-muted font-13 m-b-30">
@@ -31,4 +30,3 @@
             </div>
         </div>
     }
-</div>
