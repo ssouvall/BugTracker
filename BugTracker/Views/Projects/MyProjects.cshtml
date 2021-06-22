@@ -1,44 +1,70 @@
 ﻿@model IEnumerable<Project>
 
-<table class="table">
-    <thead class="thead-dark">
-        <tr>
-            <th scope="col">Name</th>
-            <th scope="col">Description</th>
-            <th scope="col">Start Date</th>
-            <th scope="col">End Date</th>
-            <th scope="col">Priority</th>
-            <th scope="col">Archived</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (Project project in Model)
-        {
-        <tr>
-            <td>
-                @project.Name
-            </td>
-            <td>
-                @project.Description
-            </td>
-            <td>
-                @project.StartDate.ToString("MMM dd, yyyy")
-            </td>
-            <td>
-                @project.EndDate.ToString("MMM dd, yyyy");
-            </td>
-            <td>
-                @project.ProjectPriorityId;
-            </td>
-            <td>
-                @project.Archived
-            </td>
-            <td>
-                <a asp-action="Details" asp-route-id="@project.Id">Details</a>
-            </td>
-        </tr>
 
+<div class="row mt-5">
+    <div class="col-xl-10 col-md-12 mx-auto">
+        @if(Model.Count() != 0)
+        {
+            <div class="card">
+                <div class="card-header border-bottom-0">
+                    <h3 class="card-title">Project List</h3>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table id="details-datatable" class="table table-hover card-table table-vcenter text-nowrap mb-0">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Start Date</th>
+                                    <th scope="col">End Date</th>
+                                    <th scope="col">Team</th>
+                                    <th scope="col">Ticket Count</th>
+                                    <th scope="col">Details</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (Project project in Model)
+                                {
+                                    <tr>
+                                        <th scope="row">
+                                            @project.Name
+                                        </th>
+                                        <td>
+                                            @project.StartDate.ToString("MMM dd, yyyy")
+                                        </td>
+                                        <td>
+                                            @project.EndDate.ToString("MMM dd, yyyy")
+                                        </td>
+                                        <td>
+                                            <div class="avatar-list avatar-list-stacked">
+                                                @foreach (BTUser member in project.Members)
+                                                {
+                                                    <img class="avatar avatar-md brround" src="../../assets/images/users/16.jpg" alt="img">
+                                                }
+                                            </div>
+                                        </td>
+                                        <td>
+                                            @project.Tickets.Count
+                                        </td>
+                                        <td>
+                                            <a asp-controller="Projects" asp-action="Details" asp-route-id="@project.Id"><i class="far fa-eye"></i></a>
+                                        </td>
+                                    </tr>
+
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         }
-    </tbody>
-</table>
+        else
+            {
+                <div class="text-center mt-5">
+                    <h1>Hmmm, looks like you aren't assigned to any projects yet</h1>
+                    <img src="https://i.ibb.co/vPF3Cf9/No-Projects.png" alt="Alternate Text" />
+                </div>
+             }
+
+    </div>
+</div>

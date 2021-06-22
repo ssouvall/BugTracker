@@ -12,6 +12,7 @@ using BugTracker.Models.ViewModels;
 using BugTracker.Extensions;
 using Microsoft.AspNetCore.Identity;
 using System.IO;
+using X.PagedList;
 
 namespace BugTracker.Controllers
 {
@@ -43,10 +44,13 @@ namespace BugTracker.Controllers
         }
 
         // GET: Tickets
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? page)
         {
+            var pageNumber = page ?? 1;
+            var pageSize = 10;
+
             var applicationDbContext = _context.Ticket.Include(t => t.DeveloperUser).Include(t => t.OwnerUser).Include(t => t.Project).Include(t => t.TicketPriority).Include(t => t.TicketStatus).Include(t => t.TicketType);
-            return View(await applicationDbContext.ToListAsync());
+            return View(await applicationDbContext.ToPagedListAsync(pageNumber, pageSize));
         }
 
         // GET: Tickets/Details/5
@@ -359,28 +363,46 @@ namespace BugTracker.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> AllTickets()
+        public async Task<IActionResult> AllTickets(int? page)
         {
-            
-            int companyId = User.Identity.GetCompanyId().Value;
-            
-            List<Ticket> tickets = await _ticketService.GetAllTicketsByCompanyAsync(companyId);
+            var pageNumber = page ?? 1;
+            var pageSize = 10;
 
-            return View(tickets);
+            int companyId = User.Identity.GetCompanyId().Value;
+            var applicationDbContext = await _ticketService.GetAllTicketsByCompanyAsync(companyId);
+
+            return View(await applicationDbContext.ToPagedListAsync(pageNumber, pageSize));
         }
 
         [HttpGet]
-        public async Task<IActionResult> MyTickets()
+        public async Task<IActionResult> MyTickets(int? page)
         {
+            var pageNumber = page ?? 1;
+            var pageSize = 10;
+
             string userId = _userManager.GetUserId(User);
             var devTickets = await _ticketService.GetAllTicketsByRoleAsync("Developer", userId);
             var subTickets = await _ticketService.GetAllTicketsByRoleAsync("Submitter", userId);
             var model = new MyTicketsViewModel()
             {
-                DevTickets = devTickets,
-                SubmittedTickets = subTickets
+                DevTickets = await devTickets.ToPagedListAsync(pageNumber, pageSize),
+                SubmittedTickets = await subTickets.ToPagedListAsync(pageNumber, pageSize)
             };
             return View(model);
+
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ArchivedTickets(int? page)
+        {
+            var pageNumber = page ?? 1;
+            var pageSize = 10;
+
+            int companyId = User.Identity.GetCompanyId().Value;
+            var applicationDbContext = await _ticketService.GetAllTicketsByCompanyAsync(companyId);
+            var archived = applicationDbContext.Where(t => t.TicketStatus.Name == "Archived").ToPagedListAsync(pageNumber, pageSize);
+
+            return View(await archived);
 
         }
 

@@ -1,64 +1,64 @@
 ﻿@model BugTracker.Models.ViewModels.InviteViewModel
 
 
-<div class="col-lg-6 col-md-12">
+<div class="col-lg-6 col-md-12 mt-5 mx-auto">
     <div class="card custom-card">
-        <div class="card-body">
-            <div>
-                <h6 class="main-content-label mb-1">Horizonatal Form</h6>
-                <p class="text-muted card-sub-title">A form control layout using basic layout.</p>
+            <div class="card-header">
+                <h3 class="card-title">Invite a New Team Member</h3>
             </div>
             <form asp-action="Create">
-                <div class="row row-xs align-items-center mg-b-20">
-                    <div class="col-md-4">
-                        <label class="mg-b-0">Email</label>
+                <div class="card-body">
+                    <div class="row row-xs align-items-center mg-b-20">
+                        <div class="col-md-4">
+                            <label class="mg-b-0">Recipient Email</label>
+                        </div>
+                        <div class="col-md-8 mg-t-5 mg-md-t-0">
+                            <input type="email" asp-for="Email" class="form-control" placeholder="Enter email">
+                        </div>
                     </div>
-                    <div class="col-md-8 mg-t-5 mg-md-t-0">
-                        <input type="email" asp-for="Email" class="form-control" placeholder="Enter email">
+                    <div class="row row-xs align-items-center mg-b-20">
+                        <div class="col-md-4">
+                            <label class="mg-b-0">First Name</label>
+                        </div>
+                        <div class="col-md-8 mg-t-5 mg-md-t-0">
+                            <input type="text" asp-for="FirstName" class="form-control" placeholder="Enter first name">
+                        </div>
                     </div>
-                </div>
-                <div class="row row-xs align-items-center mg-b-20">
-                    <div class="col-md-4">
-                        <label class="mg-b-0">Firstname</label>
+                    <div class="row row-xs align-items-center mg-b-20">
+                        <div class="col-md-4">
+                            <label class="mg-b-0">Last Name</label>
+                        </div>
+                        <div class="col-md-8 mg-t-5 mg-md-t-0">
+                            <input type="text" asp-for="FirstName" class="form-control" placeholder="Enter last name">
+                        </div>
                     </div>
-                    <div class="col-md-8 mg-t-5 mg-md-t-0">
-                        <input type="text" asp-for="FirstName" class="form-control" placeholder="Enter first name">
+                    <div class="row row-xs align-items-center mg-b-20">
+                        <div class="col-md-4">
+                            <label class="mg-b-0">Select Project</label>
+                        </div>
+                        <div class="col-md-8 mg-t-5 mg-md-t-0">
+                            <select class="form-control" asp-for="ProjectId" asp-items="Model.ProjectsList">
+                                <option value="">Select Project</option>
+                            </select>
+                        </div>
                     </div>
-                </div>
-                <div class="row row-xs align-items-center mg-b-20">
-                    <div class="col-md-4">
-                        <label class="mg-b-0">Lastname</label>
+                    <div class="row row-xs align-items-center mg-b-20">
+                        <div class="col-md-4">
+                            <label class="mg-b-0">Message</label>
+                        </div>
+                        <div class="col-md-8 mg-t-5 mg-md-t-0">
+                            <textarea asp-for="Message" multiple="multiple" rows="5" cols="30" class="form-control"></textarea>
+                        </div>
                     </div>
-                    <div class="col-md-8 mg-t-5 mg-md-t-0">
-                        <input type="text" asp-for="FirstName" class="form-control" placeholder="Enter last name">
-                    </div>
-                </div>
-                <div class="row row-xs align-items-center mg-b-20">
-                    <div class="col-md-4">
-                        <label class="mg-b-0">Select Project</label>
-                    </div>
-                    <div class="col-md-8 mg-t-5 mg-md-t-0">
-                        <select class="form-control" asp-for="ProjectId" asp-items="Model.ProjectsList">
-                            <option value="">Select Project</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="row row-xs align-items-center mg-b-20">
-                    <div class="col-md-4">
-                        <label class="mg-b-0">Message</label>
-                    </div>
-                    <div class="col-md-8 mg-t-5 mg-md-t-0">
-                        <textarea asp-for="Message" multiple="multiple"></textarea>
-                    </div>
-                </div>
-                <div class="form-group row justify-content-end mb-0">
-                    <div class="col-md-8 pl-md-2">
-                        <input type="submit" class="btn ripple btn-primary pd-x-30 mg-r-5" value="Send Invite" />
-                        <button class="btn ripple btn-secondary pd-x-30">Cancel</button>
+                    <div class="form-group row justify-content-end mb-0">
+                        <div class="col-md-8 pl-md-2">
+                            <input type="submit" class="btn ripple btn-primary pd-x-30 mg-r-5" value="Send Invite" />
+                            <button class="btn ripple btn-secondary pd-x-30">Cancel</button>
+                        </div>
                     </div>
                 </div>
             </form>
-        </div>
+        
     </div>
 </div>
 @section Scripts {

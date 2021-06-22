@@ -1,136 +1,161 @@
-﻿@model BugTracker.Models.ViewModels.MyTicketsViewModel
+﻿@using X.PagedList
+@using X.PagedList.Mvc.Core
+@using X.PagedList.Web.Common
+@model BugTracker.Models.ViewModels.MyTicketsViewModel
 
+<div class="row mt-5">
+    <div class="col-xl-10 col-md-12 mx-auto">
+        <div class="card">
+            <div class="card-header border-bottom-0">
+                <h3 class="card-title">My Assigned Tickets</h3>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table id="details-datatable" class="table table-hover card-table table-vcenter text-nowrap mb-0">
+                        <thead>
+                            <tr>
+                                <th scope="col">Title</th>
+                                <th scope="col">Project</th>
+                                <th scope="col">Created Date</th>
+                                <th scope="col">Ticket Type</th>
+                                <th scope="col">Ticket Status</th>
+                                <th scope="col">Ticket Priority</th>
+                                <th scope="col">Details</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (Ticket ticket in Model.DevTickets)
+                            {
+                                <tr>
+                                    <th scope="row">
+                                        @ticket.Title
+                                    </th>
+                                    <td>
+                                        @ticket.Project.Name
+                                    </td>
+                                    <td>
+                                        @ticket.Created.ToString("MMM dd, yyyy")
+                                    </td>
+                                    <td>
+                                        @ticket.TicketType.Name
+                                    </td>
+                                    <td>
+                                        @ticket.TicketStatus.Name
+                                    </td>
+                                    <td>
+                                        @ticket.TicketPriority.Name
+                                    </td>
+                                    <td>
+                                        <a asp-controller="Tickets" asp-action="Details" asp-route-id="@ticket.Id"><i class="far fa-lg fa-eye" style="color: #0275d8;"></i></a>
+                                        @if (User.IsInRole("Admin"))
+                                        {
+                                            <a asp-controller="Tickets" asp-action="Edit" asp-route-id="@ticket.Id"><i class="fas fa-lg fa-edit" style="color:#f0ad4e;"></i></a>
+                                            <a asp-controller="Tickets" asp-action="Delete" asp-route-id="@ticket.Id"><i class="fas fa-lg fa-trash-alt" style="color:#d9534f;"></i></a>
 
-<h1>My Development Tickets</h1>
-<table class="table">
-    <thead class="thead-dark">
-        <tr>
-            <th scope="col">Title</th>
-            <th scope="col">Description</th>
-            <th scope="col">Date Created</th>
-            <th scope="col">Date Updated</th>
-            <th scope="col">Priority</th>
-            <th scope="col">Status</th>
-            <th scope="col">Type</th>
-            <th scope="col">Owner</th>
-            <th scope="col">Developer</th>
-            <th scope="col">Archived?</th>
-            <th scope="col">Archived Date</th>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    <div class="row m-3">
+                        <div class="col h5">
+                            Page @(Model.DevTickets.PageCount < Model.DevTickets.PageNumber ? 0 : Model.DevTickets.PageNumber) of @Model.DevTickets.PageCount
+                        </div>
+                    </div>
 
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (Ticket ticket in Model.DevTickets)
-        {
-            if (ticket.TicketStatus.Name == "Development")
-            {
-                <tr>
-                    <td>
-                        @ticket.Title
-                    </td>
-                    <td>
-                        @ticket.Description
-                    </td>
-                    <td>
-                        @ticket.Created
-                    </td>
-                    <td>
-                        @ticket.Updated
-                    </td>
-                    <td>
-                        @ticket.TicketPriority.Name
-                    </td>
-                    <td>
-                        @ticket.TicketStatus.Name
-                    </td>
-                    <td>
-                        @ticket.TicketType.Name
-                    </td>
-                    <td>
-                        @ticket.OwnerUser
-                    </td>
-                    <td>
-                        @ticket.DeveloperUser
-                    </td>
-                    <td>
-                        @ticket.Archived
-                    </td>
-                    <td>
-                        @ticket.ArchivedDate
-                    </td>
-                </tr>
-            }
+                    <div class="row m-3">
+                        <div class="col">
+                            @Html.PagedListPager(Model.DevTickets, page => Url.Action("MyTickets", new { id = @Model.DevTickets.FirstOrDefault()?.Id, page = page }),
+                            new PagedListRenderOptions
+                            {
+                                LiElementClasses = new string[] { "page-item" },
+                                PageClasses = new string[] { "page-link" }
+                            }
 
-        }
-    </tbody>
-</table>
+                          )
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row mt-5">
+    <div class="col-xl-10 col-md-12 mx-auto">
+        <div class="card">
+            <div class="card-header border-bottom-0">
+                <h3 class="card-title">My Submitted Tickets</h3>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table id="details-datatable" class="table table-hover card-table table-vcenter text-nowrap mb-0">
+                        <thead>
+                            <tr>
+                                <th scope="col">Title</th>
+                                <th scope="col">Project</th>
+                                <th scope="col">Created Date</th>
+                                <th scope="col">Ticket Type</th>
+                                <th scope="col">Ticket Status</th>
+                                <th scope="col">Ticket Priority</th>
+                                <th scope="col">Details</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (Ticket ticket in Model.SubmittedTickets)
+                            {
+                                <tr>
+                                    <th scope="row">
+                                        @ticket.Title
+                                    </th>
+                                    <td>
+                                        @ticket.Project.Name
+                                    </td>
+                                    <td>
+                                        @ticket.Created.ToString("MMM dd, yyyy")
+                                    </td>
+                                    <td>
+                                        @ticket.TicketType.Name
+                                    </td>
+                                    <td>
+                                        @ticket.TicketStatus.Name
+                                    </td>
+                                    <td>
+                                        @ticket.TicketPriority.Name
+                                    </td>
+                                    <td>
+                                        <a asp-controller="Tickets" asp-action="Details" asp-route-id="@ticket.Id"><i class="far fa-lg fa-eye" style="color: #0275d8;"></i></a>
+                                        @if (User.IsInRole("Admin"))
+                                        {
+                                            <a asp-controller="Tickets" asp-action="Edit" asp-route-id="@ticket.Id"><i class="fas fa-lg fa-edit" style="color:#f0ad4e;"></i></a>
+                                            <a asp-controller="Tickets" asp-action="Delete" asp-route-id="@ticket.Id"><i class="fas fa-lg fa-trash-alt" style="color:#d9534f;"></i></a>
 
-<h1>My Submitted Tickets</h1>
-<table class="table">
-    <thead class="thead-dark">
-        <tr>
-            <th scope="col">Title</th>
-            <th scope="col">Description</th>
-            <th scope="col">Date Created</th>
-            <th scope="col">Date Updated</th>
-            <th scope="col">Priority</th>
-            <th scope="col">Status</th>
-            <th scope="col">Type</th>
-            <th scope="col">Owner</th>
-            <th scope="col">Developer</th>
-            <th scope="col">Archived?</th>
-            <th scope="col">Archived Date</th>
-            <th></th>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    <div class="row m-3">
+                        <div class="col h5">
+                            Page @(Model.SubmittedTickets.PageCount < Model.SubmittedTickets.PageNumber ? 0 : Model.SubmittedTickets.PageNumber) of @Model.SubmittedTickets.PageCount
+                        </div>
+                    </div>
 
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (Ticket ticket in Model.SubmittedTickets)
-        {
-            if (ticket.TicketStatus.Name == "Submitted")
-            {
-                <tr>
-                    <td>
-                        @ticket.Title
-                    </td>
-                    <td>
-                        @ticket.Description
-                    </td>
-                    <td>
-                        @ticket.Created
-                    </td>
-                    <td>
-                        @ticket.Updated
-                    </td>
-                    <td>
-                        @ticket.TicketPriority.Name
-                    </td>
-                    <td>
-                        @ticket.TicketStatus.Name
-                    </td>
-                    <td>
-                        @ticket.TicketType.Name
-                    </td>
-                    <td>
-                        @ticket.OwnerUser
-                    </td>
-                    <td>
-                        @ticket.DeveloperUser
-                    </td>
-                    <td>
-                        @ticket.Archived
-                    </td>
-                    <td>
-                        @ticket.ArchivedDate
-                    </td>
-                    <td>
-                        <a asp-action="Edit" asp-route-id="@ticket.Id">Edit</a> |
-                        <a asp-action="Details" asp-route-id="@ticket.Id">Details</a> |
-                        <a asp-action="Delete" asp-route-id="@ticket.Id">Delete</a>
-                    </td>
-                </tr>
-            }
+                    <div class="row m-3">
+                        <div class="col">
+                            @Html.PagedListPager(Model.SubmittedTickets, page => Url.Action("MyTickets", new { id = @Model.SubmittedTickets.FirstOrDefault()?.Id, page = page }),
+                            new PagedListRenderOptions
+                            {
+                                LiElementClasses = new string[] { "page-item" },
+                                PageClasses = new string[] { "page-link" }
+                            }
 
-        }
-    </tbody>
-</table>
+                          )
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

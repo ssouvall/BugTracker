@@ -57,12 +57,38 @@ namespace BugTracker.Controllers
                 .Include(p => p.ProjectPriority)
                 .Include(p => p.Tickets)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (project == null)
             {
                 return NotFound();
             }
 
-            return View(project);
+            BTUser projectManager = await _projectService.GetProjectManagerAsync(project.Id);
+
+            if (projectManager is not null)
+            {
+                ProjectDetailsViewModel model = new()
+                {
+
+                    Project = project,
+                    ProjectManager = projectManager
+
+                };
+
+                return View(model);
+            }
+            else
+            {
+                ProjectDetailsViewModel model = new()
+                {
+
+                    Project = project,
+
+                };
+
+                return View(model);
+            }
+            
         }
 
         // GET: Projects/Create
@@ -209,6 +235,48 @@ namespace BugTracker.Controllers
                 }
             }
             return View(model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> AssignProjectManager(int id)
+        {
+            ProjectDetailsViewModel model = new();
+
+            int companyId = User.Identity.GetCompanyId().Value;
+
+            Project project = (await _projectService.GetAllProjectsByCompany(companyId))
+                                        .FirstOrDefault(p => p.Id == id);
+
+            model.Project = project;
+            List<BTUser> projectManagers = await _bTCompanyInfoService.GetMembersInRoleAsync(Roles.ProjectManager.ToString(), companyId);
+            List<BTUser> pmSelect = projectManagers.ToList();
+            BTUser assignedProjectManager = await _projectService.GetProjectManagerAsync(project.Id);
+            if (assignedProjectManager is null)
+            {
+                ViewData["ProjectManager"] = new SelectList(pmSelect, "Id", "FullName", model.ProjectManagers);
+                return View(model);
+            }
+            else
+            {
+                return View(model);
+            }
+
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AssignProjectManager(int id, BTUser projectManager)
+        {
+            if (ModelState.IsValid)
+            {
+                Project project = await _context.Project.FirstOrDefaultAsync(p => p.Id == id);
+
+                await _projectService.AddProjectManagerAsync(projectManager.Id, project.Id);
+                return RedirectToAction("Index", "Projects");
+            }
+
+            return View();
+
         }
 
         [HttpGet]

@@ -1,7 +1,7 @@
 ﻿@model BugTracker.Models.ViewModels.DashboardViewModel
 
     <div class="row mt-5">
-        <div class="col-xl-12 col-md-12 col-lg-12">
+        <div class="col-xl-10 col-md-12 mx-auto">
             <div class="card">
                 <div class="card-header border-bottom-0">
                     <h3 class="card-title">Project List</h3>
@@ -34,17 +34,23 @@
                                         </td>
                                         <td>
                                             <div class="avatar-list avatar-list-stacked">
-                                                <img class="avatar avatar-md brround" src="../../assets/images/users/16.jpg" alt="img">
-                                                <img class="avatar avatar-md brround" src="../../assets/images/users/16.jpg" alt="img">
-                                                <img class="avatar avatar-md brround" src="../../assets/images/users/16.jpg" alt="img">
-                                                <img class="avatar avatar-md brround" src="../../assets/images/users/16.jpg" alt="img">
+                                                @foreach (BTUser member in project.Members)
+                                                {
+                                                    <img class="avatar avatar-md brround" src="../../assets/images/users/16.jpg" alt="img">
+                                                }
                                             </div>
                                         </td>
                                         <td>
                                             @project.Tickets.Count
                                         </td>
                                         <td>
-                                            <a asp-controller="Projects" asp-action="Details" asp-route-id="@project.Id"><i class="far fa-eye"></i></a>
+                                            <a asp-controller="Projects" asp-action="Details" asp-route-id="@project.Id"><i class="far fa-lg fa-eye"></i></a>
+                                            @if (User.IsInRole("Admin"))
+                                            {
+                                                <a asp-controller="Projects" asp-action="Edit" asp-route-id="@project.Id"><i class="fas fa-lg fa-edit"></i></a>
+                                                <a asp-controller="Projects" asp-action="Delete" asp-route-id="@project.Id"><i class="fas fa-lg fa-trash-alt"></i></a>
+
+                                            }
                                         </td>
                                     </tr>
                                 }

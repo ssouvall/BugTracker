@@ -3,11 +3,11 @@
 @inject SignInManager<BTUser> SignInManager
 @inject UserManager<BTUser> UserManager
 @inject IBTRolesService BTRolesService
-@model BugTracker.Models.Project
+@model BugTracker.Models.ViewModels.ProjectDetailsViewModel
 <!--Page header-->
 <div class="page-header d-xl-flex d-block">
     <div class="page-leftheader">
-        <h4 class="page-title"><span class="font-weight-normal text-muted mr-2">Project #67</span> @Model.Name</h4>
+        <h4 class="page-title"><span class="font-weight-normal text-muted mr-2">Project #67</span> @Model.Project.Name</h4>
     </div>
     <div class="page-rightheader ml-md-auto">
         <div class="d-flex align-items-end flex-wrap my-auto right-content breadcrumb-right">
@@ -32,12 +32,21 @@
                         <tbody>
                             <tr>
                                 <td>
-                                    <span class="w-50">Team Lead</span>
+                                    <span class="w-50">Project Manager</span>
                                 </td>
                                 <td>:</td>
+                                @if(Model.ProjectManager is not null)
+                                {
                                 <td>
-                                    <span class="font-weight-semibold"></span>
+                                    <span class="font-weight-semibold">@Model.ProjectManager.FullName</span>
                                 </td>
+                                }
+                                else
+                                {
+                                <td>
+                                    <span class="font-weight-semibold"><a asp-action="AssignProjectManager" asp-controller="Projects" asp-route-id="@Model.Project.Id" class="btn btn-success">Assign Project Manager</a></span>
+                                </td>
+                                }
                             </tr>
                             <tr>
                                 <td>
@@ -45,7 +54,7 @@
                                 </td>
                                 <td>:</td>
                                 <td>
-                                    <span class="font-weight-semibold">@Model.StartDate.ToString("MMM dd, yyyy")</span>
+                                    <span class="font-weight-semibold">@Model.Project.StartDate.ToString("MMM dd, yyyy")</span>
                                 </td>
                             </tr>
                             <tr>
@@ -54,7 +63,7 @@
                                 </td>
                                 <td>:</td>
                                 <td>
-                                    <span class="font-weight-semibold">@Model.EndDate.ToString("MMM dd, yyyy")</span>
+                                    <span class="font-weight-semibold">@Model.Project.EndDate.ToString("MMM dd, yyyy")</span>
                                 </td>
                             </tr>
                             <tr>
@@ -63,7 +72,7 @@
                                 </td>
                                 <td>:</td>
                                 <td>
-                                    <span class="badge badge-danger-light">@Model.ProjectPriority.Name</span>
+                                    <span class="badge badge-danger-light">@Model.Project.ProjectPriority.Name</span>
                                 </td>
                             </tr>
                         </tbody>
@@ -84,14 +93,14 @@
             <div class="card-header  border-0">
                 <div class="card-title">Assigned Team</div>
                 <div class="ml-auto">
-                    <a asp-action="AssignUsers" asp-controller="Projects" asp-route-id="@Model.Id" class="btn btn-success btn-sm">Add</a>
+                    <a asp-action="AssignUsers" asp-controller="Projects" asp-route-id="@Model.Project.Id" class="btn btn-success btn-sm">Add</a>
                 </div>
             </div>
             <div class="card-body p-1 pt-2">
                 <div class="table-responsive">
                     <table class="table table-borderless">
                         <tbody>
-                            @foreach (BTUser member in Model.Members)
+                            @foreach (BTUser member in Model.Project.Members)
                             {
                                 <tr>
                                     <td>
@@ -139,7 +148,7 @@
                 <div class="tab-pane active" id="tab5">
                     <div class="card-body">
                         <h5 class="mb-4 font-weight-semibold">Description</h5>
-                        <p>@Model.Description</p>
+                        <p>@Model.Project.Description</p>
                         </div>
                 </div>
                 <div class="tab-pane" id="tab6">
@@ -157,7 +166,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach(Ticket ticket in Model.Tickets)
+                                    @foreach(Ticket ticket in Model.Project.Tickets)
                                     {
                                         <tr>
                                             <td><a href="#" class="d-flex sidebarmodal-collapase">@ticket.Title</a></td>

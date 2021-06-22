@@ -6,16 +6,21 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>@Model.Title</h1>
-
-<div>
-    <hr />
+<!--Page header-->
+<div class="page-header d-xl-flex d-block">
+    <div class="page-leftheader">
+        <h4 class="page-title"><span class="font-weight-normal text-muted mr-2">@Model.Project.Name:</span> @Model.Title</h4>
+    </div>
 </div>
+<!--End Page header-->
+
 <div class="row">
     <div class="col-6">
-        <div class="card rounded shadow m-3 p-3">
+        <div class="card m-3 p-3">
+            <div class="card-header  border-0">
+                <div class="card-title">@Model.Description</div>
+            </div>
             <div class="card-body">
-                <h5 class="card-title">@Model.Description</h5>
                 <p class="card-text">Ticket Status: @Model.TicketStatus.Name</p>
                 @if (Model.TicketStatus.Name == "Unassigned" || Model.TicketStatus.Name == "New")
                 {
@@ -59,18 +64,31 @@
 
             </div>
         </div>
-        <div class="card rounded shadow m-3 p-3">
-            <div class="card-body">
-                <h5>Ticket Details</h5>
-                <p class="card-text">Created: @Model.Created.ToString("MMM dd, yyyy")</p>
-                <p class="card-text">Ticket Type: @Model.TicketType.Name</p>
-                <p class="card-text">Ticket Priority: @Model.TicketPriority.Name</p>
-                <p class="card-text">Ticket Status: @Model.TicketStatus.Name</p>
+        <div class="card shadow m-3 p-3">
+            <div class="card-header  border-0">
+                <div class="card-title">Ticket Details</div>
+            </div>
+            <div class="card-body row">
+                <div class="col-8">
+                    <p class="card-text">Created:</p>
+                    <p class="card-text">Ticket Type:</p>
+                    <p class="card-text">Ticket Priority:</p>
+                    <p class="card-text">Ticket Status:</p>
+                </div>
+                <div class="col-4">
+                    <p class="badge badge-primary">@Model.Created.ToString("MMM dd, yyyy")</p><br />
+                    <p class="badge badge-primary">@Model.TicketType.Name</p><br />
+                    <p class="badge badge-primary">@Model.TicketPriority.Name</p><br />
+                    <p class="badge badge-primary">@Model.TicketStatus.Name</p>
+                </div>
+                
             </div>
         </div>
-        <div class="card rounded shadow m-3 p-3">
+        <div class="card shadow m-3 p-3">
+            <div class="card-header border-0">
+                <div class="card-title">Ticket Attachments</div>
+            </div>
             <div class="card-body">
-                <h5>Ticket Attachments</h5>
                 <div class="row clearfix">
                     @foreach (TicketAttachment item in Model.Attachments)
                     {
@@ -141,9 +159,11 @@
         </div>
     </div>
     <div class="col-6">
-        <div class="card rounded shadow m-3 p-3">
+        <div class="card m-3 p-3">
+            <div class="card-header border-0">
+                <div class="card-title">Ticket Comments</div>
+            </div>
             <div class="card-body">
-                <h5>Ticket Comments</h5>
                 <form asp-action="Create" asp-controller="TicketComments" method="post">
                     @*----which post did it come from...?-----*@
                     <input type="hidden" name="TicketId" value="@Model.Id" />
@@ -177,9 +197,11 @@
                 </div>
             </div>
         </div>
-        <div class="card rounded shadow m-3 p-3">
+        <div class="card shadow m-3 p-3">
+            <div class="card-header border-0">
+                <div class="card-title">Ticket History</div>
+            </div>
             <div class="card-body">
-                <h5>Ticket History</h5>
                 <div class="row d-flex mt-70 mb-70">
                     <div class="row">
                         <div class="col-12">
@@ -198,10 +220,4 @@
             </div>
         </div>
     </div>
-</div>
-
-
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
 </div>
