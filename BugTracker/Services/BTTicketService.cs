@@ -259,7 +259,7 @@ namespace BugTracker.Services
         {
             BTUser developer = new();
 
-            Ticket ticket = await _context.Ticket.Include(t => t.DeveloperUser).FirstOrDefaultAsync(t => t.Id == ticketId);
+            Ticket ticket = await _context.Ticket.AsNoTracking().Include(t => t.DeveloperUser).FirstOrDefaultAsync(t => t.Id == ticketId);
 
             if (ticket?.DeveloperUserId != null)
             {

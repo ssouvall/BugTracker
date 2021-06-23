@@ -53,6 +53,10 @@ namespace BugTracker.Areas.Identity.Pages.Account.Manage
 
         public async Task<IActionResult> OnGetAsync()
         {
+            if (User.IsInRole("DemoUser"))
+            {
+                return RedirectToAction("Index", "Home");
+            }
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
@@ -70,6 +74,11 @@ namespace BugTracker.Areas.Identity.Pages.Account.Manage
 
         public async Task<IActionResult> OnPostAsync()
         {
+            if (User.IsInRole("DemoUser"))
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             if (!ModelState.IsValid)
             {
                 return Page();

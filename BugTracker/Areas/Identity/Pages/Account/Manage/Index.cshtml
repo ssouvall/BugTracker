@@ -5,6 +5,10 @@
     ViewData["ActivePage"] = ManageNavPages.Index;
 }
 
+@if(User.IsInRole("DemoUser"))
+            {
+                <p class="text-danger">Please note that Demo Users are unable to change the information below</p>
+            }
 <h4>@ViewData["Title"]</h4>
 <partial name="_StatusMessage" model="Model.StatusMessage" />
 <div class="row">

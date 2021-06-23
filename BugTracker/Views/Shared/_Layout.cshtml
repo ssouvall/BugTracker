@@ -166,11 +166,14 @@
                         <span class="side-menu__label">Tickets</span><i class="angle fa fa-angle-right"></i>
                     </a>
                     <ul class="slide-menu">
-                        <li><a asp-controller="Tickets" asp-action="AllTickets" class="slide-item">All Tickets</a></li>
-                        <li><a asp-controller="Tickets" asp-action="MyTickets" class="slide-item">My Tickets</a></li>
-                        <li><a asp-controller="Tickets" asp-action="Create" class="slide-item">Add Tickets</a></li>
-                        <li><a asp-controller="Tickets" asp-action="ArchivedTickets" class="slide-item">Ticket Archive</a></li>
-                    </ul>
+                        @if (User.IsInRole("Admin") || User.IsInRole("ProjectManager"))
+                        {
+                            <li><a asp-controller="Tickets" asp-action="AllTickets" class="slide-item">All Tickets</a></li>
+                        }
+                            <li><a asp-controller="Tickets" asp-action="MyTickets" class="slide-item">My Tickets</a></li>
+                            <li><a asp-controller="Tickets" asp-action="Create" class="slide-item">Add Tickets</a></li>
+                            <li><a asp-controller="Tickets" asp-action="ArchivedTickets" class="slide-item">Ticket Archive</a></li>
+                        </ul>
                 </li>
 
 

@@ -39,6 +39,10 @@ namespace BugTracker.Areas.Identity.Pages.Account.Manage
             {
                 return NotFound($"Unable to load user with ID 'user.Id'.");
             }
+            if (User.IsInRole("DemoUser"))
+            {
+                return RedirectToAction("Index", "Home");
+            }
 
             CurrentLogins = await _userManager.GetLoginsAsync(user);
             OtherLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync())
@@ -56,6 +60,11 @@ namespace BugTracker.Areas.Identity.Pages.Account.Manage
                 return NotFound($"Unable to load user with ID 'user.Id'.");
             }
 
+            if (User.IsInRole("DemoUser"))
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             var result = await _userManager.RemoveLoginAsync(user, loginProvider, providerKey);
             if (!result.Succeeded)
             {
@@ -70,6 +79,10 @@ namespace BugTracker.Areas.Identity.Pages.Account.Manage
 
         public async Task<IActionResult> OnPostLinkLoginAsync(string provider)
         {
+            if (User.IsInRole("DemoUser"))
+            {
+                return RedirectToAction("Index", "Home");
+            }
             // Clear the existing external cookie to ensure a clean login process
             await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
 
@@ -81,6 +94,10 @@ namespace BugTracker.Areas.Identity.Pages.Account.Manage
 
         public async Task<IActionResult> OnGetLinkLoginCallbackAsync()
         {
+            if (User.IsInRole("DemoUser"))
+            {
+                return RedirectToAction("Index", "Home");
+            }
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {

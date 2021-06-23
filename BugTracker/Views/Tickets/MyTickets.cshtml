@@ -3,6 +3,8 @@
 @using X.PagedList.Web.Common
 @model BugTracker.Models.ViewModels.MyTicketsViewModel
 
+@if(User.IsInRole("Developer"))
+{ 
 <div class="row mt-5">
     <div class="col-xl-10 col-md-12 mx-auto">
         <div class="card">
@@ -47,12 +49,13 @@
                                     </td>
                                     <td>
                                         <a asp-controller="Tickets" asp-action="Details" asp-route-id="@ticket.Id"><i class="far fa-lg fa-eye" style="color: #0275d8;"></i></a>
+                                        <a asp-controller="Tickets" asp-action="Edit" asp-route-id="@ticket.Id"><i class="fas fa-lg fa-edit" style="color:#f0ad4e;"></i></a>
                                         @if (User.IsInRole("Admin"))
                                         {
-                                            <a asp-controller="Tickets" asp-action="Edit" asp-route-id="@ticket.Id"><i class="fas fa-lg fa-edit" style="color:#f0ad4e;"></i></a>
                                             <a asp-controller="Tickets" asp-action="Delete" asp-route-id="@ticket.Id"><i class="fas fa-lg fa-trash-alt" style="color:#d9534f;"></i></a>
 
                                         }
+
                                     </td>
                                 </tr>
                             }
@@ -81,6 +84,7 @@
         </div>
     </div>
 </div>
+}
 <div class="row mt-5">
     <div class="col-xl-10 col-md-12 mx-auto">
         <div class="card">
