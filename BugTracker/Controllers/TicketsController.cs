@@ -13,6 +13,7 @@ using BugTracker.Extensions;
 using Microsoft.AspNetCore.Identity;
 using System.IO;
 using X.PagedList;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BugTracker.Controllers
 {
@@ -298,6 +299,7 @@ namespace BugTracker.Controllers
         }
 
         //create an action called AssignTicket and a corresponding view
+        [Authorize(Roles = "Admin,ProjectManager")]
         [HttpGet]
         public async Task<IActionResult> AssignTicket(int? ticketId)
         {
@@ -311,10 +313,11 @@ namespace BugTracker.Controllers
 
             model.ticket = (await _ticketService.GetAllTicketsByCompanyAsync(companyId))
                                                 .FirstOrDefault(t => t.Id == ticketId);
-            model.Developers = new SelectList(await _projectService.DevelopersOnProjectAsync(model.ticket.ProjectId), "Id", "FullName");
+            List<BTUser> developers = await _infoService.GetAllMembersAsync(companyId);
+            model.Developers = new SelectList(await _infoService.GetAllMembersAsync(companyId), "Id", "FullName");
             return View(model);
         }
-
+        [Authorize(Roles = "Admin,ProjectManager")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AssignTicket (AssignDeveloperViewModel model)

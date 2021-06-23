@@ -57,7 +57,11 @@
                 {
                     <p class="card-text mt-3">Assigned Developer: Unassigned</p>
 
-                    <a asp-action="AssignTicket" asp-controller="Tickets" asp-route-ticketId="@Model.Id" class="btn btn-success">Assign Developer</a>
+                    @if (User.IsInRole("Admin") || User.IsInRole("ProjectManager"))
+                    {
+                        <a asp-action="AssignTicket" asp-controller="Tickets" asp-route-ticketId="@Model.Id" class="btn btn-success">Assign Developer</a>
+
+                    }
                 }
 
 

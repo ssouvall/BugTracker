@@ -23096,7 +23096,7 @@ hr.divider:after {
 }
 
 .login-bg, .message-bg {
-    background: url(//i.ibb.co/6Db9h32/landing-Bg.jpg);
+    background: url(~/assets/images/photos/landingBg.jpg);
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
