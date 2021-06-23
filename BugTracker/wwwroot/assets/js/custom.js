@@ -352,3 +352,20 @@ function not2(){
 	});
 }
 
+//Display file name in input when uploaded
+function processSelectedFiles(fileInput) {
+	var files = fileInput.files;
+	var label = document.querySelectorAll(".control-label");
+
+	//for (var i = 0; i < files.length; i++) {
+	//    for (var j = 0; j < label.length; j++) {
+	//        label[j].innerText = files[i].name;
+	//    }
+
+	//}
+	for (var i = 0; i < label.length; i++) {
+		for (var j = 0; j < files.length; j++) {
+			label[i].innerHTML = files[j].name;
+		}
+	}
+}

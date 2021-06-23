@@ -4,6 +4,7 @@
 @inject UserManager<BTUser> UserManager
 @inject IBTRolesService BTRolesService
 @inject IBTNotificationsService NotificationService
+@inject IBTImageService BTImageService
 
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
@@ -81,24 +82,31 @@
         <div class="app-sidebar__logo">
             <a class="header-brand" asp-action="Index" asp-controller="Home">
 
-                <img src="../../assets/images/brand/bugzapper-logo.png" class="header-brand-img desktop-lgo h-auto w-75" alt="Dayonelogo">
-                <img src="../../assets/images/brand/bugzapper-logo.png" class="header-brand-img dark-logo h-auto w-75" alt="Dayonelogo">
-                <img src="../../assets/images/brand/logo-no-text.png" class="header-brand-img mobile-logo" alt="Dayonelogo">
-                <img src="../../assets/images/brand/logo-no-text.png" class="header-brand-img darkmobile-logo" alt="Dayonelogo">
+                <img src="../../assets/images/brand/bugzapper-logo.png" class="header-brand-img desktop-lgo h-auto w-75" alt="Logo">
+                <img src="../../assets/images/brand/bugzapper-logo.png" class="header-brand-img dark-logo h-auto w-75" alt="Logo">
+                <img src="//i.ibb.co/g9Y4nx2/logo-no-text.png" class="header-brand-img mobile-logo" alt="Logo">
+                <img src="//i.ibb.co/g9Y4nx2/logo-no-text.png" class="header-brand-img darkmobile-logo" alt="Logo">
             </a>
         </div>
         <div class="app-sidebar3">
             <div class="app-sidebar__user">
                 <div class="dropdown user-pro-body text-center">
-                    <div class="user-pic">
-                        <img src="../../assets/images/users/16.jpg" alt="user-img" class="avatar-xxl rounded-circle mb-1">
-                    </div>
+
 
                     @if (SignInManager.IsSignedIn(User))
                     {
                         BTUser btUser = await UserManager.GetUserAsync(User);
                         IEnumerable<string> roles = await BTRolesService.ListUserRolesAsync(btUser);
+                        @if (btUser.AvatarFileData is not null)
+                        {
+                            <img src="@BTImageService.DecodeImage(btUser.AvatarFileData, btUser.AvatarContentType)" alt="img" class="avatar avatar-md bradius">
 
+                        }
+                        else
+                        {
+                            <img src="//i.ibb.co/Yd6P9rF/default-profile-picture.jpg" alt="img" class="rounded-circle w-25 h-auto mb-3">
+
+                        }
                         <div>
                             <div class="user-info">
                                 <h5 class=" mb-2">@btUser.FullName</h5>
@@ -235,7 +243,16 @@
 
                                     <a href="#" class="nav-link pr-1 pl-0 leading-none" data-toggle="dropdown">
                                         <span>
-                                            <img src="../../assets/images/users/16.jpg" alt="img" class="avatar avatar-md bradius">
+                                            @if (btUser.AvatarFileData is not null)
+                                            {
+                                                <img src="@BTImageService.DecodeImage(btUser.AvatarFileData, btUser.AvatarContentType)" alt="img" class="avatar avatar-md bradius">
+
+                                            }
+                                            else
+                                            {
+                                                <img src="//i.ibb.co/Yd6P9rF/default-profile-picture.jpg" alt="img" class="avatar avatar-md bradius">
+
+                                            }
                                         </span>
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow animated">
@@ -247,9 +264,9 @@
                                             }
 
                                         </div>
-                                        <a class="dropdown-item d-flex" href="#" data-toggle="modal" data-target="#changepasswordnmodal">
+                                        <a class="dropdown-item d-flex" asp-area="Identity" asp-page="/Account/Manage/Index">
                                             <i class="feather feather-edit-2 mr-3 fs-16 my-auto"></i>
-                                            <div class="mt-1">Change Password</div>
+                                            <div class="mt-1">Manage Account</div>
                                         </a>
                                         <a class="dropdown-item d-flex" href="javascript:document.getElementById('logoutform').submit();">
                                             <i class="feather feather-power mr-3 fs-16 my-auto"></i>

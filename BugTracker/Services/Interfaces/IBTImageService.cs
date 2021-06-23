@@ -9,7 +9,7 @@ namespace BugTracker.Services.Interfaces
     public interface IBTImageService
     {
         public string ContentType(IFormFile file);
-        public string DecodeFile(byte[] data, string type);
+        public string DecodeImage(byte[] data, string type);
         public Task<byte[]> EncodeFileAsync(IFormFile file);
         public int Size(IFormFile file);
         public bool ValidateFileSize(IFormFile file);

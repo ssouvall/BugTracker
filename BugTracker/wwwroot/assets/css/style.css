@@ -40017,3 +40017,10 @@ color: #333;
         margin-top: 2rem;
         padding: 2rem;
     }
+
+#profile-pic {
+    height: auto;
+    width: 50%;
+    margin-left: 25%;
+    margin-right: 25%;
+}
