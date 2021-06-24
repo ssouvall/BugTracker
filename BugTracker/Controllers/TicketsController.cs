@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Identity;
 using System.IO;
 using X.PagedList;
 using Microsoft.AspNetCore.Authorization;
+using BugTracker.Services;
 
 namespace BugTracker.Controllers
 {
@@ -26,6 +27,7 @@ namespace BugTracker.Controllers
         private readonly IBTCompanyInfoService _infoService;
         private readonly IBTHistoryService _historyService;
         private readonly IBTNotificationsService _notificationsService;
+        private readonly BTSearchService _searchService;
 
         public TicketsController(ApplicationDbContext context,
                                  IBTTicketService ticketService,
@@ -33,7 +35,8 @@ namespace BugTracker.Controllers
                                  IBTProjectService projectService,
                                  IBTCompanyInfoService infoService,
                                  IBTHistoryService historyService,
-                                 IBTNotificationsService notificationsService)
+                                 IBTNotificationsService notificationsService,
+                                 BTSearchService searchService)
         {
             _context = context;
             _ticketService = ticketService;
@@ -42,6 +45,7 @@ namespace BugTracker.Controllers
             _infoService = infoService;
             _historyService = historyService;
             _notificationsService = notificationsService;
+            _searchService = searchService;
         }
 
         // GET: Tickets
@@ -84,6 +88,40 @@ namespace BugTracker.Controllers
             }
 
             return View(ticket);
+        }
+
+        //public async Task<IActionResult> SearchIndex(int? page, string searchString)
+        public async Task<IActionResult> SearchIndex(int? page, string searchString)
+        {
+            SearchIndexViewModel model = new();
+            ViewData["SearchString"] = searchString;
+
+            BTUser currentUser = await _userManager.GetUserAsync(User);
+            int companyId = User.Identity.GetCompanyId().Value;
+            var tickets = _searchService.SearchContent(searchString, companyId);
+            
+            //var pageNumber = page ?? 1;
+            //var pageSize = 6;
+
+
+            foreach(Ticket ticket in tickets)
+            {
+                if(ticket.DeveloperUserId == currentUser.Id || ticket.OwnerUserId == currentUser.Id)
+                {
+                    model.DeveloperTickets.Add(ticket);
+                }
+                else if(ticket.OwnerUserId == currentUser.Id && ticket.DeveloperUserId != currentUser.Id)
+                {
+                    model.SubmitterTickets.Add(ticket);
+                }
+
+                if(User.IsInRole("Admin") || User.IsInRole("ProjectManager"))
+                {
+                    model.AdminPmTickets.Add(ticket);
+                }
+            }
+
+            return View(model);
         }
 
         // GET: Tickets/Create
@@ -192,14 +230,14 @@ namespace BugTracker.Controllers
                 return NotFound();
             }
 
-            if (currentUserId == ticketDeveloperId || currentUserId == ticket.OwnerUser.Id)
+            if (currentUserId == ticketDeveloperId || currentUserId == ticket.OwnerUserId)
             { 
-            ViewData["DeveloperUserId"] = new SelectList(_context.Users, "Id", "Id", ticket.DeveloperUserId);
-            ViewData["OwnerUserId"] = new SelectList(_context.Users, "Id", "Id", ticket.OwnerUserId);
+            //ViewData["DeveloperUserId"] = new SelectList(_context.Users, "Id", "Name", ticket.DeveloperUserId);
+            //ViewData["OwnerUserId"] = new SelectList(_context.Users, "Id", "Name", ticket.OwnerUserId);
             ViewData["ProjectId"] = new SelectList(_context.Project, "Id", "Name", ticket.ProjectId);
-            ViewData["TicketPriorityId"] = new SelectList(_context.Set<TicketPriority>(), "Id", "Id", ticket.TicketPriorityId);
-            ViewData["TicketStatusId"] = new SelectList(_context.Set<TicketStatus>(), "Id", "Id", ticket.TicketStatusId);
-            ViewData["TicketTypeId"] = new SelectList(_context.Set<TicketType>(), "Id", "Id", ticket.TicketTypeId);
+            ViewData["TicketPriorityId"] = new SelectList(_context.Set<TicketPriority>(), "Id", "Name", ticket.TicketPriorityId);
+            ViewData["TicketStatusId"] = new SelectList(_context.Set<TicketStatus>(), "Id", "Name", ticket.TicketStatusId);
+            ViewData["TicketTypeId"] = new SelectList(_context.Set<TicketType>(), "Id", "Name", ticket.TicketTypeId);
             return View(ticket);
             }
             else
@@ -236,7 +274,7 @@ namespace BugTracker.Controllers
                                             .Include(t => t.DeveloperUser)
                                             .AsNoTracking().FirstOrDefaultAsync(t => t.Id == ticket.Id);
 
-                if(btUser.Id == ticketDeveloper.Id || btUser.Id == ticket.OwnerUser.Id)
+                if(btUser.Id == ticketDeveloper.Id || btUser.Id == ticket.OwnerUserId)
                 {
                     try
                     {

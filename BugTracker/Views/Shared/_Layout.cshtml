@@ -207,10 +207,10 @@
                             </a>
                         </div>
                         <div class="mt-0">
-                            <form class="form-inline">
+                            <form asp-action="SearchIndex" asp-controller="Tickets" method="get" class="form-inline">
                                 <div class="search-element">
-                                    <input type="search" class="form-control header-search" placeholder="Search…" aria-label="Search" tabindex="1">
-                                    <button class="btn btn-primary-color">
+                                    <input type="search" class="form-control header-search" placeholder="Search Tickets…" name="SearchString" aria-label="Search" tabindex="1">
+                                    <button type="submit" class="btn btn-primary-color">
                                         <i class="feather feather-search"></i>
                                     </button>
                                 </div>
