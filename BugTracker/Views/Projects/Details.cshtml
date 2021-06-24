@@ -37,9 +37,14 @@
                                 <td>:</td>
                                 @if(Model.ProjectManager is not null)
                                 {
-                                <td>
-                                    <span class="font-weight-semibold">@Model.ProjectManager.FullName</span>
-                                </td>
+                            <td>
+                                <span class="font-weight-semibold">@Model.ProjectManager.FullName</span>
+                                @if (User.IsInRole("Admin"))
+                                {
+                                    <span class="font-weight-semibold ml-3"><a asp-action="AssignProjectManager" asp-controller="Projects" asp-route-id="@Model.Project.Id" class="btn-sm btn-success">Change</a></span>
+
+                                }
+                            </td>
                                 }
                                 else
                                 {

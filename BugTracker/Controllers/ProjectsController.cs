@@ -13,6 +13,7 @@ using BugTracker.Extensions;
 using BugTracker.Models.Enums;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
+using System.Diagnostics;
 
 namespace BugTracker.Controllers
 {
@@ -240,7 +241,7 @@ namespace BugTracker.Controllers
         [HttpGet]
         public async Task<IActionResult> AssignProjectManager(int id)
         {
-            ProjectDetailsViewModel model = new();
+            ProjectManagerViewModel model = new();
 
             int companyId = User.Identity.GetCompanyId().Value;
 
@@ -248,34 +249,46 @@ namespace BugTracker.Controllers
                                         .FirstOrDefault(p => p.Id == id);
 
             model.Project = project;
-            List<BTUser> projectManagers = await _bTCompanyInfoService.GetMembersInRoleAsync(Roles.ProjectManager.ToString(), companyId);
-            List<BTUser> pmSelect = projectManagers.ToList();
-            BTUser assignedProjectManager = await _projectService.GetProjectManagerAsync(project.Id);
-            if (assignedProjectManager is null)
+
+            List<BTUser> users = new();
+
+            try
             {
-                ViewData["ProjectManager"] = new SelectList(pmSelect, "Id", "FullName", model.ProjectManagers);
-                return View(model);
+                List<BTUser> projectManagers = await _bTCompanyInfoService.GetMembersInRoleAsync(Roles.ProjectManager.ToString(), companyId);
+                users = projectManagers;
             }
-            else
+            catch (Exception ex)
             {
-                return View(model);
+                Debug.WriteLine($"*** ERROR *** - Error getting project managers - {ex.Message}");
+                throw;
             }
 
+
+            model.Users = new SelectList(users, "Id", "FullName", users);
+            BTUser assignedProjectManager = await _projectService.GetProjectManagerAsync(project.Id);
+            
+            return View(model);
         }
+
         [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AssignProjectManager(int id, BTUser projectManager)
+        public async Task<IActionResult> AssignProjectManager(ProjectManagerViewModel model)
         {
             if (ModelState.IsValid)
             {
-                Project project = await _context.Project.FirstOrDefaultAsync(p => p.Id == id);
+                if (model.SelectedUser != null)
+                {
+                    await _projectService.AddProjectManagerAsync(model.SelectedUser, model.Project.Id);
 
-                await _projectService.AddProjectManagerAsync(projectManager.Id, project.Id);
-                return RedirectToAction("Index", "Projects");
+                    return RedirectToAction("Details", "Projects", new { id = model.Project.Id });
+                }
+                else
+                {
+                    return View();
+                }
             }
-
-            return View();
+            return View(model);
 
         }
 

@@ -27,26 +27,32 @@ namespace BugTracker.Services
 
         public async Task<bool> AddProjectManagerAsync(string userId, int projectId)
         {
-            Project project = await _context.Project
-                               .Include(p => p.Members)
-                               .FirstOrDefaultAsync(p => p.Id == projectId);
+            BTUser currentPm = await GetProjectManagerAsync(projectId);
+
+            if (currentPm != null)
+            {
+                try
+                {
+                    await RemoveProjectManagerAsync(projectId);
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"Error removing current PM. - Error: {ex.Message}");
+                    return false;
+                }
+            }
 
             try
             {
-                
-                foreach (BTUser member in project.Members)
-                {
-                    if (await _rolesService.IsUserInRoleAsync(member, Roles.ProjectManager.ToString()))
-                    {
-                        await AddUserToProjectAsync(member.Id, project.Id);
-                    }
-                }
+                await AddUserToProjectAsync(userId, projectId);
                 return true;
             }
-            catch
+            catch (Exception ex)
             {
-                throw;
-            }
+                Debug.WriteLine($"Error adding new PM. - Error: {ex.Message}");
+                return false;
+            } 
+            
         }
 
         public async Task<bool> AddUserToProjectAsync(string userId, int projectId)
