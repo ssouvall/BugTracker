@@ -99,27 +99,25 @@ namespace BugTracker.Controllers
             BTUser currentUser = await _userManager.GetUserAsync(User);
             int companyId = User.Identity.GetCompanyId().Value;
             var tickets = _searchService.SearchContent(searchString, companyId);
-            
-            //var pageNumber = page ?? 1;
-            //var pageSize = 6;
 
+            var pageNumber = page ?? 1;
+            var pageSize = 8;
 
-            foreach(Ticket ticket in tickets)
+            List<Ticket> pagedTickets = new();
+
+            foreach (Ticket ticket in tickets)
             {
-                if(ticket.DeveloperUserId == currentUser.Id || ticket.OwnerUserId == currentUser.Id)
-                {
-                    model.DeveloperTickets.Add(ticket);
-                }
-                else if(ticket.OwnerUserId == currentUser.Id && ticket.DeveloperUserId != currentUser.Id)
-                {
-                    model.SubmitterTickets.Add(ticket);
-                }
-
-                if(User.IsInRole("Admin") || User.IsInRole("ProjectManager"))
-                {
-                    model.AdminPmTickets.Add(ticket);
-                }
+                pagedTickets.Add(ticket);
             }
+
+            List<Ticket> adminPmTickets = pagedTickets;
+            model.AdminPmTickets = await adminPmTickets.ToPagedListAsync(pageNumber, pageSize);
+
+            List<Ticket> devTickets = pagedTickets.Where(t => t.DeveloperUserId == currentUser.Id || t.OwnerUserId == currentUser.Id).ToList();
+            model.DeveloperTickets = await adminPmTickets.ToPagedListAsync(pageNumber, pageSize);
+
+            List<Ticket> submitterTickets = pagedTickets.Where(t => t.DeveloperUserId != currentUser.Id || t.OwnerUserId == currentUser.Id).ToList();
+            model.SubmitterTickets = await adminPmTickets.ToPagedListAsync(pageNumber, pageSize);
 
             return View(model);
         }

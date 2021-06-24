@@ -3,13 +3,13 @@
 @using X.PagedList.Web.Common
 @using BugTracker.Services
 @using System.Text.RegularExpressions
-@*@model IPagedList<Ticket>*@
 @model BugTracker.Models.ViewModels.SearchIndexViewModel
+
 @{
     ViewData["Title"] = "Search Results";
 }
 
-<div class="text-center mb-5">
+<div class="text-center m-5">
     <h3 class="mb-3">@ViewData["Title"]</h3>
 </div>
 
@@ -19,21 +19,38 @@
         <!--Model is the IEnumerable and blog is the instance of Model-->
         @foreach (var ticket in Model.AdminPmTickets)
         {
-            <div class="text-center border shadow p-3">
-                <div class="row card">
-                    <div class="col-lg-6">
-                        <div class="card-header">
-                            <h3>@ticket.Title</h3>
-                        </div>
-                        <div class="card-body"></div>
-                        <p class="text-left pl-3 pr-3">@ticket.Description</p>
-                        <a asp-controller="Tickets" asp-action="Details" asp-route-id="@ticket.Id" class="btn btn-primary btn-block rounded mt-3">Ticket Details</a>
-                    </div>
+        <div class="col-lg-3 col-md-6 col-sm-12 mt-5">
+            <div class="card h-100">
+                <div class="card-header">
+                    <h3>@ticket.Title</h3>
+                </div>
+                <div class="card-body">
+                    <p class="text-left pl-3 pr-3">@ticket.Description</p>
+                    <a asp-controller="Tickets" asp-action="Details" asp-route-id="@ticket.Id" class="btn btn-primary btn-block rounded mt-5">Ticket Details</a>
                 </div>
             </div>
-
-            <hr />
+        </div>
+            
         }
+    </div>
+
+    <div class="row mt-5 m-3">
+        <div class="col h5">
+            Page @(Model.AdminPmTickets.PageCount < Model.AdminPmTickets.PageNumber ? 0 : Model.AdminPmTickets.PageNumber) of @Model.AdminPmTickets.PageCount
+        </div>
+    </div>
+
+    <div class="row m-3">
+        <div class="col">
+            @Html.PagedListPager(Model.AdminPmTickets, page => Url.Action("SearchIndex", new { id = Model.AdminPmTickets.FirstOrDefault()?.Id, page = page }),
+            new PagedListRenderOptions
+            {
+                LiElementClasses = new string[] { "page-item" },
+                PageClasses = new string[] { "page-link" }
+            }
+
+          )
+        </div>
     </div>
 }
 
@@ -43,63 +60,75 @@
         <!--Model is the IEnumerable and blog is the instance of Model-->
         @foreach (var ticket in Model.DeveloperTickets)
         {
-            <div class="text-center border shadow p-3">
-                <div class="row card">
-                    <div class="col-lg-6">
-                        <div class="card-header">
-                            <h3>@ticket.Title</h3>
-                        </div>
-                        <div class="card-body"></div>
-                        <p class="text-left pl-3 pr-3">@ticket.Description</p>
-                        <a asp-controller="Tickets" asp-action="Details" asp-route-id="@ticket.Id" class="btn btn-primary btn-block rounded mt-3">Ticket Details</a>
-                    </div>
+            <div class="card col-lg-3 col-md-6 col-sm-12">
+                <div class="card-header">
+                    <h3>@ticket.Title</h3>
+                </div>
+                <div class="card-body">
+                    <p class="text-left pl-3 pr-3">@ticket.Description</p>
+                    <a asp-controller="Tickets" asp-action="Details" asp-route-id="@ticket.Id" class="btn btn-primary btn-block rounded mt-3">Ticket Details</a>
                 </div>
             </div>
-
-            <hr />
         }
+    </div>
+
+    <div class="row m-3">
+        <div class="col h5">
+            Page @(Model.AdminPmTickets.PageCount < Model.AdminPmTickets.PageNumber ? 0 : Model.AdminPmTickets.PageNumber) of @Model.AdminPmTickets.PageCount
+        </div>
+    </div>
+
+    <div class="row m-3">
+        <div class="col">
+            @Html.PagedListPager(Model.AdminPmTickets, page => Url.Action("SearchIndex", new { id = Model.AdminPmTickets.FirstOrDefault()?.Id, page = page }),
+            new PagedListRenderOptions
+            {
+                LiElementClasses = new string[] { "page-item" },
+                PageClasses = new string[] { "page-link" }
+            }
+
+          )
+        </div>
     </div>
 }
 
-@if (User.IsInRole("Admin,ProjectManager"))
+@if (User.IsInRole("Submitter"))
 {
     <div class="row">
         <!--Model is the IEnumerable and blog is the instance of Model-->
         @foreach (var ticket in Model.SubmitterTickets)
         {
-            <div class="text-center border shadow p-3">
-                <div class="row card">
-                    <div class="col-lg-6">
-                        <div class="card-header">
-                            <h3>@ticket.Title</h3>
-                        </div>
-                        <div class="card-body"></div>
-                        <p class="text-left pl-3 pr-3">@ticket.Description</p>
-                        <a asp-controller="Tickets" asp-action="Details" asp-route-id="@ticket.Id" class="btn btn-primary btn-block rounded mt-3">Ticket Details</a>
-                    </div>
+            <div class="card col-lg-3 col-md-6 col-sm-12">
+                <div class="card-header">
+                    <h3>@ticket.Title</h3>
+                </div>
+                <div class="card-body">
+                    <p class="text-left pl-3 pr-3">@ticket.Description</p>
+                    <a asp-controller="Tickets" asp-action="Details" asp-route-id="@ticket.Id" class="btn btn-primary btn-block rounded mt-3">Ticket Details</a>
                 </div>
             </div>
-
-            <hr />
         }
     </div>
-}
 
-@*<div class="row">
-        <div class="col h3">
+    <div class="row m-3">
+        <div class="col h5">
             Page @(Model.AdminPmTickets.PageCount < Model.AdminPmTickets.PageNumber ? 0 : Model.AdminPmTickets.PageNumber) of @Model.AdminPmTickets.PageCount
         </div>
     </div>
 
-    <div class="row">
+    <div class="row m-3">
         <div class="col">
-            @Html.PagedListPager(Model, page => Url.Action("SearchIndex", new { page = page, searchString = ViewData["SearchString"] }),
-               new PagedListRenderOptions
-               {
-                   LiElementClasses = new string[] { "page-item" },
-                   PageClasses = new string[] { "page-link" }
-               }
+            @Html.PagedListPager(Model.AdminPmTickets, page => Url.Action("SearchIndex", new { id = Model.AdminPmTickets.FirstOrDefault()?.Id, page = page }),
+            new PagedListRenderOptions
+            {
+                LiElementClasses = new string[] { "page-item" },
+                PageClasses = new string[] { "page-link" }
+            }
 
           )
         </div>
-    </div>*@
+    </div>
+}
+
+
+
