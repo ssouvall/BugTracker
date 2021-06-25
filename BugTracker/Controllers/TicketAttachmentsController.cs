@@ -10,6 +10,8 @@ using BugTracker.Models;
 using System.IO;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
+using BugTracker.Services.Interfaces;
+using BugTracker.Extensions;
 
 namespace BugTracker.Controllers
 {
@@ -18,12 +20,18 @@ namespace BugTracker.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<BTUser> _userManager;
+        private readonly IBTProjectService _projectService;
+        private readonly IBTTicketService _ticketService;
 
         public TicketAttachmentsController(ApplicationDbContext context,
-                                            UserManager<BTUser> userManager)
+                                            UserManager<BTUser> userManager,
+                                            IBTProjectService projectService,
+                                            IBTTicketService ticketService)
         {
             _context = context;
             _userManager = userManager;
+            _projectService = projectService;
+            _ticketService = ticketService;
         }
 
         // GET: TicketAttachments
@@ -70,6 +78,15 @@ namespace BugTracker.Controllers
         {
             if (ModelState.IsValid)
             {
+                int companyId = User.Identity.GetCompanyId().Value;
+                List<Ticket> tickets = await _ticketService.GetAllTicketsByCompanyAsync(companyId);
+                Ticket ticket = tickets.FirstOrDefault(t => t.Id == ticketAttachment.TicketId);
+                Project project = ticket.Project;
+                BTUser currentUser = await _userManager.GetUserAsync(User);
+                BTUser ticketOwner = ticket.OwnerUser;
+                BTUser ticketDeveloper = ticket.DeveloperUser;
+                BTUser projectManager = await _projectService.GetProjectManagerAsync(project.Id);
+
                 MemoryStream ms = new MemoryStream();
                 await ticketAttachment.FormFile.CopyToAsync(ms);
 
@@ -79,10 +96,16 @@ namespace BugTracker.Controllers
                 ticketAttachment.Created = DateTimeOffset.Now;
                 ticketAttachment.UserId = _userManager.GetUserId(User);
 
-
-                _context.Add(ticketAttachment);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                if (currentUser.Id == ticketOwner?.Id || currentUser.Id == ticketDeveloper?.Id || currentUser.Id == projectManager?.Id || User.IsInRole("Admin"))
+                {
+                    _context.Add(ticketAttachment);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction("Details", "Tickets", new { Id = ticketAttachment.TicketId });
+                }
+                else
+                {
+                    return RedirectToAction("Details", "Tickets", new { Id = ticketAttachment.TicketId });
+                }
             }
             ViewData["TicketId"] = new SelectList(_context.Ticket, "Id", "Description", ticketAttachment.TicketId);
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", ticketAttachment.UserId);
