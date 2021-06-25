@@ -52,7 +52,7 @@
                         <div class="progress-bar" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                 }
-                @if (Model.CurrentUser.Id == Model.ProjectManager.Id || User.IsInRole("Admin"))
+                @if (Model.CurrentUser.Id == Model.ProjectManager?.Id || User.IsInRole("Admin"))
                 {
                     @if (Model.Ticket.DeveloperUser != null)
                     {
