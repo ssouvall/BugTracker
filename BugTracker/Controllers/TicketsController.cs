@@ -61,10 +61,13 @@ namespace BugTracker.Controllers
         // GET: Tickets/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            
             if (id == null)
             {
                 return NotFound();
             }
+
+            TicketDetailsViewModel model = new();
 
             var ticket = await _context.Ticket
                 .Include(t => t.DeveloperUser)
@@ -87,7 +90,14 @@ namespace BugTracker.Controllers
                 return NotFound();
             }
 
-            return View(ticket);
+            BTUser projectManager = await _projectService.GetProjectManagerAsync(ticket.Project.Id);
+            BTUser currentUser = await _userManager.GetUserAsync(User);
+
+            model.Ticket = ticket;
+            model.ProjectManager = projectManager;
+            model.CurrentUser = currentUser;
+
+            return View(model);
         }
 
         //public async Task<IActionResult> SearchIndex(int? page, string searchString)
@@ -425,13 +435,25 @@ namespace BugTracker.Controllers
         [HttpGet]
         public async Task<IActionResult> AllTickets(int? page)
         {
+            AllTicketsViewModel model = new();
+
+            BTUser currentUser = await _userManager.GetUserAsync(User);
+
             var pageNumber = page ?? 1;
             var pageSize = 10;
 
             int companyId = User.Identity.GetCompanyId().Value;
+            
+            
             var applicationDbContext = await _ticketService.GetAllTicketsByCompanyAsync(companyId);
+            var projectManagerTickets = await _ticketService.GetAllPMTicketsAsync(currentUser.Id);
 
-            return View(await applicationDbContext.ToPagedListAsync(pageNumber, pageSize));
+
+            model.AllTickets = await applicationDbContext.ToPagedListAsync(pageNumber, pageSize);
+            model.PMTickets = await projectManagerTickets.ToPagedListAsync(pageNumber, pageSize);
+
+
+            return View(model);
         }
 
         [HttpGet]

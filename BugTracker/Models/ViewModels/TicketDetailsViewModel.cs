@@ -1,15 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace BugTracker.Models.ViewModels
 {
-    public class ProjectDetailsViewModel
+    public class TicketDetailsViewModel
     {
-        public Project Project { get; set; } = new();
-        public SelectList ProjectManagers { get; set; }
+        public Ticket Ticket { get; set; }
         public BTUser ProjectManager { get; set; }
         public BTUser CurrentUser { get; set; }
     }

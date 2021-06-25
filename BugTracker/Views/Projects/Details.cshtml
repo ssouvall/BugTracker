@@ -80,26 +80,26 @@
                                     <span class="badge badge-danger-light">@Model.Project.ProjectPriority.Name</span>
                                 </td>
                             </tr>
+                            <tr>
+                                <td colspan="3">
+                                    <span class="font-weight-semibold">@Model.Project.Description</span>
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
-                </div>
-                <div class="p-3">
-                    <div class="d-flex align-items-end justify-content-between">
-                        <h6 class="fs-12">Project Status</h6>
-                        <h6 class="fs-12">80%</h6>
-                    </div>
-                    <div class="progress h-2">
-                        <div class="progress-bar bg-success w-80"></div>
-                    </div>
                 </div>
             </div>
         </div>
         <div class="card">
             <div class="card-header  border-0">
                 <div class="card-title">Assigned Team</div>
-                <div class="ml-auto">
-                    <a asp-action="AssignUsers" asp-controller="Projects" asp-route-id="@Model.Project.Id" class="btn btn-success btn-sm">Add</a>
-                </div>
+                @if (Model.CurrentUser.Id == Model.ProjectManager.Id || User.IsInRole("Admin"))
+                {
+                    <div class="ml-auto">
+                        <a asp-action="AssignUsers" asp-controller="Projects" asp-route-id="@Model.Project.Id" class="btn btn-success btn-sm">Add</a>
+                    </div>
+                }
+
             </div>
             <div class="card-body p-1 pt-2">
                 <div class="table-responsive">
@@ -139,61 +139,48 @@
         </div>
     </div>
     <div class="col-xl-9 col-md-12 col-lg-12">
-        <div class="tab-menu-heading hremp-tabs p-0 ">
-            <div class="tabs-menu1">
-                <!-- Tabs -->
-                <ul class="nav panel-tabs">
-                    <li class="ml-4"><a href="#tab5" class="active" data-toggle="tab">Overview</a></li>
-                    <li><a href="#tab6" data-toggle="tab">Tickets</a></li>
-                </ul>
+        <div class="card">
+            <div class="card-header border-0">
+                <h3 class="card-title">Tickets</h3>
             </div>
-        </div>
-        <div class="panel-body tabs-menu-body hremp-tabs1 p-0">
-            <div class="tab-content">
-                <div class="tab-pane active" id="tab5">
-                    <div class="card-body">
-                        <h5 class="mb-4 font-weight-semibold">Description</h5>
-                        <p>@Model.Project.Description</p>
-                        </div>
-                </div>
-                <div class="tab-pane" id="tab6">
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table  table-vcenter text-nowrap table-bordered border-bottom" id="task-list">
-                                <thead>
+                <div class="card-body">
+                    <div>
+                            
+                    <div class="table-responsive">
+                        <table class="table  table-vcenter text-nowrap border-bottom" id="task-list">
+                            <thead>
+                                <tr>
+                                    <th class="border-bottom-0">Title</th>
+                                    <th class="border-bottom-0">Assign To</th>
+                                    <th class="border-bottom-0">Priority</th>
+                                    <th class="border-bottom-0">Start Date</th>
+                                    <th class="border-bottom-0">Ticket Status</th>
+                                    <th class="border-bottom-0">Details</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (Ticket ticket in Model.Project.Tickets)
+                                {
                                     <tr>
-                                        <th class="border-bottom-0">Title</th>
-                                        <th class="border-bottom-0">Assign To</th>
-                                        <th class="border-bottom-0">Priority</th>
-                                        <th class="border-bottom-0">Start Date</th>
-                                        <th class="border-bottom-0">Ticket Status</th>
-                                        <th class="border-bottom-0">Details</th>
+                                        <td><a href="#" class="d-flex sidebarmodal-collapase">@ticket.Title</a></td>
+                                        @if (ticket.OwnerUser is not null)
+                                        {
+                                            <td>@ticket.OwnerUser.FullName</td>
+                                        }
+                                        else
+                                        {
+                                            <td>Unassigned</td>
+                                        }
+                                        <td>@ticket.TicketPriority</td>
+                                        <td>@ticket.Created.ToString("MMM dd, yyyy")</td>
+                                        <td>@ticket.TicketStatus</td>
+                                        <td><a asp-controller="Tickets" asp-action="Details" asp-route-id="@ticket.Id"><i class="far fa-eye"></i></a></td>
                                     </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach(Ticket ticket in Model.Project.Tickets)
-                                    {
-                                        <tr>
-                                            <td><a href="#" class="d-flex sidebarmodal-collapase">@ticket.Title</a></td>
-                                            @if(ticket.OwnerUser is not null)
-                                            {
-                                                <td>@ticket.OwnerUser.FullName</td>
-                                            }
-                                            else
-                                            {
-                                                <td>Unassigned</td>
-                                            }
-                                            <td>@ticket.TicketPriority</td>
-                                            <td>@ticket.Created.ToString("MMM dd, yyyy")</td>
-                                            <td>@ticket.TicketStatus</td>
-                                            <td><a asp-controller="Tickets" asp-action="Details" asp-route-id="@ticket.Id"><i class="far fa-eye"></i></a></td>
-                                        </tr>
-                                    }
-                                    
-                                   
-                                </tbody>
-                            </table>
-                        </div>
+                                }
+
+
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -202,18 +189,6 @@
 </div>
 <!-- End Row-->
 					
-
-<!--Footer-->
-<footer class="footer">
-    <div class="container">
-        <div class="row align-items-center flex-row-reverse">
-            <div class="col-md-12 col-sm-12 mt-3 mt-lg-0 text-center">
-                Copyright © 2021 <a href="#">Dayone</a>. Designed by <a href="#">Spruko Technologies Pvt.Ltd</a> All rights reserved.
-            </div>
-        </div>
-    </div>
-</footer>
-<!-- End Footer-->
 <!--Sidebar-right-->
 <div class="sidebar sidebar-right sidebar-animate">
     <div class="card-header border-bottom pb-5">

@@ -60,6 +60,7 @@ namespace BugTracker.Controllers
             }
 
             BTUser projectManager = await _projectService.GetProjectManagerAsync(project.Id);
+            BTUser currentUser = await _userManager.GetUserAsync(User);
 
             if (projectManager is not null)
             {
@@ -67,7 +68,8 @@ namespace BugTracker.Controllers
                 {
 
                     Project = project,
-                    ProjectManager = projectManager
+                    ProjectManager = projectManager,
+                    CurrentUser = currentUser
 
                 };
 

@@ -1,7 +1,7 @@
 ﻿@using X.PagedList
 @using X.PagedList.Mvc.Core
 @using X.PagedList.Web.Common
-@model IPagedList<BugTracker.Models.Ticket>
+@model BugTracker.Models.ViewModels.AllTicketsViewModel
 
 
 <div class="row mt-5">
@@ -26,58 +26,116 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (Ticket ticket in Model)
+                            @if (User.IsInRole("Admin"))
                             {
-                                <tr>
-                                    <th scope="row">
-                                        @ticket.Title
-                                    </th>
-                                    <td>
-                                        @ticket.Project.Name
-                                    </td>
-                                    <td>
-                                        @ticket.Created.ToString("MMM dd, yyyy")
-                                    </td>
-                                    <td>
-                                        @ticket.TicketType.Name
-                                    </td>
-                                    <td>
-                                        @ticket.TicketStatus.Name
-                                    </td>
-                                    <td>
-                                        @ticket.TicketPriority.Name
-                                    </td>
-                                    <td>
-                                        <a asp-controller="Tickets" asp-action="Details" asp-route-id="@ticket.Id"><i class="far fa-lg fa-eye" style="color: #0275d8;"></i></a>
-                                        @if (User.IsInRole("Admin"))
-                                        {
+                                @foreach (Ticket ticket in Model.AllTickets)
+                                {
+                                    <tr>
+                                        <th scope="row">
+                                            @ticket.Title
+                                        </th>
+                                        <td>
+                                            @ticket.Project.Name
+                                        </td>
+                                        <td>
+                                            @ticket.Created.ToString("MMM dd, yyyy")
+                                        </td>
+                                        <td>
+                                            @ticket.TicketType.Name
+                                        </td>
+                                        <td>
+                                            @ticket.TicketStatus.Name
+                                        </td>
+                                        <td>
+                                            @ticket.TicketPriority.Name
+                                        </td>
+                                        <td>
+                                            <a asp-controller="Tickets" asp-action="Details" asp-route-id="@ticket.Id"><i class="far fa-lg fa-eye" style="color: #0275d8;"></i></a>
                                             <a asp-controller="Tickets" asp-action="Edit" asp-route-id="@ticket.Id"><i class="fas fa-lg fa-edit" style="color:#f0ad4e;"></i></a>
                                             <a asp-controller="Tickets" asp-action="Delete" asp-route-id="@ticket.Id"><i class="fas fa-lg fa-trash-alt" style="color:#d9534f;"></i></a>
 
-                                        }
-                                    </td>
-                                </tr>
+                                        </td>
+                                    </tr>
+                                }
                             }
+
+                            @if (User.IsInRole("ProjectManager"))
+                            {
+                                @foreach (Ticket ticket in Model.PMTickets)
+                                {
+                                    <tr>
+                                        <th scope="row">
+                                            @ticket.Title
+                                        </th>
+                                        <td>
+                                            @ticket.Project.Name
+                                        </td>
+                                        <td>
+                                            @ticket.Created.ToString("MMM dd, yyyy")
+                                        </td>
+                                        <td>
+                                            @ticket.TicketType.Name
+                                        </td>
+                                        <td>
+                                            @ticket.TicketStatus.Name
+                                        </td>
+                                        <td>
+                                            @ticket.TicketPriority.Name
+                                        </td>
+                                        <td>
+                                            <a asp-controller="Tickets" asp-action="Details" asp-route-id="@ticket.Id"><i class="far fa-lg fa-eye" style="color: #0275d8;"></i></a>
+                                            <a asp-controller="Tickets" asp-action="Edit" asp-route-id="@ticket.Id"><i class="fas fa-lg fa-edit" style="color:#f0ad4e;"></i></a>
+                                        </td>
+                                    </tr>
+                                }
+
+
+                            }
+
                         </tbody>
                     </table>
-                    <div class="row m-3">
-                        <div class="col h5">
-                            Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <div class="row m-3">
+                            <div class="col h5">
+                                Page @(Model.AllTickets.PageCount < Model.AllTickets.PageNumber ? 0 : Model.AllTickets.PageNumber) of @Model.AllTickets.PageCount
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="row m-3">
-                        <div class="col">
-                            @Html.PagedListPager(Model, page => Url.Action("AllTickets", new { id = @Model.FirstOrDefault()?.Id, page = page }),
-                            new PagedListRenderOptions
-                            {
-                                LiElementClasses = new string[] { "page-item" },
-                                PageClasses = new string[] { "page-link" }
-                            }
+                        <div class="row m-3">
+                            <div class="col">
+                                @Html.PagedListPager(Model.AllTickets, page => Url.Action("AllTickets", new { id = @Model.AllTickets.FirstOrDefault()?.Id, page = page }),
+                                new PagedListRenderOptions
+                                {
+                                    LiElementClasses = new string[] { "page-item" },
+                                    PageClasses = new string[] { "page-link" }
+                                }
 
-                          )
+                              )
+                            </div>
                         </div>
-                    </div>
+                    }
+                    @if (User.IsInRole("ProjectManager"))
+                    {
+                        <div class="row m-3">
+                            <div class="col h5">
+                                Page @(Model.PMTickets.PageCount < Model.PMTickets.PageNumber ? 0 : Model.PMTickets.PageNumber) of @Model.PMTickets.PageCount
+                            </div>
+                        </div>
+
+                        <div class="row m-3">
+                            <div class="col">
+                                @Html.PagedListPager(Model.PMTickets, page => Url.Action("AllTickets", new { id = @Model.PMTickets.FirstOrDefault()?.Id, page = page }),
+                                new PagedListRenderOptions
+                                {
+                                    LiElementClasses = new string[] { "page-item" },
+                                    PageClasses = new string[] { "page-link" }
+                                }
+
+                              )
+                            </div>
+                        </div>
+                    }
                 </div>
             </div>
         </div>

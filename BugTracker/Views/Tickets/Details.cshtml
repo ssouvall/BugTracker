@@ -1,4 +1,4 @@
-﻿@model BugTracker.Models.Ticket
+﻿@model BugTracker.Models.ViewModels.TicketDetailsViewModel
 @using BugTracker.Services.Interfaces
 @inject IBTFileService _fileService
 
@@ -9,7 +9,7 @@
 <!--Page header-->
 <div class="page-header d-xl-flex d-block">
     <div class="page-leftheader">
-        <h4 class="page-title"><span class="font-weight-normal text-muted mr-2">@Model.Project.Name:</span> @Model.Title</h4>
+        <h4 class="page-title"><span class="font-weight-normal text-muted mr-2">@Model.Ticket.Project.Name:</span> @Model.Ticket.Title</h4>
     </div>
 </div>
 <!--End Page header-->
@@ -18,59 +18,66 @@
     <div class="col-6">
         <div class="card m-3 p-3">
             <div class="card-header  border-0">
-                <div class="card-title">@Model.Description</div>
+                <div class="card-title">@Model.Ticket.Description</div>
             </div>
             <div class="card-body">
-                <p class="card-text">Ticket Status: @Model.TicketStatus.Name</p>
-                @if (Model.TicketStatus.Name == "New")
+                <p class="card-text">Ticket Status: @Model.Ticket.TicketStatus.Name</p>
+                @if (Model.Ticket.TicketStatus.Name == "New")
                 {
                     <div class="progress">
                         <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                 }
-                else if (Model.TicketStatus.Name == "Unassigned")
+                else if (Model.Ticket.TicketStatus.Name == "Unassigned")
                 {
                     <div class="progress">
-                        <div class="progress-bar" role="progressbar" aria-valuenow="25%" aria-valuemin="25" aria-valuemax="100"></div>
+                        <div class="progress-bar" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="25" aria-valuemax="100"></div>
                     </div>
                 }
-                else if (Model.TicketStatus.Name == "Development")
+                else if (Model.Ticket.TicketStatus.Name == "Development")
                 {
                     <div class="progress">
                         <div class="progress-bar" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                 }
-                else if (Model.TicketStatus.Name == "Testing")
+                else if (Model.Ticket.TicketStatus.Name == "Testing")
                 {
                     <div class="progress">
                         <div class="progress-bar" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                 }
-                else if (Model.TicketStatus.Name == "Resolved")
+                else if (Model.Ticket.TicketStatus.Name == "Resolved")
                 {
                     <div class="progress">
                         <div class="progress-bar" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                 }
-
-                @if (Model.DeveloperUser != null)
+                @if (Model.CurrentUser.Id == Model.ProjectManager.Id || User.IsInRole("Admin"))
                 {
-                    <p class="card-text mt-3">Assigned Developer: @Model.DeveloperUser.FullName</p>
+                    @if (Model.Ticket.DeveloperUser != null)
+                    {
+                        <p class="card-text mt-3">Assigned Developer: @Model.Ticket.DeveloperUser.FullName</p>
 
-                    <a asp-action="AssignTicket" asp-controller="Tickets" asp-route-ticketId="@Model.Id" class="btn btn-success">Change Developer</a>
+                        <a asp-action="AssignTicket" asp-controller="Tickets" asp-route-ticketId="@Model.Ticket.Id" class="btn btn-success">Change Developer</a>
+                    }
+                    else
+                    {
+                        <p class="card-text mt-3">Assigned Developer: Unassigned</p>
+                        <a asp-action="AssignTicket" asp-controller="Tickets" asp-route-ticketId="@Model.Ticket.Id" class="btn btn-success">Assign Developer</a>
+                    }
+
                 }
                 else
                 {
-                    <p class="card-text mt-3">Assigned Developer: Unassigned</p>
-
-                    @if (User.IsInRole("Admin") || User.IsInRole("ProjectManager"))
+                    @if (Model.Ticket.DeveloperUser != null)
                     {
-                        <a asp-action="AssignTicket" asp-controller="Tickets" asp-route-ticketId="@Model.Id" class="btn btn-success">Assign Developer</a>
-
+                        <p class="card-text mt-3">Assigned Developer: @Model.Ticket.DeveloperUser.FullName</p>
+                    }
+                    else
+                    {
+                        <p class="card-text mt-3">Assigned Developer: Unassigned</p>
                     }
                 }
-
-
 
             </div>
         </div>
@@ -86,10 +93,10 @@
                     <p class="card-text">Ticket Status:</p>
                 </div>
                 <div class="col-4">
-                    <p class="badge badge-primary">@Model.Created.ToString("MMM dd, yyyy")</p><br />
-                    <p class="badge badge-primary">@Model.TicketType.Name</p><br />
-                    <p class="badge badge-primary">@Model.TicketPriority.Name</p><br />
-                    <p class="badge badge-primary">@Model.TicketStatus.Name</p>
+                    <p class="badge badge-primary">@Model.Ticket.Created.ToString("MMM dd, yyyy")</p><br />
+                    <p class="badge badge-primary">@Model.Ticket.TicketType.Name</p><br />
+                    <p class="badge badge-primary">@Model.Ticket.TicketPriority.Name</p><br />
+                    <p class="badge badge-primary">@Model.Ticket.TicketStatus.Name</p>
                 </div>
                 
             </div>
@@ -100,7 +107,7 @@
             </div>
             <div class="card-body">
                 <div class="row clearfix">
-                    @foreach (TicketAttachment item in Model.Attachments)
+                    @foreach (TicketAttachment item in Model.Ticket.Attachments)
                     {
                         <div class="col-sm-2">
                             <div class="card">
@@ -149,17 +156,17 @@
                 <div>
                     <form asp-action="Create" asp-controller="TicketAttachments" enctype="multipart/form-data" method="post">
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                        <input type="hidden" asp-for="@Model.Id" name="TicketId">
+                        <input type="hidden" asp-for="@Model.Ticket.Id" name="TicketId">
 
 
                         <div class="media-body ml-3">
                             <label class="form-label d-block mb-2">Add Attachment</label>
                             <label>
                                 Description
-                                <input asp-for="@Model.Attachments.FirstOrDefault().Description" type="text" class="form-control" />
+                                <input asp-for="@Model.Ticket.Attachments.FirstOrDefault().Description" type="text" class="form-control" />
                             </label><br />
                             <label class="btn btn-outline-primary btn-sm">
-                                <input asp-for="@Model.Attachments.FirstOrDefault().FormFile" type="file" />
+                                <input asp-for="@Model.Ticket.Attachments.FirstOrDefault().FormFile" type="file" />
                             </label>
                             <button type="submit" class="btn btn-outline-secondary btn-sm md-btn-flat">Submit</button>
                         </div>
@@ -176,7 +183,7 @@
             <div class="card-body">
                 <form asp-action="Create" asp-controller="TicketComments" method="post">
                     @*----which post did it come from...?-----*@
-                    <input type="hidden" name="TicketId" value="@Model.Id" />
+                    <input type="hidden" name="TicketId" value="@Model.Ticket.Id" />
                     @*----------*@
                     <h5 class="text-center">ADD A COMMENT</h5>
                     <textarea class="form-control mb-3" rows="5" id="summernote" name="editordata"></textarea>
@@ -186,9 +193,9 @@
 
                     <hr />
                     @*show user comments*@
-                    <div class="btn-sm btn-dark btn-block w-100">@Model.Comments.Count Comment(s)</div>
+                    <div class="btn-sm btn-dark btn-block w-100">@Model.Ticket.Comments.Count Comment(s)</div>
 
-                    @foreach (var comment in Model.Comments.OrderByDescending(c => c.Created))
+                    @foreach (var comment in Model.Ticket.Comments.OrderByDescending(c => c.Created))
                     {
                         <div class="row">
                             <div class="media border mr-3 ml-3 p-3 w-100">
@@ -216,7 +223,7 @@
                     <div class="row">
                         <div class="col-12">
                             <ul class="timeline pr-5">
-                                @foreach (TicketHistory history in Model.History)
+                                @foreach (TicketHistory history in Model.Ticket.History)
                                 {
                                     <li>
                                         <p class="pl-5">@history.Description</p>
