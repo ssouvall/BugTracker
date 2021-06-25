@@ -16,6 +16,7 @@ using System.Drawing;
 
 namespace BugTracker.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;

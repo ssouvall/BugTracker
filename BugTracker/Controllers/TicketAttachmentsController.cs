@@ -9,9 +9,11 @@ using BugTracker.Data;
 using BugTracker.Models;
 using System.IO;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BugTracker.Controllers
 {
+    [Authorize]
     public class TicketAttachmentsController : Controller
     {
         private readonly ApplicationDbContext _context;

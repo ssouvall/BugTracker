@@ -13,9 +13,11 @@ using BugTracker.Services.Interfaces;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using BugTracker.Models.ViewModels;
 using BugTracker.Extensions;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BugTracker.Controllers
 {
+    [Authorize]
     public class InvitesController : Controller
     {
         private readonly ApplicationDbContext _context;
