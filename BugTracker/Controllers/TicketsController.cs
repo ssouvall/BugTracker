@@ -18,6 +18,7 @@ using BugTracker.Services;
 
 namespace BugTracker.Controllers
 {
+    [Authorize]
     public class TicketsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -48,16 +49,7 @@ namespace BugTracker.Controllers
             _searchService = searchService;
         }
 
-        // GET: Tickets
-        public async Task<IActionResult> Index(int? page)
-        {
-            var pageNumber = page ?? 1;
-            var pageSize = 10;
-
-            var applicationDbContext = _context.Ticket.Include(t => t.DeveloperUser).Include(t => t.OwnerUser).Include(t => t.Project).Include(t => t.TicketPriority).Include(t => t.TicketStatus).Include(t => t.TicketType);
-            return View(await applicationDbContext.ToPagedListAsync(pageNumber, pageSize));
-        }
-
+        
         // GET: Tickets/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -90,14 +82,25 @@ namespace BugTracker.Controllers
                 return NotFound();
             }
 
-            BTUser projectManager = await _projectService.GetProjectManagerAsync(ticket.Project.Id);
+            int companyId = User.Identity.GetCompanyId().Value;
+            Project project = ticket.Project;
             BTUser currentUser = await _userManager.GetUserAsync(User);
+            BTUser ticketOwner = ticket.OwnerUser;
+            BTUser ticketDeveloper = ticket.DeveloperUser;
+            BTUser projectManager = await _projectService.GetProjectManagerAsync(ticket.Project.Id);
 
             model.Ticket = ticket;
             model.ProjectManager = projectManager;
             model.CurrentUser = currentUser;
 
-            return View(model);
+            if(currentUser.Id == ticketOwner?.Id || currentUser.Id == ticketDeveloper?.Id || currentUser.Id == projectManager?.Id || User.IsInRole("Admin"))
+            { 
+                return View(model);
+            }
+            else
+            {
+                return RedirectToAction("Index", "Home");
+            }
         }
 
         //public async Task<IActionResult> SearchIndex(int? page, string searchString)
@@ -230,15 +233,16 @@ namespace BugTracker.Controllers
             }
             
             var ticket = await _context.Ticket.FindAsync(id);
-            string ticketDeveloperId = (await _ticketService.GetTicketDeveloperAsync(ticket.Id)).Id;
-            string currentUserId = (await _userManager.GetUserAsync(User)).Id;
+            BTUser ticketDeveloper = await _ticketService.GetTicketDeveloperAsync(ticket.Id);
+            BTUser currentUser = await _userManager.GetUserAsync(User);
+            BTUser projectManager = await _projectService.GetProjectManagerAsync(ticket.ProjectId);
             
             if (ticket == null)
             {
                 return NotFound();
             }
 
-            if (currentUserId == ticketDeveloperId || currentUserId == ticket.OwnerUserId)
+            if (currentUser.Id == ticketDeveloper?.Id || currentUser.Id == ticket.OwnerUser?.Id || currentUser.Id == projectManager?.Id || User.IsInRole("Admin"))
             { 
             //ViewData["DeveloperUserId"] = new SelectList(_context.Users, "Id", "Name", ticket.DeveloperUserId);
             //ViewData["OwnerUserId"] = new SelectList(_context.Users, "Id", "Name", ticket.OwnerUserId);
@@ -282,7 +286,7 @@ namespace BugTracker.Controllers
                                             .Include(t => t.DeveloperUser)
                                             .AsNoTracking().FirstOrDefaultAsync(t => t.Id == ticket.Id);
 
-                if(btUser.Id == ticketDeveloper.Id || btUser.Id == ticket.OwnerUserId)
+                if(btUser.Id == ticketDeveloper?.Id || btUser.Id == ticket.OwnerUser?.Id || btUser.Id == projectManager?.Id || User.IsInRole("Admin"))
                 {
                     try
                     {

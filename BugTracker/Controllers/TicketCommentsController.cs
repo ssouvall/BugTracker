@@ -10,22 +10,27 @@ using BugTracker.Models;
 using Microsoft.AspNetCore.Identity;
 using BugTracker.Services.Interfaces;
 using BugTracker.Extensions;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BugTracker.Controllers
 {
+    [Authorize]
     public class TicketCommentsController : Controller
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<BTUser> _userManager;
         private readonly IBTTicketService _ticketService;
+        private readonly IBTProjectService _projectService;
 
         public TicketCommentsController(ApplicationDbContext context,
                                         UserManager<BTUser> userManager,
-                                        IBTTicketService ticketService)
+                                        IBTTicketService ticketService,
+                                        IBTProjectService projectService)
         {
             _context = context;
             _userManager = userManager;
             _ticketService = ticketService;
+            _projectService = projectService;
         }
 
         // GET: TicketComments
@@ -56,30 +61,37 @@ namespace BugTracker.Controllers
             return View(ticketComment);
         }
 
-        // GET: TicketComments/Create
-        //public IActionResult Create()
-        //{
-        //    ViewData["TicketId"] = new SelectList(_context.Ticket, "Id", "Description");
-        //    ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id");
-        //    return View();
-        //}
-
-        // POST: TicketComments/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Comment,Created,TicketId,UserId,User")] TicketComment ticketComment)
+        public async Task<IActionResult> Create([Bind("Id,Comment,Created,TicketId,ProjectId,UserId,User")] TicketComment ticketComment)
         {
             if (ModelState.IsValid)
             {
+                int companyId = User.Identity.GetCompanyId().Value;
+                List<Ticket> tickets = await _ticketService.GetAllTicketsByCompanyAsync(companyId);
+                Ticket ticket = tickets.FirstOrDefault(t => t.Id == ticketComment.TicketId);
+                Project project = ticket.Project;
+                BTUser currentUser = await _userManager.GetUserAsync(User);
+                BTUser ticketOwner = ticket.OwnerUser;
+                BTUser ticketDeveloper = ticket.DeveloperUser;
+                BTUser projectManager = await _projectService.GetProjectManagerAsync(project.Id);
+
                 if(!string.IsNullOrEmpty(ticketComment.Comment))
                 {
-                    ticketComment.Created = DateTime.Now;
-                    ticketComment.UserId = _userManager.GetUserId(User);
-                    _context.Add(ticketComment);
-                    await _context.SaveChangesAsync();
-                    return RedirectToAction("Details", "Tickets", new { Id = ticketComment.TicketId });
+                    if(currentUser.Id == ticketOwner?.Id || currentUser.Id == ticketDeveloper?.Id || currentUser.Id == projectManager?.Id || User.IsInRole("Admin"))
+                    {
+                        ticketComment.Created = DateTime.Now;
+                        ticketComment.UserId = _userManager.GetUserId(User);
+                        _context.Add(ticketComment);
+                        await _context.SaveChangesAsync();
+                        return RedirectToAction("Details", "Tickets", new { Id = ticketComment.TicketId });
+                    }
+                    else
+                    {
+                        return RedirectToAction("Details", "Tickets", new { Id = ticketComment.TicketId });
+                    }
+                    
                 }
                 
                 

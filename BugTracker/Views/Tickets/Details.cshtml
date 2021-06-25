@@ -184,9 +184,10 @@
                 <form asp-action="Create" asp-controller="TicketComments" method="post">
                     @*----which post did it come from...?-----*@
                     <input type="hidden" name="TicketId" value="@Model.Ticket.Id" />
+                    <input type="hidden" name="ProjectId" value="@Model.Ticket.ProjectId" />
                     @*----------*@
                     <h5 class="text-center">ADD A COMMENT</h5>
-                    <textarea class="form-control mb-3" rows="5" id="summernote" name="editordata"></textarea>
+                    <textarea class="form-control mb-3" rows="5" name="Comment"></textarea>
                     <button type="submit" class="btn btn-primary btn-block btn-sm">Submit!</button>
                 </form>
                 <div class="col-12 mx-auto">
