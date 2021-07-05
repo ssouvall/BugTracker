@@ -40028,3 +40028,8 @@ color: #333;
     margin-left: 25%;
     margin-right: 25%;
 }
+
+.timeline p,
+.timeline small {
+    margin-left: 50px;
+}

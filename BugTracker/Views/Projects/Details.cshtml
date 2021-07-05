@@ -10,7 +10,7 @@
 <!--Page header-->
 <div class="page-header d-xl-flex d-block">
     <div class="page-leftheader">
-        <h4 class="page-title"><span class="font-weight-normal text-muted mr-2">Project #67</span> @Model.Project.Name</h4>
+        <h4 class="page-title">@Model.Project.Name</h4>
     </div>
     <div class="page-rightheader ml-md-auto">
         <div class="d-flex align-items-end flex-wrap my-auto right-content breadcrumb-right">
@@ -84,6 +84,10 @@
                                 </td>
                             </tr>
                             <tr>
+                                <td>
+                                    <span class="w-50">Description</span>
+                                </td>
+                                <td>:</td>
                                 <td colspan="3">
                                     <span class="font-weight-semibold">@Model.Project.Description</span>
                                 </td>
@@ -154,9 +158,9 @@
                             <thead>
                                 <tr>
                                     <th class="border-bottom-0">Title</th>
-                                    <th class="border-bottom-0">Assign To</th>
+                                    <th class="border-bottom-0">Assigned To</th>
                                     <th class="border-bottom-0">Priority</th>
-                                    <th class="border-bottom-0">Start Date</th>
+                                    <th class="border-bottom-0">Created Date</th>
                                     <th class="border-bottom-0">Ticket Status</th>
                                     <th class="border-bottom-0">Details</th>
                                 </tr>
@@ -164,44 +168,31 @@
                             <tbody>
                                 @foreach (Ticket ticket in Model.Tickets)
                                 {
-                                    <tr>
-                                        <td><a href="#" class="d-flex sidebarmodal-collapase">@ticket.Title</a></td>
-                                        @if (ticket.OwnerUser is not null)
-                                        {
-                                            <td>@ticket.OwnerUser.FullName</td>
-                                        }
-                                        else
-                                        {
-                                            <td>Unassigned</td>
-                                        }
-                                        <td>@ticket.TicketPriority</td>
-                                        <td>@ticket.Created.ToString("MMM dd, yyyy")</td>
-                                        <td>@ticket.TicketStatus</td>
-                                        <td><a asp-controller="Tickets" asp-action="Details" asp-route-id="@ticket.Id"><i class="far fa-eye"></i></a></td>
-                                    </tr>
+                                <tr>
+                                    <td><a href="#" class="d-flex sidebarmodal-collapase">@ticket.Title</a></td>
+                                    @if (ticket.DeveloperUser is not null)
+                                    {
+                                        <td>@ticket.DeveloperUser.FullName</td>
+                                    }
+                                    else
+                                    {
+                                        <td>Unassigned</td>
+                                    }
+                                    <td>@ticket.TicketPriority.Name</td>
+                                    <td>@ticket.Created.ToString("MMM dd, yyyy")</td>
+                                    <td>@ticket.TicketStatus.Name</td>
+                                    <td><a asp-controller="Tickets" asp-action="Details" asp-route-id="@ticket.Id"><i class="far fa-lg fa-eye" style="color: #0275d8;"></i></a>
+                                    @if(User.IsInRole("Admin"))
+                                    {
+                                    <a asp-controller="Tickets" asp-action="Edit" asp-route-id="@ticket.Id"><i class="fas fa-lg fa-edit" style="color:#f0ad4e;"></i></a>
+                                    <a asp-controller="Tickets" asp-action="Delete" asp-route-id="@ticket.Id"><i class="fas fa-lg fa-trash-alt" style="color:#d9534f;"></i></a>
+                                    }
+                                </tr>
                                 }
 
 
                             </tbody>
                         </table>
-                        @*<div class="row m-3">
-                            <div class="col h5">
-                                Page @(Model.Tickets.PageCount < Model.Tickets.PageNumber ? 0 : Model.Tickets.PageNumber) of @Model.Tickets.PageCount
-                            </div>
-                        </div>
-
-                        <div class="row m-3">
-                            <div class="col">
-                                @Html.PagedListPager(Model.Tickets, page => Url.Action("Details", new { id = @Model.Tickets.FirstOrDefault()?.Id, page = page }),
-                                new PagedListRenderOptions
-                                {
-                                    LiElementClasses = new string[] { "page-item" },
-                                    PageClasses = new string[] { "page-link" }
-                                }
-
-                              )
-                            </div>
-                        </div>*@
 
                     </div>
                 </div>

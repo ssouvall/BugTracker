@@ -18,10 +18,11 @@
     <div class="col-6">
         <div class="card m-3 p-3">
             <div class="card-header  border-0">
-                <div class="card-title">@Model.Ticket.Description</div>
+                <div class="card-title">Ticket Details</div>
             </div>
             <div class="card-body">
-                <p class="card-text">Ticket Status: @Model.Ticket.TicketStatus.Name</p>
+                <p><strong>Description:</strong> @Model.Ticket.Description</p>
+                <p class="card-text"><strong>Ticket Status:</strong> @Model.Ticket.TicketStatus.Name</p>
                 @if (Model.Ticket.TicketStatus.Name == "New")
                 {
                     <label>0% Completed</label>
@@ -61,13 +62,13 @@
                 {
                     @if (Model.Ticket.DeveloperUser != null)
                     {
-                        <p class="card-text mt-3">Assigned Developer: @Model.Ticket.DeveloperUser.FullName</p>
+                        <p class="card-text mt-3"><strong>Assigned Developer:</strong> @Model.Ticket.DeveloperUser.FullName</p>
 
                         <a asp-action="AssignTicket" asp-controller="Tickets" asp-route-ticketId="@Model.Ticket.Id" class="btn btn-success">Change Developer</a>
                     }
                     else
                     {
-                        <p class="card-text mt-3">Assigned Developer: Unassigned</p>
+                        <p class="card-text mt-3"><strong>Assigned Developer:</strong> Unassigned</p>
                         <a asp-action="AssignTicket" asp-controller="Tickets" asp-route-ticketId="@Model.Ticket.Id" class="btn btn-success">Assign Developer</a>
                     }
 
@@ -76,11 +77,11 @@
                 {
                     @if (Model.Ticket.DeveloperUser != null)
                     {
-                        <p class="card-text mt-3">Assigned Developer: @Model.Ticket.DeveloperUser.FullName</p>
+                        <p class="card-text mt-3"><strong>Assigned Developer:</strong> @Model.Ticket.DeveloperUser.FullName</p>
                     }
                     else
                     {
-                        <p class="card-text mt-3">Assigned Developer: Unassigned</p>
+                        <p class="card-text mt-3"><strong>Assigned Developer:</strong> Unassigned</p>
                     }
                 }
 

@@ -58,6 +58,9 @@ namespace BugTracker.Controllers
                 .Include(p => p.Company)
                 .Include(p => p.ProjectPriority)
                 .Include(p => p.Tickets)
+                    .ThenInclude(t => t.TicketPriority)
+                .Include(p => p.Tickets)
+                    .ThenInclude(t => t.TicketStatus)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             List<Ticket> pageTickets = project.Tickets.ToList();
@@ -131,13 +134,13 @@ namespace BugTracker.Controllers
                 return NotFound();
             }
 
+            int companyId = User.Identity.GetCompanyId().Value;
             var project = await _context.Project.FindAsync(id);
             if (project == null)
             {
                 return NotFound();
             }
-            ViewData["CompanyId"] = new SelectList(_context.Company, "Id", "Name", project.CompanyId);
-            ViewData["ProjectPriorityId"] = new SelectList(_context.Set<ProjectPriority>(), "Id", "Id", project.ProjectPriorityId);
+            ViewData["ProjectPriorityId"] = new SelectList(_context.Set<ProjectPriority>(), "Id", "Name", project.ProjectPriorityId);
             return View(project);
         }
 
@@ -174,7 +177,6 @@ namespace BugTracker.Controllers
                 }
                 return RedirectToAction("Details", "Projects", new { id = project.Id });
             }
-            ViewData["CompanyId"] = new SelectList(_context.Company, "Id", "Name", project.CompanyId);
             ViewData["ProjectPriorityId"] = new SelectList(_context.Set<ProjectPriority>(), "Id", "Id", project.ProjectPriorityId);
             return View(project);
         }
@@ -343,7 +345,7 @@ namespace BugTracker.Controllers
 
             var project = await _context.Project
                 .Include(p => p.Company)
-                .Include(p => p.ProjectPriority)
+                .Include(p => p.ProjectPriority.Name)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (project == null)
             {
