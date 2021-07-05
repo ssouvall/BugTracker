@@ -80,7 +80,22 @@
                                 </td>
                                 <td>:</td>
                                 <td>
-                                    <span class="badge badge-danger-light">@Model.Project.ProjectPriority.Name</span>
+                                    @if (Model.Project.ProjectPriority.Name == "Urgent")
+                                    {
+                                        <span class="badge badge-danger">@Model.Project.ProjectPriority.Name</span>
+                                    }
+                                    else if (Model.Project.ProjectPriority.Name == "High")
+                                    {
+                                        <span class="badge badge-danger-light">@Model.Project.ProjectPriority.Name</span>
+                                    }
+                                    else if (Model.Project.ProjectPriority.Name == "Medium")
+                                    {
+                                        <span class="badge badge-warning-light">@Model.Project.ProjectPriority.Name</span>
+                                    }
+                                    else if (Model.Project.ProjectPriority.Name == "Low")
+                                    {
+                                        <span class="badge badge-success-light">@Model.Project.ProjectPriority.Name</span>
+                                    }
                                 </td>
                             </tr>
                             <tr>
@@ -120,19 +135,7 @@
                                             <span class="avatar avatar-md brround mr-3" style="background-image: url(../../assets/images/users/4.jpg)"></span>
                                             <div class="mr-3 mt-0 mt-sm-1 d-block">
                                                 <h6 class="mb-1 fs-14">@member.FullName</h6>
-                                                <p class="text-muted mb-0 fs-12">Role goes here </p>
                                             </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="chart-circle chart-circle-xxs" data-value="0.62" data-thickness="3" data-color="#0dcd94" data-toggle="tooltip" data-placement="top" title="Project Status">
-                                            <div class="chart-circle-value text-success">62</div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="d-flex mt-1 text-right">
-                                            <a href="#" class="action-btns1" data-toggle="tooltip" data-placement="top" title="View"><i class="feather feather-eye text-primary"></i></a>
-                                            <a href="#" class="action-btns1  mr-0" data-toggle="tooltip" data-placement="top" title="Delete"><i class="feather feather-trash-2 text-danger"></i></a>
                                         </div>
                                     </td>
                                 </tr>

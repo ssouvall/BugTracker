@@ -67,7 +67,7 @@ namespace BugTracker.Areas.Identity.Pages.Account.Manage
             Username = userName;
             if(user.AvatarFileData is not null)
             {
-                 _bTImageService.DecodeImage(user.AvatarFileData, user.AvatarContentType);
+                CurrentImage = _bTImageService.DecodeImage(user.AvatarFileData, user.AvatarContentType);
             }
             else
             {
