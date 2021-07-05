@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using X.PagedList;
 
 namespace BugTracker.Models.ViewModels
 {
@@ -12,5 +13,6 @@ namespace BugTracker.Models.ViewModels
         public SelectList ProjectManagers { get; set; }
         public BTUser ProjectManager { get; set; }
         public BTUser CurrentUser { get; set; }
+        public IPagedList<Ticket> Tickets { get; set; }
     }
 }

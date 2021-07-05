@@ -49,7 +49,7 @@
                                     </td>
                                     <td>
                                         <a asp-controller="Tickets" asp-action="Details" asp-route-id="@ticket.Id"><i class="far fa-lg fa-eye" style="color: #0275d8;"></i></a>
-                                        <a asp-controller="Tickets" asp-action="Edit" asp-route-id="@ticket.Id"><i class="fas fa-lg fa-edit" style="color:#f0ad4e;"></i></a>
+                                        <a asp-controller="Tickets" asp-action="Edit" asp-route-id="@ticket.Id"><i class="fas fa-lg fa-edit" style="color: #f0ad4e;"></i></a>
                                         @if (User.IsInRole("Admin"))
                                         {
                                             <a asp-controller="Tickets" asp-action="Delete" asp-route-id="@ticket.Id"><i class="fas fa-lg fa-trash-alt" style="color:#d9534f;"></i></a>

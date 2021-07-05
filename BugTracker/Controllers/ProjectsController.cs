@@ -14,6 +14,7 @@ using BugTracker.Models.Enums;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 using System.Diagnostics;
+using X.PagedList;
 
 namespace BugTracker.Controllers
 {
@@ -40,12 +41,17 @@ namespace BugTracker.Controllers
         }
 
         // GET: Projects/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int? page, int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
+
+            ProjectDetailsViewModel model = new();
+            
+            var pageNumber = page ?? 1;
+            var pageSize = 15;
 
             var project = await _context.Project
                 .Include(p => p.Members)
@@ -53,6 +59,8 @@ namespace BugTracker.Controllers
                 .Include(p => p.ProjectPriority)
                 .Include(p => p.Tickets)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
+            List<Ticket> pageTickets = project.Tickets.ToList();
 
             if (project == null)
             {
@@ -64,25 +72,19 @@ namespace BugTracker.Controllers
 
             if (projectManager is not null)
             {
-                ProjectDetailsViewModel model = new()
-                {
-
-                    Project = project,
-                    ProjectManager = projectManager,
-                    CurrentUser = currentUser
-
-                };
+                
+                model.Project = project;
+                model.ProjectManager = projectManager;
+                model.CurrentUser = currentUser;
+                model.Tickets = await pageTickets?.ToPagedListAsync(pageNumber, pageSize);
 
                 return View(model);
             }
             else
             {
-                ProjectDetailsViewModel model = new()
-                {
 
-                    Project = project,
-
-                };
+                model.Project = project;
+                model.Tickets = await pageTickets?.ToPagedListAsync(pageNumber, pageSize);
 
                 return View(model);
             }

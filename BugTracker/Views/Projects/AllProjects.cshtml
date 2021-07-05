@@ -44,12 +44,12 @@
                                             @project.Tickets.Count
                                         </td>
                                         <td>
-                                            <a asp-controller="Projects" asp-action="Details" asp-route-id="@project.Id"><i class="far fa-lg fa-eye"></i></a>
+                                            <a asp-controller="Projects" asp-action="Details" asp-route-id="@project.Id"><i class="far fa-lg fa-eye" style="color: #0275d8;"></i></a>
                                             @if (User.IsInRole("Admin"))
                                             {
-                                                <a asp-controller="Projects" asp-action="Edit" asp-route-id="@project.Id"><i class="fas fa-lg fa-edit"></i></a>
-                                                <a asp-controller="Projects" asp-action="Delete" asp-route-id="@project.Id"><i class="fas fa-lg fa-trash-alt"></i></a>
-
+                                                <a asp-controller="Projects" asp-action="Edit" asp-route-id="@project.Id"><i class="fas fa-lg fa-edit" style="color:#f0ad4e;"></i></a>
+                                                <a asp-controller="Projects" asp-action="Delete" asp-route-id="@project.Id"><i class="fas fa-lg fa-trash-alt" style="color:#d9534f;"></i></a>
+                                                
                                             }
                                         </td>
                                     </tr>

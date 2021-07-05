@@ -450,8 +450,9 @@ namespace BugTracker.Controllers
             
             
             var applicationDbContext = await _ticketService.GetAllTicketsByCompanyAsync(companyId);
-            var projectManagerTickets = await _ticketService.GetAllPMTicketsAsync(currentUser.Id);
-
+            var allProjectManagerTickets = await _ticketService.GetAllPMTicketsAsync(currentUser.Id);
+            var allTickets = applicationDbContext.Where(t => t.TicketStatusId != 1);
+            var projectManagerTickets = allProjectManagerTickets.Where(t => t.TicketStatusId != 1);
 
             model.AllTickets = await applicationDbContext.ToPagedListAsync(pageNumber, pageSize);
             model.PMTickets = await projectManagerTickets.ToPagedListAsync(pageNumber, pageSize);
@@ -467,8 +468,10 @@ namespace BugTracker.Controllers
             var pageSize = 10;
 
             string userId = _userManager.GetUserId(User);
-            var devTickets = await _ticketService.GetAllTicketsByRoleAsync("Developer", userId);
-            var subTickets = await _ticketService.GetAllTicketsByRoleAsync("Submitter", userId);
+            var allDevTickets = await _ticketService.GetAllTicketsByRoleAsync("Developer", userId);
+            var allSubTickets = await _ticketService.GetAllTicketsByRoleAsync("Submitter", userId);
+            var devTickets = allDevTickets.Where(t => t.TicketStatusId != 1);
+            var subTickets = allSubTickets.Where(t => t.TicketStatusId != 1);
             var model = new MyTicketsViewModel()
             {
                 DevTickets = await devTickets.ToPagedListAsync(pageNumber, pageSize),
@@ -486,7 +489,7 @@ namespace BugTracker.Controllers
 
             int companyId = User.Identity.GetCompanyId().Value;
             var applicationDbContext = await _ticketService.GetAllTicketsByCompanyAsync(companyId);
-            var archived = applicationDbContext.Where(t => t.TicketStatus.Name == "Archived").ToPagedListAsync(pageNumber, pageSize);
+            var archived = applicationDbContext.Where(t => t.TicketStatusId == 1).ToPagedListAsync(pageNumber, pageSize);
 
             return View(await archived);
 
@@ -522,9 +525,10 @@ namespace BugTracker.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var ticket = await _context.Ticket.FindAsync(id);
-            _context.Ticket.Remove(ticket);
+            ticket.Archived = true;
+            ticket.TicketStatusId = 1;
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("AllTickets", "Tickets");
         }
 
         private bool TicketExists(int id)

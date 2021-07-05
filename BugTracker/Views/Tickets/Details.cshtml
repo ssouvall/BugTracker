@@ -24,30 +24,35 @@
                 <p class="card-text">Ticket Status: @Model.Ticket.TicketStatus.Name</p>
                 @if (Model.Ticket.TicketStatus.Name == "New")
                 {
+                    <label>0% Completed</label>
                     <div class="progress">
                         <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                 }
                 else if (Model.Ticket.TicketStatus.Name == "Unassigned")
                 {
+                    <label>25% Completed</label>
                     <div class="progress">
                         <div class="progress-bar" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="25" aria-valuemax="100"></div>
                     </div>
                 }
                 else if (Model.Ticket.TicketStatus.Name == "Development")
                 {
+                    <label>50% Completed</label>
                     <div class="progress">
                         <div class="progress-bar" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                 }
                 else if (Model.Ticket.TicketStatus.Name == "Testing")
                 {
+                    <label>75% Completed</label>
                     <div class="progress">
                         <div class="progress-bar" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                 }
                 else if (Model.Ticket.TicketStatus.Name == "Resolved")
                 {
+                    <label>100% Completed</label>
                     <div class="progress">
                         <div class="progress-bar" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>

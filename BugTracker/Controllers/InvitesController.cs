@@ -76,9 +76,12 @@ namespace BugTracker.Controllers
         {
             InviteViewModel model = new();
 
+            int companyId = User.Identity.GetCompanyId().Value;
+            List<Project> companyProjects = await _projectService.GetAllProjectsByCompany(companyId);
+
             if (User.IsInRole("Admin"))
             {
-                model.ProjectsList = new SelectList(_context.Project, "Id", "Name");
+                model.ProjectsList = new SelectList(companyProjects, "Id", "Name");
             }
             else if (User.IsInRole("ProjectManager"))
             {

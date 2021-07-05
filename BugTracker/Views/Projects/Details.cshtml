@@ -1,5 +1,8 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @using BugTracker.Services.Interfaces
+@using X.PagedList
+@using X.PagedList.Mvc.Core
+@using X.PagedList.Web.Common
 @inject SignInManager<BTUser> SignInManager
 @inject UserManager<BTUser> UserManager
 @inject IBTRolesService BTRolesService
@@ -35,22 +38,22 @@
                                     <span class="w-50">Project Manager</span>
                                 </td>
                                 <td>:</td>
-                                @if(Model.ProjectManager is not null)
+                                @if (Model.ProjectManager is not null)
                                 {
-                            <td>
-                                <span class="font-weight-semibold">@Model.ProjectManager.FullName</span>
-                                @if (User.IsInRole("Admin"))
-                                {
-                                    <span class="font-weight-semibold ml-3"><a asp-action="AssignProjectManager" asp-controller="Projects" asp-route-id="@Model.Project.Id" class="btn-sm btn-success">Change</a></span>
+                                    <td>
+                                        <span class="font-weight-semibold">@Model.ProjectManager.FullName</span>
+                                        @if (User.IsInRole("Admin"))
+                                        {
+                                            <span class="font-weight-semibold ml-3"><a asp-action="AssignProjectManager" asp-controller="Projects" asp-route-id="@Model.Project.Id" class="btn-sm btn-success">Change</a></span>
 
-                                }
-                            </td>
+                                        }
+                                    </td>
                                 }
                                 else
                                 {
-                                <td>
-                                    <span class="font-weight-semibold"><a asp-action="AssignProjectManager" asp-controller="Projects" asp-route-id="@Model.Project.Id" class="btn btn-success">Assign Project Manager</a></span>
-                                </td>
+                                    <td>
+                                        <span class="font-weight-semibold"><a asp-action="AssignProjectManager" asp-controller="Projects" asp-route-id="@Model.Project.Id" class="btn btn-success">Assign Project Manager</a></span>
+                                    </td>
                                 }
                             </tr>
                             <tr>
@@ -131,7 +134,7 @@
                                 </tr>
                             }
 
-                            
+
                         </tbody>
                     </table>
                 </div>
@@ -143,9 +146,9 @@
             <div class="card-header border-0">
                 <h3 class="card-title">Tickets</h3>
             </div>
-                <div class="card-body">
-                    <div>
-                            
+            <div class="card-body">
+                <div>
+
                     <div class="table-responsive">
                         <table class="table  table-vcenter text-nowrap border-bottom" id="task-list">
                             <thead>
@@ -159,7 +162,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach (Ticket ticket in Model.Project.Tickets)
+                                @foreach (Ticket ticket in Model.Tickets)
                                 {
                                     <tr>
                                         <td><a href="#" class="d-flex sidebarmodal-collapase">@ticket.Title</a></td>
@@ -181,6 +184,25 @@
 
                             </tbody>
                         </table>
+                        @*<div class="row m-3">
+                            <div class="col h5">
+                                Page @(Model.Tickets.PageCount < Model.Tickets.PageNumber ? 0 : Model.Tickets.PageNumber) of @Model.Tickets.PageCount
+                            </div>
+                        </div>
+
+                        <div class="row m-3">
+                            <div class="col">
+                                @Html.PagedListPager(Model.Tickets, page => Url.Action("Details", new { id = @Model.Tickets.FirstOrDefault()?.Id, page = page }),
+                                new PagedListRenderOptions
+                                {
+                                    LiElementClasses = new string[] { "page-item" },
+                                    PageClasses = new string[] { "page-link" }
+                                }
+
+                              )
+                            </div>
+                        </div>*@
+
                     </div>
                 </div>
             </div>
@@ -188,7 +210,6 @@
     </div>
 </div>
 <!-- End Row-->
-					
 <!--Sidebar-right-->
 <div class="sidebar sidebar-right sidebar-animate">
     <div class="card-header border-bottom pb-5">
