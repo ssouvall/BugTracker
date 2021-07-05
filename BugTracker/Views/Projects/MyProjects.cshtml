@@ -25,6 +25,8 @@
                             <tbody>
                                 @foreach (Project project in Model)
                                 {
+                                    if (project.Archived == false)
+                                    {
                                     <tr>
                                         <th scope="row">
                                             @project.Name
@@ -50,6 +52,7 @@
                                             <a asp-controller="Projects" asp-action="Details" asp-route-id="@project.Id"><i class="far fa-lg fa-eye"></i></a>
                                         </td>
                                     </tr>
+                                    }
 
                                 }
                             </tbody>

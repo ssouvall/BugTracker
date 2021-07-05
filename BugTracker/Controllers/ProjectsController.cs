@@ -345,7 +345,7 @@ namespace BugTracker.Controllers
 
             var project = await _context.Project
                 .Include(p => p.Company)
-                .Include(p => p.ProjectPriority.Name)
+                .Include(p => p.ProjectPriority)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (project == null)
             {
@@ -361,7 +361,7 @@ namespace BugTracker.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var project = await _context.Project.FindAsync(id);
-            _context.Project.Remove(project);
+            project.Archived = true;
             await _context.SaveChangesAsync();
             return RedirectToAction("Index", "Home");
         }

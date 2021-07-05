@@ -172,7 +172,7 @@
                                 @foreach (Ticket ticket in Model.Tickets)
                                 {
                                 <tr>
-                                    <td><a href="#" class="d-flex sidebarmodal-collapase">@ticket.Title</a></td>
+                                    <td><a a asp-controller="Tickets" asp-action="Details" asp-route-id="@ticket.Id" class="d-flex sidebarmodal-collapase">@ticket.Title</a></td>
                                     @if (ticket.DeveloperUser is not null)
                                     {
                                         <td>@ticket.DeveloperUser.FullName</td>
