@@ -99,7 +99,7 @@
                         IEnumerable<string> roles = await BTRolesService.ListUserRolesAsync(btUser);
                         @if (btUser.AvatarFileData is not null)
                         {
-                            <img src="@BTImageService.DecodeImage(btUser.AvatarFileData, btUser.AvatarContentType)" alt="img" class="avatar avatar-md bradius">
+                            <img src="@BTImageService.DecodeImage(btUser.AvatarFileData, btUser.AvatarContentType)" alt="img" class="h-auto w-50 rounded-circle">
 
                         }
                         else
@@ -193,10 +193,10 @@
                             @*<ul class="ml-auto">
                                     <partial name="_LoginPartial" />
                                 </ul>*@
-                            <img src="~/assets/images/brand/bugzapper-logo.png" class="header-brand-img desktop-lgo" alt="Dayonelogo">
-                            <img src="~/assets/images/brand/bugzapper-logo.pngbugzapper-logo.png" class="header-brand-img dark-logo" alt="Dayonelogo">
-                            <img src="~/assets/images/brand/favicon.png" class="header-brand-img mobile-logo" alt="Dayonelogo">
-                            <img src="~/assets/images/brand/favicon1.png" class="header-brand-img darkmobile-logo" alt="Dayonelogo">
+                            <img src="~/assets/images/brand/bugzapper-logo.png" class="header-brand-img desktop-lgo" alt="Bugzapperlogo">
+                            <img src="~/assets/images/brand/bugzapper-logo.png" class="header-brand-img dark-logo" alt="Bugzapper logo">
+                            <img src="~/assets/images/brand/logo-no-text.png" class="header-brand-img mobile-logo w-25 h-auto" alt="Bugzapperlogo">
+                            <img src="~/assets/images/brand/logo-no-text.png" class="header-brand-img darkmobile-logo w-25 h-auto" alt="Bugzapperlogo">
                         </a>
                         <div class="app-sidebar__toggle" data-toggle="sidebar">
                             <a class="open-toggle" href="#">

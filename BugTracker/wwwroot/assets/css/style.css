@@ -8269,6 +8269,10 @@ ol.list-order-style {
 }
 
 @media (max-width:480px) {
+    .app-header {
+        background-color: #263871!important;
+    }
+
     .app-header .header-brand {
         min-width: auto !important;
     }
@@ -22490,7 +22494,7 @@ pre {
 
 @media (min-width:992px) {
     .customlogin-content {
-        padding: 4rem 10rem;
+        padding: 1rem 6rem;
     }
 
     .container {
