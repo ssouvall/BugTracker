@@ -149,14 +149,18 @@
                         <span class="side-menu__label">Projects</span><i class="angle fa fa-angle-right"></i>
                     </a>
                     <ul class="slide-menu">
-                        @if(User.IsInRole("Admin") || User.IsInRole("ProjectManager"))
+                        @if (User.IsInRole("Admin"))
                         {
-                        <li><a asp-controller="Projects" asp-action="AllProjects" class="slide-item">All Projects</a></li>
-                        <li><a asp-controller="Projects" asp-action="Create" class="slide-item">Add Project</a></li>
-                        <li><a asp-controller="Projects" asp-action="ArchivedProjects" class="slide-item">Project Archive</a></li>
+                            <li><a asp-controller="Projects" asp-action="AllProjects" class="slide-item">All Projects</a></li>
+                            <li><a asp-controller="Projects" asp-action="Create" class="slide-item">Add Project</a></li>
                         }
 
                         <li><a asp-controller="Projects" asp-action="MyProjects" class="slide-item">My Projects</a></li>
+
+                        @if (User.IsInRole("Admin") || User.IsInRole("ProjectManager"))
+                        {
+                            <li><a asp-controller="Projects" asp-action="ArchivedProjects" class="slide-item">Project Archive</a></li>
+                        }
 
                     </ul>
                 </li>
