@@ -40049,3 +40049,7 @@ color: #333;
 :-moz-placeholder { /* Firefox 18- */
     color: pink;
 }
+
+.ticket-cards {
+    height: 85%;
+}

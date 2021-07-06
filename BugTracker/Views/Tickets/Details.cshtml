@@ -15,79 +15,101 @@
 <!--End Page header-->
 
 <div class="row">
-    <div class="col-6">
-        <div class="card m-3 p-3">
+    <div class="col-lg-4 col-md-12">
+        <div class="card m-3 p-3 ticket-cards">
             <div class="card-header  border-0">
                 <div class="card-title">Ticket Details</div>
             </div>
             <div class="card-body">
-                <p><strong>Description:</strong> @Model.Ticket.Description</p>
-                <p class="card-text"><strong>Ticket Status:</strong> @Model.Ticket.TicketStatus.Name</p>
-                @if (Model.Ticket.TicketStatus.Name == "New")
-                {
-                    <label>0% Completed</label>
-                    <div class="progress">
-                        <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-                }
-                else if (Model.Ticket.TicketStatus.Name == "Unassigned")
-                {
-                    <label>25% Completed</label>
-                    <div class="progress">
-                        <div class="progress-bar" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="25" aria-valuemax="100"></div>
-                    </div>
-                }
-                else if (Model.Ticket.TicketStatus.Name == "Development")
-                {
-                    <label>50% Completed</label>
-                    <div class="progress">
-                        <div class="progress-bar" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-                }
-                else if (Model.Ticket.TicketStatus.Name == "Testing")
-                {
-                    <label>75% Completed</label>
-                    <div class="progress">
-                        <div class="progress-bar" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-                }
-                else if (Model.Ticket.TicketStatus.Name == "Resolved")
-                {
-                    <label>100% Completed</label>
-                    <div class="progress">
-                        <div class="progress-bar" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-                }
-                @if (Model.CurrentUser.Id == Model.ProjectManager?.Id || User.IsInRole("Admin"))
-                {
-                    @if (Model.Ticket.DeveloperUser != null)
-                    {
-                        <p class="card-text mt-3"><strong>Assigned Developer:</strong> @Model.Ticket.DeveloperUser.FullName</p>
+                <div class="table-responsive">
+                    <table class="table">
+                        <tr>
+                            <td><strong>Description:</strong></td>
+                            <td>:</td>
+                            <td>@Model.Ticket.Description</td>
 
-                        <a asp-action="AssignTicket" asp-controller="Tickets" asp-route-ticketId="@Model.Ticket.Id" class="btn btn-success">Change Developer</a>
-                    }
-                    else
-                    {
-                        <p class="card-text mt-3"><strong>Assigned Developer:</strong> Unassigned</p>
-                        <a asp-action="AssignTicket" asp-controller="Tickets" asp-route-ticketId="@Model.Ticket.Id" class="btn btn-success">Assign Developer</a>
-                    }
+                        </tr>
+                        <tr>
+                            <td><strong>Ticket Status</strong></td>
+                            <td>:</td>
+                            <td>@Model.Ticket.TicketStatus.Name</td>
+                        </tr>
+                        @if (Model.CurrentUser.Id == Model.ProjectManager?.Id || User.IsInRole("Admin"))
+                        {
+                            @if (Model.Ticket.DeveloperUser != null)
+                            {
+                                <tr>
+                                    <td class="card-text mt-3"><strong>Assigned Developer:</strong> </td>
+                                    <td>
+                                        :
+                                    </td>
+                                    <td>
+                                        @Model.Ticket.DeveloperUser.FullName
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <a asp-action="AssignTicket" asp-controller="Tickets" asp-route-ticketId="@Model.Ticket.Id" class="btn btn-success">Change Developer</a>
+                                    </td>
+                                </tr>
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td class="card-text mt-3"><strong>Assigned Developer:</strong> </td>
+                                    <td>
+                                        :
+                                    </td>
+                                    <td>
+                                        Unassigned
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <a asp-action="AssignTicket" asp-controller="Tickets" asp-route-ticketId="@Model.Ticket.Id" class="btn btn-success">Assign Developer</a>
+                                    </td>
+                                </tr>
+                            }
 
-                }
-                else
-                {
-                    @if (Model.Ticket.DeveloperUser != null)
-                    {
-                        <p class="card-text mt-3"><strong>Assigned Developer:</strong> @Model.Ticket.DeveloperUser.FullName</p>
-                    }
-                    else
-                    {
-                        <p class="card-text mt-3"><strong>Assigned Developer:</strong> Unassigned</p>
-                    }
-                }
+                        }
+                        else
+                        {
+                            @if (Model.Ticket.DeveloperUser != null)
+                            {
+                                <tr>
+                                    <td class="card-text mt-3"><strong>Assigned Developer:</strong> </td>
+                                    <td>
+                                        :
+                                    </td>
+                                    <td>
+                                        @Model.Ticket.DeveloperUser.FullName
+                                    </td>
+                                </tr>
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td class="card-text mt-3"><strong>Assigned Developer:</strong> </td>
+                                    <td>
+                                        :
+                                    </td>
+                                    <td>
+                                        Unassigned
+                                    </td>
+                                </tr>
+                            }
+                        }
+                       
+                    </table>
+                </div>
+                
+                
 
             </div>
         </div>
-        <div class="card shadow m-3 p-3">
+    </div>
+    <div class="col-lg-4 col-md-12">
+        <div class="card shadow m-3 p-3 ticket-cards">
             <div class="card-header  border-0">
                 <div class="card-title">Ticket Details</div>
             </div>
@@ -104,10 +126,13 @@
                     <p class="badge badge-primary">@Model.Ticket.TicketPriority.Name</p><br />
                     <p class="badge badge-primary">@Model.Ticket.TicketStatus.Name</p>
                 </div>
-                
+
             </div>
         </div>
-        <div class="card shadow m-3 p-3">
+    </div>
+
+    <div class="col-lg-4 col-md-12">
+        <div class="card shadow m-3 p-3 ticket-cards">
             <div class="card-header border-0">
                 <div class="card-title">Ticket Attachments</div>
             </div>
@@ -181,8 +206,10 @@
             </div>
         </div>
     </div>
-    <div class="col-6">
-        <div class="card m-3 p-3">
+</div>
+<div class="row">
+    <div class="col-lg-6 col-md-12">
+        <div class="card m-3 mb-5 p-3">
             <div class="card-header border-0">
                 <div class="card-title">Ticket Comments</div>
             </div>
@@ -221,6 +248,8 @@
                 </div>
             </div>
         </div>
+    </div>
+    <div class="col-lg-6 col-md-12">
         <div class="card shadow m-3 p-3">
             <div class="card-header border-0">
                 <div class="card-title">Ticket History</div>

@@ -369,3 +369,4 @@ function processSelectedFiles(fileInput) {
 		}
 	}
 }
+

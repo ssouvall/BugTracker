@@ -277,6 +277,7 @@
                     var options = {
                         //title: 'Company Ticket Distribution',
                         is3D: true
+
                     };
                     var chart = new google.visualization.PieChart($("#chart1")[0]);
                     chart.draw(data, options);
@@ -288,12 +289,15 @@
                     alert(result.d);
                 }
             });
-        }
+        };
+        $(window).resize(function () {
+            drawChart();
+        });
     </script>
     <script type="text/javascript">
         google.load("visualization", "1", { packages: ["corechart"] });
-        google.setOnLoadCallback(drawChart);
-        function drawChart() {
+        google.setOnLoadCallback(drawChart2);
+        function drawChart2() {
             $.ajax({
                 type: "POST",
                 url: "/Home/TicketStatusChartMethod",
@@ -318,12 +322,15 @@
                     alert(result.d);
                 }
             });
-        }
+        };
+        $(window).resize(function () {
+            drawChart2();
+        });
     </script>
     <script type="text/javascript">
         google.load("visualization", "1", { packages: ["corechart"] });
-        google.setOnLoadCallback(drawChart);
-        function drawChart() {
+        google.setOnLoadCallback(drawChart3);
+        function drawChart3() {
             $.ajax({
                 type: "POST",
                 url: "/Home/TicketTypeChartMethod",
@@ -349,12 +356,15 @@
                     alert(result.d);
                 }
             });
-        }
+        };
+        $(window).resize(function () {
+            drawChart3();
+        });
     </script>
     <script type="text/javascript">
         google.load("visualization", "1", { packages: ["corechart"] });
-        google.setOnLoadCallback(drawChart);
-        function drawChart() {
+        google.setOnLoadCallback(drawChart4);
+        function drawChart4() {
             $.ajax({
                 type: "POST",
                 url: "/Home/TicketPriorityChartMethod",
@@ -381,7 +391,11 @@
                     alert(result.d);
                 }
             });
-        }
+        };
+        //resize google charts when window is resized
+        $(window).resize(function () {
+            drawChart4();
+        });
     </script>
 }
 
