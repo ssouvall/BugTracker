@@ -171,7 +171,7 @@ namespace BugTracker.Controllers
                 BTUser btUser = await _userManager.GetUserAsync(User);
                 int companyId = User.Identity.GetCompanyId().Value;
 
-                ticket.Created = DateTimeOffset.Now;
+                ticket.Created = DateTime.Now;
                 string userId = _userManager.GetUserId(User);
                 ticket.OwnerUserId = userId;
 
@@ -290,7 +290,7 @@ namespace BugTracker.Controllers
                 {
                     try
                     {
-                        ticket.Updated = DateTimeOffset.Now;
+                        ticket.Updated = DateTime.Now;
                         _context.Update(ticket);
                         await _context.SaveChangesAsync();
 
@@ -299,7 +299,7 @@ namespace BugTracker.Controllers
                             TicketId = ticket.Id,
                             Title = "New Ticket",
                             Message = $"New Ticket: {ticket?.Title}, was created by {btUser?.FullName}",
-                            Created = DateTimeOffset.Now,
+                            Created = DateTime.Now,
                             SenderId = btUser?.Id,
                             RecipientId = projectManager?.Id
                         };
@@ -321,7 +321,7 @@ namespace BugTracker.Controllers
                                 TicketId = ticket.Id,
                                 Title = "A ticket assigned to you has been modified",
                                 Message = $"Ticket: [{ticket.Id}]:{ticket.Title} updated by {btUser?.FullName}",
-                                Created = DateTimeOffset.Now,
+                                Created = DateTime.Now,
                                 SenderId = btUser?.Id,
                                 RecipientId = ticket.DeveloperUserId
                             };

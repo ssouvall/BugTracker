@@ -12,6 +12,7 @@ namespace BugTracker.Data
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
         }
         public DbSet<BugTracker.Models.Company> Company { get; set; }
         public DbSet<BugTracker.Models.Invite> Invite { get; set; }
