@@ -24,6 +24,7 @@ namespace BugTracker.Controllers
         // GET: Companies
         public async Task<IActionResult> Index()
         {
+            //
             return View(await _context.Company.ToListAsync());
         }
 
