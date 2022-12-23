@@ -22,18 +22,18 @@ namespace BugTracker.Models
 
         [DataType(DataType.Date)]
         [DisplayName("Created")]
-        public DateTimeOffset Created { get; set; }
+        public DateTime Created { get; set; }
 
         [DataType(DataType.Date)]
         [DisplayName("Updated")]
-        public DateTimeOffset Updated { get; set; }
+        public DateTime Updated { get; set; }
 
         [DisplayName("Archived")]
         public bool Archived { get; set; }
 
         [DataType(DataType.Date)]
         [DisplayName("Date Archived")]
-        public DateTimeOffset? ArchivedDate { get; set; }
+        public DateTime? ArchivedDate { get; set; }
 
         [DisplayName("Project")]
         public int ProjectId { get; set; }
