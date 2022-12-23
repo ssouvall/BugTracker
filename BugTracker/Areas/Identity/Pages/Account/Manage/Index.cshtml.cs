@@ -144,7 +144,7 @@ namespace BugTracker.Areas.Identity.Pages.Account.Manage
                 hasChanged = true;
             }
 
-            if (hasChanged == true)
+            if (hasChanged == true && !User.IsInRole("DemoUser"))
             {
                 await _userManager.UpdateAsync(user);
             }
