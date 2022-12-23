@@ -7,11 +7,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
-namespace BugTracker.Data.Migrations
+namespace BugTracker.datamigrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210705190657_001")]
-    partial class _001
+    [Migration("20220214201513_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
