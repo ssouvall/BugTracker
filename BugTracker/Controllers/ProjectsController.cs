@@ -111,8 +111,7 @@ namespace BugTracker.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,Description,StartDate,EndDate,ProjectPriorityId,FileName,FileData,FileContentType")] Project project)
-        {
-            
+        {   
             if (ModelState.IsValid)
             {
                 project.CompanyId = User.Identity.GetCompanyId().Value;
