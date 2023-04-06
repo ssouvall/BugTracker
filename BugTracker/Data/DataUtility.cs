@@ -74,7 +74,8 @@ namespace BugTracker.Data
                 await dbContextSvc.Database.MigrateAsync();
             }
 
-            demoUserPw = configuration.GetValue<string>("DemoUserPassword");
+            //demoUserPw = configuration.GetValue<string>("DemoUserPassword");
+            demoUserPw = "S1d4&j29djc93jd0!";
 
             //Custom  Bug Tracker Seed Methods
             await SeedRolesAsync(userManagerSvc, roleManagerSvc);
