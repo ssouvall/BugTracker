@@ -68,7 +68,11 @@ namespace BugTracker.Data
             //Service: An instance of the UserManager
             var userManagerSvc = svcProvider.GetRequiredService<UserManager<BTUser>>();
             //TsTEP 1: This is the programmatic equivalent to Update-Database
-            await dbContextSvc.Database.MigrateAsync();
+            var pendingMigrations = await dbContextSvc.Database.GetPendingMigrationsAsync();
+            if (pendingMigrations.Any())
+            {
+                await dbContextSvc.Database.MigrateAsync();
+            }
 
             demoUserPw = configuration.GetValue<string>("DemoUserPassword");
 
