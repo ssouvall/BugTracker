@@ -41,7 +41,6 @@
 		}
 	});
 
-
 	// ______________ Horizonatl
 	$(document).ready(function() {
       $("a[data-theme]").on('click', function() {

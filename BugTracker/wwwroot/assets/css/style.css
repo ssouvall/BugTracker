@@ -18660,6 +18660,12 @@ table.dataTable.dtr-inline.collapsed > tbody > tr[role=row] > td:first-child:bef
     background-size: cover !important;
 }
 
+@media screen and (max-width: 992px) {
+    .login-cover {
+        display: none;
+    }
+}
+
 .timelineleft {
     position: relative;
     margin: 0 0 30px 0;
