@@ -82,10 +82,8 @@ namespace BugTracker.Areas.Identity.Pages.Account
 
             if(!string.IsNullOrWhiteSpace(demoEmail))
             {
-                //var email = _configuration[demoEmail];
-                //var password = _configuration["DemoUserPassword"];
-                var email = "demoadmin@coderfoundry.com";
-                var password = "S1d4&j29djc93jd0!";
+                var email = _configuration[demoEmail];
+                var password = _configuration["DemoUserPassword"];
 
                 var result = await _signInManager.PasswordSignInAsync(email, password, false, lockoutOnFailure: false);
                 if (result.Succeeded)
